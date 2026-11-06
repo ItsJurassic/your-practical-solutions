@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    window.__SITE_BASE__ = location.pathname.indexOf("/your-practical-solutions") === 0
+      ? "/your-practical-solutions/"
+      : "/";
+    document.write('<base href="' + window.__SITE_BASE__ + '">');
+  </script>
   <title>YPS house preview</title>
   <style>
     html, body { margin: 0; height: 100%; background: #e7dcc8; overflow: hidden; }

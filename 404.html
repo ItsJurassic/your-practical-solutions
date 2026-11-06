@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    window.__SITE_BASE__ = location.pathname.indexOf("/your-practical-solutions") === 0
+      ? "/your-practical-solutions/"
+      : "/";
+    document.write('<base href="' + window.__SITE_BASE__ + '">');
+  </script>
   <title>Page not found | Your Practical Solutions</title>
   <meta name="robots" content="noindex" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="wrap" style="padding:80px 0">

@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    window.__SITE_BASE__ = location.pathname.indexOf("/your-practical-solutions") === 0
+      ? "/your-practical-solutions/"
+      : "/";
+    document.write('<base href="' + window.__SITE_BASE__ + '">');
+  </script>
   <title>Your Practical Solutions | Useful goods for home, garage, car and RV</title>
   <meta name="description" content="Your Practical Solutions is a warm, practical shop for storage, pet, garage, car and RV, home decor, and everyday household goods. Explore our house and shop on Shopify." />
   <link rel="canonical" href="https://yourpracticalsolutions.com/" />

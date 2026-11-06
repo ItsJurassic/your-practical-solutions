@@ -3,19 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    window.__SITE_BASE__ = location.pathname.indexOf("/your-practical-solutions") === 0
+      ? "/your-practical-solutions/"
+      : "/";
+    document.write('<base href="' + window.__SITE_BASE__ + '">');
+  </script>
   <title>Admin KPIs | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
   <link rel="canonical" href="https://yourpracticalsolutions.com/admin/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="wrap">
-      <a class="logo" href="../"><span class="mark">Y</span> Admin</a>
+      <a class="logo" href="./"><span class="mark">Y</span> Admin</a>
       <nav>
-        <a href="../">Public site</a>
+        <a href="./">Public site</a>
         <a href="https://shop.yourpracticalsolutions.com">Shopify shop</a>
         <button class="btn btn-ghost" id="logout" type="button" hidden>Log out</button>
       </nav>
@@ -107,6 +113,6 @@
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script type="module" src="./admin.js"></script>
+  <script type="module" src="admin/admin.js"></script>
 </body>
 </html>
