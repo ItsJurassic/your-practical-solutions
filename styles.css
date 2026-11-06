@@ -93,8 +93,8 @@ th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; }
 .stage-3d {
   position: relative;
   width: 100%;
-  height: min(72vh, 760px);
-  min-height: 420px;
+  height: min(88vh, 980px);
+  min-height: 540px;
   border-radius: 24px;
   overflow: hidden;
   background: #e7dcc8;
@@ -110,5 +110,7 @@ th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; }
 .credits { margin: 0 auto 18px; font-size: .82rem; color: var(--muted); }
 .credits a { color: var(--green); }
 @media (max-width: 720px) {
-  .stage-3d { height: min(68vh, 560px); min-height: 360px; }
+  .stage-3d { height: min(82vh, 760px); min-height: 470px; }
 }
+#house .wrap { width: min(1440px, calc(100% - 20px)); }
+

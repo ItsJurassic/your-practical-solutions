@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const BASE = window.__ASSET_BASE__ || window.__SITE_BASE__ || "./";
@@ -111,77 +112,184 @@ function mesh(geo, mat, x, y, z, parent, extra = {}) {
   return m;
 }
 
+
+const texLoader = new THREE.TextureLoader();
+const texCache = new Map();
+
+function loadMap(file, { color = false, rx = 1, ry = 1 } = {}) {
+  const key = `${file}|${rx}|${ry}|${color}`;
+  if (texCache.has(key)) return texCache.get(key);
+  const tex = texLoader.load(`${BASE}textures/${file}`);
+  if (color) tex.colorSpace = THREE.SRGBColorSpace;
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(rx, ry);
+  tex.anisotropy = 8;
+  texCache.set(key, tex);
+  return tex;
+}
+
+function pbr(prefix, { rx = 2, ry = 2, color = 0xffffff, rough = 0.72, metal = 0.03, maps = true, nor = true, roughMap = true } = {}) {
+  const opts = { color, roughness: rough, metalness: metal };
+  if (maps) {
+    opts.map = loadMap(`${prefix}_diff.jpg`, { color: true, rx, ry });
+    if (nor) opts.normalMap = loadMap(`${prefix}_nor.jpg`, { rx, ry });
+    if (roughMap) opts.roughnessMap = loadMap(`${prefix}_rough.jpg`, { rx, ry });
+  }
+  return new THREE.MeshStandardMaterial(opts);
+}
+
+function frameArt(parent, x, y, z, rotY, w, h, paint) {
+  const wood = pbr("wood", { rx: 1, ry: 1, rough: 0.45 });
+  mesh(new THREE.BoxGeometry(w + 0.08, h + 0.08, 0.04), wood, x, y, z, parent, { rotY });
+  mesh(new THREE.BoxGeometry(w, h, 0.02), std(paint, { roughness: 0.55 }), x, y, z + (Math.cos(rotY) * 0.03), parent, { rotY });
+}
+
+function windowUnit(parent, x, y, z, w, h, { curtains = false } = {}) {
+  const trim = pbr("wood", { rx: 1, ry: 1, color: 0xf4eee6, rough: 0.48 });
+  const glass = new THREE.MeshStandardMaterial({
+    color: "#9fc5d8", roughness: 0.06, metalness: 0.12, transparent: true, opacity: 0.38,
+  });
+  const t = 0.07;
+  mesh(new THREE.BoxGeometry(w + 0.12, t, 0.1), trim, x, y + h / 2, z, parent);
+  mesh(new THREE.BoxGeometry(w + 0.12, t, 0.1), trim, x, y - h / 2, z, parent);
+  mesh(new THREE.BoxGeometry(t, h, 0.1), trim, x - w / 2, y, z, parent);
+  mesh(new THREE.BoxGeometry(t, h, 0.1), trim, x + w / 2, y, z, parent);
+  mesh(new THREE.BoxGeometry(0.04, h - 0.08, 0.04), trim, x, y, z, parent);
+  mesh(new THREE.BoxGeometry(w - 0.08, 0.04, 0.04), trim, x, y, z, parent);
+  mesh(new THREE.BoxGeometry(w - 0.05, h - 0.05, 0.03), glass, x, y, z - 0.02, parent);
+  mesh(new THREE.BoxGeometry(w + 0.22, 0.08, 0.18), trim, x, y - h / 2 - 0.06, z + 0.04, parent);
+  if (curtains) {
+    const fabric = pbr("fabric", { rx: 2, ry: 2, color: 0xe8d5c4, maps: false });
+    fabric.map = loadMap("fabric_diff.jpg", { color: true, rx: 2, ry: 3 });
+    const grp = new THREE.Group();
+    mesh(new THREE.BoxGeometry(0.16, h * 0.95, 0.06), fabric, x - w / 2 + 0.12, y - 0.02, z + 0.08, grp);
+    mesh(new THREE.BoxGeometry(0.16, h * 0.95, 0.06), fabric, x + w / 2 - 0.12, y - 0.02, z + 0.08, grp);
+    mark(grp, "curtains", "Curtains");
+    parent.add(grp);
+  }
+}
+
+function shakerCabinet(parent, x, y, z, w, h, d, { rotY = 0, drawers = 0 } = {}) {
+  const wood = pbr("kwood", { rx: 1.4, ry: 1.4, rough: 0.48 });
+  const body = new THREE.Group();
+  body.position.set(x, y, z);
+  body.rotation.y = rotY;
+  mesh(new THREE.BoxGeometry(w, h, d), wood, 0, 0, 0, body);
+  const inset = 0.045;
+  const face = std("#efe6d4", { roughness: 0.55 });
+  if (drawers) {
+    const dh = (h - 0.08) / drawers;
+    for (let i = 0; i < drawers; i++) {
+      const fy = -h / 2 + 0.06 + dh * i + dh / 2;
+      mesh(new THREE.BoxGeometry(w - 0.1, dh - 0.05, 0.03), face, 0, fy, d / 2 + 0.01, body);
+      mesh(new THREE.BoxGeometry(0.16, 0.02, 0.04), std("#c4a35a", { metalness: 0.75, roughness: 0.3 }), 0, fy, d / 2 + 0.04, body);
+    }
+  } else {
+    mesh(new THREE.BoxGeometry(w - 0.12, h - 0.12, 0.03), face, 0, 0, d / 2 + 0.012, body);
+    mesh(new THREE.BoxGeometry(0.03, 0.22, 0.04), std("#c4a35a", { metalness: 0.75, roughness: 0.3 }), w * 0.28, 0.05, d / 2 + 0.04, body);
+  }
+  parent.add(body);
+  return body;
+}
+
+
 function buildShell(root) {
-  const grass = std("#7d9a63");
-  const dirt = std("#6b4b32");
-  const paver = std("#d5c4a8");
-  const drive = std("#9aa1a6");
-  const wall = std("#f3ece3");
-  const trim = std("#efe4d4");
-  const oak = std("#c4a07a");
-  const tile = std("#ddd4c6");
-  const conc = std("#b8b4ae");
-  const hedge = std("#3f5c3a");
+  const grass = pbr("grass", { rx: 18, ry: 18, color: 0x8aa56a, rough: 0.95, roughMap: false });
+  const drive = pbr("asphalt", { rx: 5, ry: 4, rough: 0.9 });
+  const paver = pbr("concrete", { rx: 1, ry: 1, color: 0xe2d3b8, rough: 0.7 });
+  const brick = pbr("brick", { rx: 3.2, ry: 1.6, rough: 0.78 });
+  const plaster = pbr("plaster", { rx: 3, ry: 2, color: 0xf7f1e8, rough: 0.74 });
+  const plasterBed = pbr("plaster", { rx: 3, ry: 2, color: 0xf3e2d0, rough: 0.74 });
+  const plasterKit = pbr("plaster", { rx: 3, ry: 2, color: 0xf4eee4, rough: 0.74 });
+  const parquet = pbr("parquet", { rx: 3.5, ry: 3.5, rough: 0.42 });
+  const tile = pbr("tile", { rx: 4, ry: 4, rough: 0.35 });
+  const conc = pbr("concrete", { rx: 3, ry: 3, rough: 0.86 });
+  const trim = pbr("wood", { rx: 2, ry: 1, color: 0xf3ebe0, rough: 0.5 });
+  const roof = pbr("roof", { rx: 5, ry: 2.2, rough: 0.7 });
+  const hedge = std("#3d5a38", { roughness: 0.9 });
+  const woodDoor = pbr("wood", { rx: 1, ry: 2, color: 0x6b3e24, rough: 0.48 });
 
   mesh(new THREE.CircleGeometry(46, 64), grass, 3, 0, 3, root, { rotX: -Math.PI / 2, cast: false });
 
-  // Bedroom | Living | Kitchen floors (north)
-  mesh(new THREE.BoxGeometry(4.6, 0.1, 6.4), oak, -5.3, 0.05, -2.3, root, { cast: false });
-  mesh(new THREE.BoxGeometry(5.4, 0.1, 6.4), oak, -0.3, 0.05, -2.3, root, { cast: false });
+  mesh(new THREE.BoxGeometry(4.6, 0.1, 6.4), parquet, -5.3, 0.05, -2.3, root, { cast: false });
+  mesh(new THREE.BoxGeometry(5.4, 0.1, 6.4), parquet, -0.3, 0.05, -2.3, root, { cast: false });
   mesh(new THREE.BoxGeometry(4.8, 0.1, 6.4), tile, 4.8, 0.05, -2.3, root, { cast: false });
-  // Garage floor (south of kitchen)
   mesh(new THREE.BoxGeometry(4.8, 0.1, 5.4), conc, 4.8, 0.05, 3.7, root, { cast: false });
 
-  // Back (north) wall and west wall — dollhouse keeps these
-  mesh(new THREE.BoxGeometry(15.0, 3.05, 0.14), wall, -0.4, 1.62, -5.52, root);
-  mesh(new THREE.BoxGeometry(0.14, 3.05, 6.5), wall, -7.62, 1.62, -2.3, root);
-  // East exterior wall behind kitchen / garage (kept but shorter visually on garage opening)
-  mesh(new THREE.BoxGeometry(0.14, 3.05, 6.5), wall, 7.22, 1.62, -2.3, root);
-  mesh(new THREE.BoxGeometry(0.14, 3.05, 5.5), wall, 7.22, 1.62, 3.7, root);
+  // Exterior brick (outside) + interior plaster
+  mesh(new THREE.BoxGeometry(15.2, 3.15, 0.12), brick, -0.4, 1.62, -5.64, root);
+  mesh(new THREE.BoxGeometry(0.12, 3.15, 6.6), brick, -7.74, 1.62, -2.3, root);
+  mesh(new THREE.BoxGeometry(0.12, 3.15, 6.6), brick, 7.34, 1.62, -2.3, root);
+  mesh(new THREE.BoxGeometry(0.12, 3.15, 5.6), brick, 7.34, 1.62, 3.7, root);
 
-  // Partition: bedroom | living, living | kitchen
-  mesh(new THREE.BoxGeometry(0.12, 2.95, 6.35), wall, -3.0, 1.58, -2.3, root);
-  mesh(new THREE.BoxGeometry(0.12, 2.95, 6.35), wall, 2.42, 1.58, -2.3, root);
-  // Kitchen | garage divider (full wall so a bed cannot visually sit in both)
-  mesh(new THREE.BoxGeometry(4.8, 2.95, 0.12), wall, 4.8, 1.58, 0.92, root);
+  mesh(new THREE.BoxGeometry(4.55, 2.95, 0.1), plasterBed, -5.28, 1.58, -5.5, root);
+  mesh(new THREE.BoxGeometry(5.35, 2.95, 0.1), plaster, -0.32, 1.58, -5.5, root);
+  mesh(new THREE.BoxGeometry(4.75, 2.95, 0.1), plasterKit, 4.82, 1.58, -5.5, root);
+  mesh(new THREE.BoxGeometry(0.1, 2.95, 6.35), plasterBed, -7.58, 1.58, -2.3, root);
+  mesh(new THREE.BoxGeometry(0.1, 2.95, 6.35), plasterKit, 7.22, 1.58, -2.3, root);
+  mesh(new THREE.BoxGeometry(0.1, 2.95, 5.35), plaster, 7.22, 1.58, 3.7, root);
 
-  // Low south thresholds (cutaway)
-  mesh(new THREE.BoxGeometry(15.0, 0.18, 0.14), wall, -0.4, 0.14, 0.92, root);
-  // Garage opening facing the driveway (south) — header + side jambs like a real bay
-  mesh(new THREE.BoxGeometry(4.8, 0.28, 0.16), wall, 4.8, 2.85, 6.42, root);
-  mesh(new THREE.BoxGeometry(0.22, 2.5, 0.16), wall, 2.52, 1.4, 6.42, root);
-  mesh(new THREE.BoxGeometry(0.22, 2.5, 0.16), wall, 7.1, 1.4, 6.42, root);
-  // Rolled-up garage door tucked under the header
-  const doorMat = new THREE.MeshStandardMaterial({ color: "#8a8f93", metalness: 0.35, roughness: 0.45 });
-  mesh(new THREE.BoxGeometry(4.2, 0.18, 0.55), doorMat, 4.8, 2.55, 6.15, root);
+  mesh(new THREE.BoxGeometry(0.12, 2.95, 6.35), plaster, -3.0, 1.58, -2.3, root);
+  mesh(new THREE.BoxGeometry(0.12, 2.95, 6.35), plaster, 2.42, 1.58, -2.3, root);
+  mesh(new THREE.BoxGeometry(4.8, 2.95, 0.12), plasterKit, 4.8, 1.58, 0.92, root);
 
-  // Slim eaves
-  mesh(new THREE.BoxGeometry(15.4, 0.12, 0.5), trim, -0.4, 3.2, -5.7, root);
-  mesh(new THREE.BoxGeometry(0.5, 0.12, 6.7), trim, -7.78, 3.2, -2.3, root);
+  // Baseboards
+  mesh(new THREE.BoxGeometry(15.0, 0.12, 0.06), trim, -0.4, 0.18, -5.42, root);
+  mesh(new THREE.BoxGeometry(0.06, 0.12, 6.3), trim, -7.5, 0.18, -2.3, root);
 
-  // Front door into living
-  mesh(new THREE.BoxGeometry(1.05, 2.15, 0.1), std("#7a4e32"), 0.15, 1.18, 0.98, root);
-  mesh(new THREE.SphereGeometry(0.04, 10, 8), new THREE.MeshStandardMaterial({ color: "#c4a35a", metalness: 0.8, roughness: 0.3 }), 0.48, 1.15, 1.06, root);
+  mesh(new THREE.BoxGeometry(15.0, 0.18, 0.14), plaster, -0.4, 0.14, 0.92, root);
 
-  // Windows + curtains (living, bedroom, kitchen)
-  const glass = new THREE.MeshStandardMaterial({ color: "#c5dcea", roughness: 0.12, metalness: 0.08, transparent: true, opacity: 0.42 });
-  mesh(new THREE.BoxGeometry(1.8, 1.45, 0.06), glass, -5.2, 1.85, -5.44, root);
-  mesh(new THREE.BoxGeometry(2.2, 1.55, 0.06), glass, -0.2, 1.9, -5.44, root);
-  mesh(new THREE.BoxGeometry(1.8, 1.45, 0.06), glass, 4.7, 1.85, -5.44, root);
-  const curtain = std("#d9c1a2");
-  const cGrp = new THREE.Group();
-  mesh(new THREE.BoxGeometry(0.18, 1.7, 0.08), curtain, -1.25, 1.9, -5.38, cGrp);
-  mesh(new THREE.BoxGeometry(0.18, 1.7, 0.08), curtain, 0.85, 1.9, -5.38, cGrp);
-  mark(cGrp, "curtains", "Curtains");
-  root.add(cGrp);
+  // Garage bay
+  mesh(new THREE.BoxGeometry(4.8, 0.32, 0.18), brick, 4.8, 2.88, 6.44, root);
+  mesh(new THREE.BoxGeometry(0.24, 2.55, 0.18), brick, 2.5, 1.4, 6.44, root);
+  mesh(new THREE.BoxGeometry(0.24, 2.55, 0.18), brick, 7.12, 1.4, 6.44, root);
+  const gMetal = new THREE.MeshStandardMaterial({ color: "#8b9096", metalness: 0.42, roughness: 0.4 });
+  for (let i = 0; i < 9; i++) {
+    mesh(new THREE.BoxGeometry(4.18, 0.14, 0.08), gMetal, 4.8, 1.92 + i * 0.09, 6.28, root);
+  }
 
-  // Driveway + walk
-  mesh(new THREE.BoxGeometry(8.6, 0.06, 7.4), drive, 8.4, 0.03, 9.4, root, { cast: false });
+  // Pitched cutaway roof + west gable
+  const roofSlab = mesh(new THREE.BoxGeometry(15.8, 0.12, 4.1), roof, -0.4, 4.05, -6.55, root);
+  roofSlab.rotation.x = 0.48;
+  mesh(new THREE.BoxGeometry(15.9, 0.18, 0.16), trim, -0.4, 3.22, -5.82, root);
+  const gable = new THREE.Shape();
+  gable.moveTo(-3.3, 0);
+  gable.lineTo(3.3, 0);
+  gable.lineTo(0, 1.9);
+  const gableMesh = new THREE.Mesh(new THREE.ShapeGeometry(gable), brick);
+  gableMesh.position.set(-7.76, 3.18, -2.3);
+  gableMesh.rotation.y = Math.PI / 2;
+  gableMesh.castShadow = true;
+  gableMesh.receiveShadow = true;
+  root.add(gableMesh);
+  const roofWest = mesh(new THREE.BoxGeometry(6.8, 0.12, 2.6), roof, -8.55, 4.05, -2.3, root);
+  roofWest.rotation.z = -0.55;
+
+  // Front door + porch + steps
+  mesh(new THREE.BoxGeometry(1.22, 2.25, 0.12), woodDoor, 0.15, 1.22, 0.98, root);
+  mesh(new THREE.BoxGeometry(0.38, 0.55, 0.04), pbr("wood", { rx: 1, ry: 1, color: 0x5c3318 }), 0.15, 1.55, 1.05, root);
+  mesh(new THREE.BoxGeometry(0.38, 0.55, 0.04), pbr("wood", { rx: 1, ry: 1, color: 0x5c3318 }), 0.15, 0.85, 1.05, root);
+  mesh(new THREE.BoxGeometry(0.08, 2.3, 0.14), trim, -0.52, 1.22, 0.98, root);
+  mesh(new THREE.BoxGeometry(0.08, 2.3, 0.14), trim, 0.82, 1.22, 0.98, root);
+  mesh(new THREE.BoxGeometry(1.4, 0.08, 0.16), trim, 0.15, 2.38, 0.98, root);
+  mesh(new THREE.SphereGeometry(0.045, 12, 10), std("#c4a35a", { metalness: 0.82, roughness: 0.28 }), 0.52, 1.2, 1.08, root);
+  mesh(new THREE.BoxGeometry(1.7, 0.1, 1.15), paver, 0.15, 0.08, 1.55, root, { cast: false });
+  mesh(new THREE.BoxGeometry(1.45, 0.1, 0.38), paver, 0.15, 0.14, 2.05, root);
+  mesh(new THREE.BoxGeometry(1.2, 0.1, 0.35), paver, 0.15, 0.24, 2.32, root);
+
+  windowUnit(root, -5.2, 1.85, -5.46, 1.55, 1.4);
+  windowUnit(root, -0.2, 1.9, -5.46, 1.95, 1.5, { curtains: true });
+  windowUnit(root, 4.75, 1.85, -5.46, 1.55, 1.4);
+
+  mesh(new THREE.BoxGeometry(8.8, 0.07, 7.6), drive, 8.4, 0.03, 9.4, root, { cast: false });
   for (let i = 0; i < 8; i++) {
-    mesh(new THREE.BoxGeometry(0.95, 0.05, 0.48), paver, -1.1, 0.04, 1.6 + i * 0.7, root, { cast: false });
+    mesh(new THREE.BoxGeometry(0.95, 0.06, 0.48), paver, -1.1, 0.05, 1.55 + i * 0.7, root, { cast: false });
   }
   mesh(new THREE.BoxGeometry(5.6, 0.55, 0.45), hedge, -4.8, 0.35, 7.6, root);
   mesh(new THREE.BoxGeometry(0.45, 0.7, 6.2), hedge, -11.2, 0.42, -1.2, root);
+
+  frameArt(root, -4.0, 1.85, -5.42, 0, 0.55, 0.7, "#c45c26");
+  frameArt(root, 0.95, 1.85, -5.42, 0, 0.7, 0.5, "#2c4a3e");
 }
 
 async function buildYard(root) {
@@ -192,9 +300,9 @@ async function buildYard(root) {
   await addModel(yard, "bush.glb", 0.2, 0.4, { height: 0.85 });
   await addModel(yard, "bush-small.glb", -1.1, 1.1, { height: 0.55 });
   await addModel(yard, "plant.glb", 1.15, 0.8, { height: 0.7 });
-  await addModel(root, "tree.glb", -10.2, -3.4, { height: 3.4 });
-  await addModel(root, "tree-oak.glb", -9.4, 6.2, { height: 3.1 });
-  await addModel(root, "tree.glb", 11.8, -8.4, { height: 3.2 });
+  await addModel(root, "tree.glb", -10.2, -3.4, { height: 3.4, tint: "#7d8f4a" });
+  await addModel(root, "tree-oak.glb", -9.4, 6.2, { height: 3.1, tint: "#6e8242" });
+  await addModel(root, "tree.glb", 12.6, -9.2, { height: 3.2, tint: "#7d8f4a" });
   await addModel(root, "fence.glb", -11.4, 4.2, { height: 1.1, rotY: Math.PI / 2 });
 
   const garden = new THREE.Group();
@@ -214,42 +322,76 @@ async function buildBedroom(root) {
   await addModel(root, "bed-q.glb", -5.15, -3.55, { width: 2.35, rotY: Math.PI, id: "bed", label: "Bed" });
   await addModel(root, "nightstand.glb", -3.7, -4.55, { height: 0.62, id: "nightstand", label: "Bedside table" });
   await addModel(root, "lamp.glb", -3.7, -4.55, { height: 0.42, lift: 0.62 });
-  await addModel(root, "dresser.glb", -6.95, -4.35, { height: 1.15, rotY: Math.PI / 2, tint: "#8a623c", id: "dresser-his", label: "His dresser" });
-  await addModel(root, "dresser-wide.glb", -6.85, -1.15, { height: 1.05, rotY: Math.PI / 2, tint: "#c4897a", id: "dresser-hers", label: "Her dresser" });
+  await addModel(root, "ph/drawer/drawer_1k.gltf", -6.85, -4.35, { height: 1.2, rotY: Math.PI / 2, id: "dresser-his", label: "His dresser" });
+  await addModel(root, "ph/drawer/drawer_1k.gltf", -6.85, -1.2, { height: 1.15, rotY: Math.PI / 2, tint: "#e8c4b8", id: "dresser-hers", label: "Her dresser" });
   await addModel(root, "wardrobe.glb", -3.55, -0.15, { height: 2.15, rotY: Math.PI, id: "wardrobe", label: "Wardrobe" });
 }
 
 async function buildLiving(root) {
-  await addModel(root, "rug.glb", -0.35, -2.15, { width: 3.4, id: "rug", label: "Living room rug" });
-  await addModel(root, "sofa.glb", -0.35, -4.15, { width: 2.9, rotY: 0, id: "sofa", label: "Living room sofa" });
-  await addModel(root, "coffee-table.glb", -0.35, -2.35, { width: 1.25 });
-  await addModel(root, "tv-stand.glb", 1.85, -2.55, { width: 1.45, rotY: -Math.PI / 2, id: "media", label: "Media console" });
-  await addModel(root, "tv.glb", 1.88, -2.55, { width: 1.15, lift: 0.48, rotY: -Math.PI / 2 });
-  await addModel(root, "speaker.glb", 1.85, -1.7, { height: 0.5 });
-  await addModel(root, "speaker.glb", 1.85, -3.4, { height: 0.5 });
+  const rugMat = pbr("fabric", { rx: 2, ry: 2, color: 0xc4a07a, maps: false });
+  rugMat.map = loadMap("fabric_diff.jpg", { color: true, rx: 2, ry: 2 });
+  const rug = mesh(new THREE.BoxGeometry(3.5, 0.04, 2.5), rugMat, -0.35, 0.13, -2.2, root);
+  mark(rug, "rug", "Living room rug");
+  await addModel(root, "ph/Sofa_01/Sofa_01_1k.gltf", -0.35, -4.05, { width: 2.85, id: "sofa", label: "Living room sofa" });
+  await addModel(root, "coffee-table.glb", -0.35, -2.35, { width: 1.2 });
+  const media = new THREE.Group();
+  media.position.set(1.88, 0, -2.55);
+  mark(media, "media", "Media console");
+  root.add(media);
+  mesh(new THREE.BoxGeometry(0.42, 0.5, 1.55), pbr("wood", { rx: 1, ry: 1, rough: 0.45 }), 0, 0.32, 0, media);
+  await addModel(media, "ph/Television_01/Television_01_1k.gltf", 0, 0, { width: 1.05, lift: 0.55, rotY: -Math.PI / 2 });
+  await addModel(root, "speaker.glb", 1.85, -1.7, { height: 0.45 });
+  await addModel(root, "speaker.glb", 1.85, -3.4, { height: 0.45 });
   await addModel(root, "plant.glb", -2.45, -4.55, { height: 0.85 });
   await addModel(root, "lamp-floor.glb", 1.85, -4.55, { height: 1.35 });
 }
 
 async function buildKitchen(root) {
-  // L-shaped run along the north and east walls: fridge, sink, stove. No bed.
   const kit = new THREE.Group();
-  kit.position.set(0, 0, 0);
   mark(kit, "kitchen", "Kitchen");
   root.add(kit);
+  const quartz = new THREE.MeshStandardMaterial({ color: "#e8e0d4", roughness: 0.28, metalness: 0.08 });
+  const steel = new THREE.MeshStandardMaterial({ color: "#c5c8cc", metalness: 0.72, roughness: 0.28 });
+  const black = new THREE.MeshStandardMaterial({ color: "#2a2c2b", metalness: 0.35, roughness: 0.4 });
 
-  await addModel(kit, "fridge.glb", 3.15, -4.85, { height: 1.85 });
-  await addModel(kit, "cabinet.glb", 4.15, -4.95, { height: 0.9 });
-  await addModel(kit, "sink.glb", 5.05, -4.95, { height: 0.95, id: "kitchen-sink", label: "Kitchen sink" });
-  await addModel(kit, "cabinet-drawer.glb", 5.95, -4.95, { height: 0.9 });
-  await addModel(kit, "stove.glb", 6.7, -4.85, { height: 0.95 });
-  await addModel(kit, "hood.glb", 6.7, -4.85, { width: 0.85, lift: 1.55 });
-  await addModel(kit, "cabinet-upper.glb", 4.2, -5.05, { height: 0.7, lift: 1.55 });
-  await addModel(kit, "cabinet-upper-dbl.glb", 5.9, -5.05, { width: 1.5, lift: 1.55 });
-  await addModel(kit, "kitchen-island.glb", 4.9, -2.15, { width: 1.7, rotY: Math.PI / 2 });
-  await addModel(kit, "stool.glb", 4.35, -1.35, { height: 0.75 });
-  await addModel(kit, "stool.glb", 5.45, -1.35, { height: 0.75 });
-  await addModel(kit, "plant-small.glb", 3.2, -3.55, { height: 0.35 });
+  // Fridge
+  mesh(new THREE.BoxGeometry(0.78, 1.85, 0.68), steel, 3.2, 1.02, -4.95, kit);
+  mesh(new THREE.BoxGeometry(0.04, 1.72, 0.62), steel, 3.58, 1.02, -4.95, kit);
+  mesh(new THREE.BoxGeometry(0.03, 0.7, 0.03), std("#8a8f94", { metalness: 0.8, roughness: 0.25 }), 3.62, 1.35, -4.95, kit);
+
+  shakerCabinet(kit, 4.15, 0.46, -4.98, 0.7, 0.88, 0.58);
+  const sinkGrp = new THREE.Group();
+  sinkGrp.position.set(5.05, 0, -4.95);
+  mark(sinkGrp, "kitchen-sink", "Kitchen sink");
+  kit.add(sinkGrp);
+  shakerCabinet(sinkGrp, 0, 0.46, 0, 0.85, 0.88, 0.58, { drawers: 2 });
+  mesh(new THREE.BoxGeometry(0.7, 0.08, 0.42), steel, 0, 0.94, 0.02, sinkGrp);
+  mesh(new THREE.CylinderGeometry(0.02, 0.025, 0.28, 10), steel, 0, 1.16, -0.1, sinkGrp);
+  mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.18, 8), steel, 0, 1.28, 0.0, sinkGrp).rotation.x = Math.PI / 2;
+
+  shakerCabinet(kit, 5.9, 0.46, -4.98, 0.7, 0.88, 0.58, { drawers: 3 });
+
+  // Stove
+  mesh(new THREE.BoxGeometry(0.72, 0.88, 0.6), black, 6.65, 0.5, -4.92, kit);
+  mesh(new THREE.BoxGeometry(0.7, 0.04, 0.58), black, 6.65, 0.96, -4.92, kit);
+  for (const [ox, oz] of [[-0.16, -0.14], [0.16, -0.14], [-0.16, 0.14], [0.16, 0.14]]) {
+    mesh(new THREE.TorusGeometry(0.09, 0.015, 8, 16), steel, 6.65 + ox, 0.99, -4.92 + oz, kit, { rotX: Math.PI / 2 });
+  }
+  mesh(new THREE.BoxGeometry(0.55, 0.28, 0.04), std("#1a1a1a", { roughness: 0.3 }), 6.65, 0.45, -4.6, kit);
+  mesh(new THREE.BoxGeometry(0.7, 0.12, 0.55), steel, 6.65, 1.72, -5.05, kit);
+
+  mesh(new THREE.BoxGeometry(4.6, 0.06, 0.68), quartz, 5.05, 0.94, -4.95, kit);
+  mesh(new THREE.BoxGeometry(3.6, 0.55, 0.04), pbr("tile", { rx: 3, ry: 1.2, rough: 0.4 }), 5.15, 1.35, -5.36, kit);
+
+  shakerCabinet(kit, 4.25, 2.05, -5.12, 0.85, 0.62, 0.36);
+  shakerCabinet(kit, 5.2, 2.05, -5.12, 0.85, 0.62, 0.36);
+  shakerCabinet(kit, 6.15, 2.05, -5.12, 0.85, 0.62, 0.36);
+
+  shakerCabinet(kit, 4.9, 0.46, -2.2, 1.7, 0.88, 0.7, { rotY: 0 });
+  mesh(new THREE.BoxGeometry(1.82, 0.06, 0.78), quartz, 4.9, 0.94, -2.2, kit);
+  await addModel(kit, "stool.glb", 4.35, -1.4, { height: 0.72 });
+  await addModel(kit, "stool.glb", 5.45, -1.4, { height: 0.72 });
+  await addModel(kit, "plant-small.glb", 3.35, -3.55, { height: 0.32 });
 }
 
 async function buildGarage(root) {
@@ -286,16 +428,16 @@ async function attachWheels(car, parent) {
 
 async function buildVehicles(root) {
   const carWrap = new THREE.Group();
-  carWrap.position.set(8.15, 0, 9.35);
+  carWrap.position.set(7.15, 0, 9.55);
   mark(carWrap, "car", "Car");
   root.add(carWrap);
   await addModel(carWrap, "sedan.glb", 0, 0, { depth: 4.3, rotY: 0 });
 
   const rvWrap = new THREE.Group();
-  rvWrap.position.set(13.4, 0, 9.6);
+  rvWrap.position.set(11.55, 0, 8.15);
   mark(rvWrap, "rv", "RV");
   root.add(rvWrap);
-  await addModel(rvWrap, "rv.glb", 0, 0, { depth: 5.6, rotY: 0 });
+  await addModel(rvWrap, "rv.glb", 0, 0, { depth: 5.15, rotY: 0 });
 }
 
 async function buildRVInterior(root) {
@@ -329,7 +471,7 @@ export async function initHouse(container, options = {}) {
   renderer.setSize(width(), height());
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.12;
+  renderer.toneMappingExposure = 1.08;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setClearColor(0xe7dcc8, 1);
@@ -340,11 +482,12 @@ export async function initHouse(container, options = {}) {
   scene.fog = new THREE.Fog("#e7dcc8", 42, 78);
 
   let aspect = width() / height();
-  let frustum = 12.2;
+  const houseFrustum = () => (width() < 700 ? 7.15 : 7.55);
+  let frustum = houseFrustum();
   const camera = new THREE.OrthographicCamera(-frustum * aspect, frustum * aspect, frustum, -frustum, 0.1, 200);
-  const houseTarget = new THREE.Vector3(2.6, 0.45, 2.0);
+  const houseTarget = new THREE.Vector3(3.35, 0.72, 2.55);
   const rvTarget = new THREE.Vector3(40, 0.25, 0);
-  camera.position.set(houseTarget.x + 18, 24, houseTarget.z + 18);
+  camera.position.set(houseTarget.x + 13.5, 17.2, houseTarget.z + 13.5);
   camera.lookAt(houseTarget);
   camera.userData.target = houseTarget.clone();
 
@@ -359,9 +502,9 @@ export async function initHouse(container, options = {}) {
   controls.screenSpacePanning = true;
   controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
 
-  const hemi = new THREE.HemisphereLight(0xfff2dd, 0x6b7a4e, 0.78);
+  const hemi = new THREE.HemisphereLight(0xfff2dd, 0x6b7a4e, 0.42);
   scene.add(hemi);
-  const sun = new THREE.DirectionalLight(0xfff0d6, 2.15);
+  const sun = new THREE.DirectionalLight(0xfff0d6, 1.65);
   sun.position.set(18, 24, 12);
   sun.castShadow = true;
   const mapSize = width() < 700 ? 1024 : 2048;
@@ -389,6 +532,17 @@ export async function initHouse(container, options = {}) {
     p.position.set(x, y, z);
     scene.add(p);
   });
+
+  try {
+    const hdr = await new RGBELoader().loadAsync(`${BASE}textures/venice_sunset_1k.hdr`);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromEquirectangular(hdr).texture;
+    scene.environmentIntensity = 0.48;
+    hdr.dispose();
+    pmrem.dispose();
+  } catch (err) {
+    console.warn("HDRI unavailable", err);
+  }
 
   const world = new THREE.Group();
   scene.add(world);
@@ -483,13 +637,13 @@ export async function initHouse(container, options = {}) {
       await buildRVInterior(rvWorld);
       rvBuilt = true;
     }
-    applyFrustum(next === "rv" ? 4.1 : 12.2);
+    applyFrustum(next === "rv" ? 4.1 : houseFrustum());
     controls.enabled = false;
     const fromPos = camera.position.clone();
     const fromTarget = controls.target.clone();
     const toPos = next === "rv"
       ? new THREE.Vector3(rvTarget.x, 15.5, rvTarget.z + 0.12)
-      : new THREE.Vector3(houseTarget.x + 18, 24, houseTarget.z + 18);
+      : new THREE.Vector3(houseTarget.x + 13.5, 17.2, houseTarget.z + 13.5);
     const toTarget = next === "rv" ? rvTarget.clone() : houseTarget.clone();
     if (next === "rv") {
       controls.minPolarAngle = 0.02;
