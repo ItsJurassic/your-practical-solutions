@@ -1,6 +1,6 @@
 import { CONFIG, shopUrl, collectionUrl, productUrl } from "./config.js";
 import { fetchCatalog, collectionsFallback, matchProducts } from "./shopify.js";
-import { initHouse } from "./house-scene.js";
+import { initHouse } from "./house-plan.js";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 export const HOTSPOT_META = {
@@ -181,7 +181,7 @@ backHouse.onclick = () => {
   if (houseApi) {
     houseApi.setView("house");
     backHouse.hidden = true;
-    viewHint.textContent = "Explore the 3D house";
+    viewHint.textContent = "Explore the floor plan";
     view = "house";
     return;
   }
@@ -209,10 +209,6 @@ function showImageFallback(reason) {
 }
 
 async function startHouse() {
-  if (!webglOk()) {
-    showImageFallback("no-webgl");
-    return;
-  }
   try {
     houseApi = await initHouse(houseStage, {
       onHover(hs) {
@@ -235,21 +231,17 @@ async function startHouse() {
           viewHint.textContent = "Inside the RV";
         } else {
           backHouse.hidden = true;
-          viewHint.textContent = "Explore the 3D house";
+          viewHint.textContent = "Explore the floor plan";
         }
       },
-      onPeek(isPeek) {
-        if (peekHouse) {
-          peekHouse.textContent = isPeek ? "Show exterior" : "Peek inside";
-          peekHouse.setAttribute("aria-pressed", isPeek ? "true" : "false");
-        }
-      },
+
       onReady() {
         if (sceneStatus) sceneStatus.remove();
         window.__SCENE_READY__ = true;
         window.__SCENE_MODE__ = "3d";
         if (peekHouse) {
-          peekHouse.onclick = () => houseApi?.setPeek(!houseApi.getPeek());
+          peekHouse.textContent = "Reset view";
+          peekHouse.onclick = () => (houseApi?.getView() === "rv" ? houseApi.setView("house") : houseApi?.reset());
         }
       },
     });

@@ -114,3 +114,9 @@ th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; }
 }
 #house .wrap { width: min(1440px, calc(100% - 20px)); }
 
+
+.plan-svg { display:block; width:100%; height:100%; transition: opacity .22s ease; touch-action:none; user-select:none; -webkit-user-select:none; background:#6f9a45; }
+.plan-svg .room-label { font: 700 30px "Source Sans 3", sans-serif; letter-spacing: 2px; fill: #2c2a27; paint-order: stroke; stroke: rgba(255,255,255,.75); stroke-width: 6px; pointer-events:none; }
+.plan-svg .room-dim { font: 600 21px "Source Sans 3", sans-serif; fill: #4a4540; paint-order: stroke; stroke: rgba(255,255,255,.75); stroke-width: 4px; pointer-events:none; }
+.plan-svg .tag { font: 700 11px "Source Sans 3", sans-serif; fill: #f6efe2; letter-spacing:1px; pointer-events:none; }
+.plan-svg .hs { cursor: pointer; }

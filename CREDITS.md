@@ -1,4 +1,6 @@
-# 3D asset credits
+# Asset credits
+
+The homepage hero is a hand-drawn SVG top-down floor plan (`house-plan.js`): walls, doors, windows, furniture, car, RV and landscaping are original vector drawings. Surface textures come from Poly Haven (CC0, below). The earlier 3D assets listed below remain in the repo but are no longer loaded.
 
 All models and textures on the Your Practical Solutions storefront are free for commercial use.
 
