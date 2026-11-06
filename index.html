@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Practical Solutions | Useful goods for home, garage, car and RV</title>
+  <meta name="description" content="Your Practical Solutions is a warm, practical shop for storage, pet, garage, car and RV, home decor, and everyday household goods. Explore our house and shop on Shopify." />
+  <link rel="canonical" href="https://yourpracticalsolutions.com/" />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Your Practical Solutions" />
+  <meta property="og:title" content="Your Practical Solutions | Practical household goods" />
+  <meta property="og:description" content="Explore a livable house of useful goods — then check out on our Shopify shop." />
+  <meta property="og:url" content="https://yourpracticalsolutions.com/" />
+  <meta property="og:image" content="https://yourpracticalsolutions.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Your Practical Solutions" />
+  <meta name="twitter:description" content="Useful goods for home, garage, car and RV." />
+  <meta name="twitter:image" content="https://yourpracticalsolutions.com/og-image.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='12' width='64' height='64' fill='%232c4a3e'/><text x='32' y='42' text-anchor='middle' font-size='28' fill='%23f7f1e8'>Y</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="./"><span class="mark">Y</span> Your Practical Solutions</a>
+      <nav>
+        <a href="#house">Explore the house</a>
+        <a href="#shop">Shop</a>
+        <a href="#about">About</a>
+        <a class="btn btn-primary" id="shop-cta" href="https://shop.yourpracticalsolutions.com">Visit the shop</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <h1>Useful things, thoughtfully placed.</h1>
+        <p>Browse our home as if you lived here — bedroom, kitchen, living room, garage, yard, car and RV. Click what you see to find matching products. When you are ready to buy, checkout happens on our Shopify shop.</p>
+        <a class="btn btn-primary" href="#house">Explore the house</a>
+        <a class="btn btn-ghost" id="shop-cta-2" href="https://shop.yourpracticalsolutions.com">Shop on Shopify</a>
+      </div>
+    </section>
+
+    <section id="house">
+      <div class="wrap">
+        <h2>A house full of practical solutions</h2>
+        <p class="lede">Hover to highlight a piece. Click to see products for that spot. Click the RV to step inside a top-down interior.</p>
+        <div class="house-frame">
+          <div class="house-toolbar">
+            <span class="hint" id="view-hint">Isometric house</span>
+            <button class="btn btn-ghost" id="back-house" hidden type="button">Back to house</button>
+            <button class="btn btn-ghost" id="toggle-3d" type="button">Use simple map</button>
+          </div>
+          <div id="house-stage"></div>
+          <div id="fallback-map"></div>
+          <div id="hover-label"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside id="product-sheet" class="sheet" aria-live="polite">
+      <div class="sheet-head">
+        <h3 id="sheet-title">Products</h3>
+        <p class="muted" id="sheet-blurb"></p>
+        <button class="btn btn-ghost" id="close-sheet" type="button">Close</button>
+      </div>
+      <div class="sheet-body" id="sheet-body"></div>
+    </aside>
+
+    <section id="shop">
+      <div class="wrap">
+        <h2>Shop by room and category</h2>
+        <p class="lede">These are our live Shopify collections. Product pages and checkout live on shop.yourpracticalsolutions.com.</p>
+        <div class="grid" id="collection-grid"></div>
+        <h2 style="margin-top:48px">Everything we sell</h2>
+        <p class="lede">Pulled from Shopify. Nothing here is sample or placeholder inventory.</p>
+        <div class="grid" id="product-grid"></div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <h2>About Your Practical Solutions</h2>
+        <p class="lede">We focus on household goods that earn their keep: storage, pet supplies, garage and tools, car and RV gear, tech accessories, carpets, curtains, and everyday home comforts. Delivery typically takes 5–12 business days.</p>
+        <div class="stats" id="public-stats"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© Your Practical Solutions</span>
+      <nav>
+        <a href="https://shop.yourpracticalsolutions.com">Shop</a>
+        <a href="https://shop.yourpracticalsolutions.com/pages/contact">Contact</a>
+        <a href="./admin/">Admin</a>
+      </nav>
+    </div>
+  </footer>
+    <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

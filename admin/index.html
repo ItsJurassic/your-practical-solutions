@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin KPIs | Your Practical Solutions</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="canonical" href="https://yourpracticalsolutions.com/admin/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="../"><span class="mark">Y</span> Admin</a>
+      <nav>
+        <a href="../">Public site</a>
+        <a href="https://shop.yourpracticalsolutions.com">Shopify shop</a>
+        <button class="btn btn-ghost" id="logout" type="button" hidden>Log out</button>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="login" id="login-view">
+      <h1>Store dashboard</h1>
+      <p class="lede">Sign in with <strong>contact@yourpracticalsolutions.com</strong>. Use the invite or magic link sent to that inbox — we never set or store a password for you.</p>
+      <form id="login-form">
+        <label>Email <input name="email" type="email" required value="contact@yourpracticalsolutions.com" autocomplete="username" /></label>
+        <label>Password <input name="password" type="password" autocomplete="current-password" /></label>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <button class="btn btn-ghost" id="magic" type="button">Email me a sign-in link</button>
+        <button class="btn btn-ghost" id="reset" type="button">Send password reset</button>
+      </form>
+      <p class="muted" id="login-msg"></p>
+    </section>
+    <section class="dash" id="dash-view" hidden>
+      <h1>Dropshipping KPIs</h1>
+      <p class="lede">Figures come from Shopify sync plus costs you enter. Empty means there is no data yet — never demo numbers.</p>
+      <div class="panel">
+        <label>Date range
+          <select id="range">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="ytd">Year to date</option>
+            <option value="all">All time</option>
+          </select>
+        </label>
+        <button class="btn btn-primary" id="sync" type="button">Sync from Shopify</button>
+        <span class="muted" id="sync-msg"></span>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="panel"><canvas id="rev-chart" height="120"></canvas></div>
+      <div class="panel">
+        <h2>Top products</h2>
+        <div id="top-products" class="empty">No orders yet.</div>
+      </div>
+      <div class="panel">
+        <h2>Supplier breakdown</h2>
+        <div id="suppliers" class="empty">No supplier data yet.</div>
+      </div>
+      <div class="panel">
+        <h2>Product costs</h2>
+        <p class="muted">Gross profit uses sale price minus supplier cost, shipping, and estimated payment fees.</p>
+        <div id="costs"></div>
+      </div>
+      <div class="panel">
+        <h2>Ad spend & ROAS</h2>
+        <form id="ad-form">
+          <label>Date <input name="spend_date" type="date" required /></label>
+          <label>Amount <input name="amount" type="number" min="0" step="0.01" required /></label>
+          <label>Channel <input name="channel" value="ads" /></label>
+          <label>Notes <input name="notes" /></label>
+          <button class="btn btn-primary" type="submit">Add spend</button>
+        </form>
+        <div id="ads"></div>
+      </div>
+      <div class="panel">
+        <h2>Traffic sessions (optional)</h2>
+        <p class="muted">Conversion rate = orders ÷ sessions for the selected range. Leave blank if you do not track sessions yet.</p>
+        <form id="sess-form">
+          <label>Day <input name="day" type="date" required /></label>
+          <label>Sessions <input name="sessions" type="number" min="0" required /></label>
+          <button class="btn btn-primary" type="submit">Save</button>
+        </form>
+      </div>
+      <div class="panel">
+        <h2>Inventory / supplier notes</h2>
+        <form id="note-form">
+          <label>Product Shopify ID <input name="product_shopify_id" /></label>
+          <label>Status
+            <select name="stock_status">
+              <option>unknown</option><option>in_stock</option><option>low</option><option>out</option>
+            </select>
+          </label>
+          <label>Note <input name="note" required /></label>
+          <button class="btn btn-primary" type="submit">Add note</button>
+        </form>
+        <div id="notes"></div>
+      </div>
+      <div class="panel">
+        <h2>Connect another assistant</h2>
+        <p>Placeholder for linking a second bot later (buying, ads, or supplier tools). Nothing is connected yet.</p>
+        <button class="btn btn-ghost" type="button" disabled>Coming soon</button>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script type="module" src="./admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YPS house preview</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #e7dcc8; overflow: hidden; }
+    #stage { width: 100%; height: 100%; }
+    #hud {
+      position: fixed; left: 28px; bottom: 28px; z-index: 2;
+      font: 500 15px/1.4 Georgia, serif; color: #2c4a3e;
+      background: rgba(247,241,232,.86); padding: 10px 14px; border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div id="stage"></div>
+  <div id="hud">Your Practical Solutions — explore the house</div>
+    <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+    import { initHouse } from "./house-scene.js";
+    const hud = document.getElementById("hud");
+    const house = await initHouse(document.getElementById("stage"), {
+      onHover(hs) { hud.textContent = hs ? hs.label : "Your Practical Solutions — explore the house"; },
+      onSelect(hs) { hud.textContent = hs ? "Viewing: " + hs.label : hud.textContent; },
+    });
+    window.__house = house;
+    if (new URLSearchParams(location.search).get("view") === "rv") {
+      window.__SCENE_READY__ = false;
+      house.setView("rv");
+      setTimeout(() => { window.__SCENE_READY__ = true; }, 1200);
+    }
+  </script>
+</body>
+</html>
