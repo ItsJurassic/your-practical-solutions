@@ -147,91 +147,280 @@ function hitBox(parent, id, label, x, y, z, w, h, d) {
   return m;
 }
 
+
+const WALL_H = 2.62;
+const WALL_T = 0.11;
+const DOOR_W = 0.92;
+const DOOR_H = 2.12;
+const CLIP_Y = 2.72;
+
+function baseboard(parent, x, y, z, w, d) {
+  const trim = pbr("wood", { rx: 2, ry: 1, color: 0xf3ebe0, rough: 0.5 });
+  mesh(new THREE.BoxGeometry(w, 0.1, d), trim, x, y, z, parent);
+}
+
+function wallX(parent, plaster, trim, x, z0, z1, { doorZ, open = 0 } = {}) {
+  const zMin = Math.min(z0, z1), zMax = Math.max(z0, z1);
+  const segs = [];
+  if (doorZ == null) segs.push([zMin, zMax]);
+  else {
+    const d0 = doorZ - DOOR_W / 2, d1 = doorZ + DOOR_W / 2;
+    if (d0 - zMin > 0.05) segs.push([zMin, d0]);
+    if (zMax - d1 > 0.05) segs.push([d1, zMax]);
+    const head = WALL_H - DOOR_H;
+    mesh(new THREE.BoxGeometry(WALL_T, head, DOOR_W), plaster, x, DOOR_H + head / 2, doorZ, parent);
+    hungDoor(parent, x, 0, doorZ, Math.PI / 2, open);
+  }
+  for (const [a, b] of segs) {
+    const len = b - a, mid = (a + b) / 2;
+    mesh(new THREE.BoxGeometry(WALL_T, WALL_H, len), plaster, x, WALL_H / 2, mid, parent);
+    baseboard(parent, x, 0.06, mid, WALL_T + 0.04, len);
+  }
+}
+
+function wallZ(parent, plaster, trim, z, x0, x1, { doorX, open = 0 } = {}) {
+  const xMin = Math.min(x0, x1), xMax = Math.max(x0, x1);
+  const segs = [];
+  if (doorX == null) segs.push([xMin, xMax]);
+  else {
+    const d0 = doorX - DOOR_W / 2, d1 = doorX + DOOR_W / 2;
+    if (d0 - xMin > 0.05) segs.push([xMin, d0]);
+    if (xMax - d1 > 0.05) segs.push([d1, xMax]);
+    const head = WALL_H - DOOR_H;
+    mesh(new THREE.BoxGeometry(DOOR_W, head, WALL_T), plaster, doorX, DOOR_H + head / 2, z, parent);
+    hungDoor(parent, doorX, 0, z, 0, open);
+  }
+  for (const [a, b] of segs) {
+    const len = b - a, mid = (a + b) / 2;
+    mesh(new THREE.BoxGeometry(len, WALL_H, WALL_T), plaster, mid, WALL_H / 2, z, parent);
+    baseboard(parent, mid, 0.06, z, len, WALL_T + 0.04);
+  }
+}
+
+function hungDoor(parent, x, y, z, facing, open = 0) {
+  const wood = pbr("wood", { rx: 1, ry: 2, color: 0x6b3e24, rough: 0.48 });
+  const brass = std("#c4a35a", { metalness: 0.82, roughness: 0.28 });
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.rotation.y = facing;
+  const leaf = new THREE.Group();
+  leaf.position.set(-DOOR_W / 2, 0, 0);
+  leaf.rotation.y = open;
+  mesh(new THREE.BoxGeometry(DOOR_W - 0.04, DOOR_H - 0.04, 0.05), wood, DOOR_W / 2, DOOR_H / 2, 0, leaf);
+  mesh(new THREE.BoxGeometry(0.22, 0.72, 0.02), pbr("wood", { rx: 1, ry: 1, color: 0x5c3318 }), DOOR_W / 2, 1.35, 0.03, leaf);
+  mesh(new THREE.BoxGeometry(0.22, 0.72, 0.02), pbr("wood", { rx: 1, ry: 1, color: 0x5c3318 }), DOOR_W / 2, 0.55, 0.03, leaf);
+  mesh(new THREE.SphereGeometry(0.035, 10, 8), brass, DOOR_W - 0.16, 1.02, 0.05, leaf);
+  g.add(leaf);
+  parent.add(g);
+  return g;
+}
+
+function ceilingLamp(parent, x, z) {
+  const shade = std("#f7f0e4", { roughness: 0.45, emissive: new THREE.Color("#ffd9a8"), emissiveIntensity: 0.35 });
+  mesh(new THREE.CylinderGeometry(0.16, 0.22, 0.08, 12), shade, x, 2.52, z, parent);
+  mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.16, 8), std("#d8d0c4"), x, 2.6, z, parent, { cast: false });
+  const light = new THREE.PointLight(0xffe0b8, 0.55, 5.8, 1.5);
+  light.position.set(x, 2.35, z);
+  parent.add(light);
+}
+
 async function buildProperty(root) {
   const grass = pbr("grass", { rx: 18, ry: 18, color: 0x8aa56a, rough: 0.95, roughMap: false });
-  mesh(new THREE.CircleGeometry(36, 64), grass, 1, 0, 0, root, { rotX: -Math.PI / 2, cast: false });
+  mesh(new THREE.CircleGeometry(36, 64), grass, 2, 0, 0, root, { rotX: -Math.PI / 2, cast: false });
 
   const shell = new THREE.Group();
-  shell.add(prepare(await loadGLB("house/bungalow.glb")));
+  const bungalow = prepare(await loadGLB("house/bungalow.glb"));
+  shell.add(bungalow);
   root.add(shell);
 
   const interiors = new THREE.Group();
   root.add(interiors);
 
-  async function addRoom(file, x, z) {
-    const g = new THREE.Group();
-    g.position.set(x, 0, z);
-    g.add(prepare(await loadGLB(file)));
-    interiors.add(g);
-    return g;
-  }
+  const plaster = pbr("plaster", { rx: 3, ry: 2, color: 0xf7f1e8, rough: 0.74 });
+  const plasterBed = pbr("plaster", { rx: 3, ry: 2, color: 0xf3e2d0, rough: 0.74 });
+  const plasterKit = pbr("plaster", { rx: 3, ry: 2, color: 0xf4eee4, rough: 0.74 });
+  const trim = pbr("wood", { rx: 2, ry: 1, color: 0xf3ebe0, rough: 0.5 });
+  const parquet = pbr("parquet", { rx: 4, ry: 4, rough: 0.42 });
+  const tile = pbr("tile", { rx: 4, ry: 4, rough: 0.35 });
+  const conc = pbr("concrete", { rx: 3, ry: 3, rough: 0.86 });
+  const fabric = pbr("fabric", { rx: 2, ry: 2, color: 0xc4a07a, maps: false });
+  fabric.map = loadMap("fabric_diff.jpg", { color: true, rx: 2, ry: 2 });
 
-  const bedroom = await addRoom("house/bedroom.glb", -2, -2);
-  hitBox(bedroom, "bed", "Bed", 0.45, 0.55, -1.05, 2.05, 0.95, 1.65);
-  hitBox(bedroom, "nightstand", "Bedside table", -0.65, 0.4, -1.4, 0.5, 0.7, 0.5);
-  hitBox(bedroom, "wardrobe", "Wardrobe", -1.55, 1.0, -0.55, 0.75, 2.0, 0.7);
-  hitBox(bedroom, "dresser-hers", "Her dresser", -0.7, 0.55, -1.55, 0.85, 0.95, 0.45);
-  hitBox(bedroom, "dresser-his", "His dresser", -1.55, 0.4, 0.25, 0.7, 0.8, 0.55);
+  // Interior of the bungalow (inset from the exterior walls).
+  const x0 = -5.72, x1 = 5.72, z0 = -4.28, z1 = 3.28;
+  const hx = -0.88; // hallway / kitchen split
+  const lx = 0.28;  // living split
+  const kz = 0.92;  // kitchen / bath split
+  const bz = -0.88; // bedroom north wall
 
-  const kitchen = await addRoom("house/kitchen.glb", -2, 2);
-  hitBox(kitchen, "kitchen", "Kitchen", 0.15, 1.1, -0.2, 3.5, 2.2, 3.4);
-  hitBox(kitchen, "kitchen-sink", "Kitchen sink", 0.05, 0.95, -1.55, 0.85, 0.7, 0.55);
+  mesh(new THREE.BoxGeometry(hx - x0, 0.08, z1 - kz), tile, (x0 + hx) / 2, 0.07, (kz + z1) / 2, interiors, { cast: false });
+  mesh(new THREE.BoxGeometry(hx - x0, 0.08, kz - bz), tile, (x0 + hx) / 2, 0.07, (bz + kz) / 2, interiors, { cast: false });
+  mesh(new THREE.BoxGeometry(lx - x0, 0.08, bz - z0), parquet, (x0 + lx) / 2, 0.07, (z0 + bz) / 2, interiors, { cast: false });
+  mesh(new THREE.BoxGeometry(x1 - lx, 0.08, z1 - z0), parquet, (lx + x1) / 2, 0.07, (z0 + z1) / 2, interiors, { cast: false });
+  mesh(new THREE.BoxGeometry(lx - hx, 0.08, z1 - bz), parquet, (hx + lx) / 2, 0.07, (bz + z1) / 2, interiors, { cast: false });
 
-  const living = await addRoom("house/living-room.glb", 2, -2);
-  hitBox(living, "sofa", "Living room sofa", 0.55, 0.5, -0.15, 2.15, 0.9, 1.05);
-  hitBox(living, "rug", "Living room rug", 0.2, 0.05, 0.35, 2.3, 0.1, 1.9);
-  hitBox(living, "media", "Media console", -1.4, 0.45, -0.35, 1.35, 0.85, 0.55);
-  hitBox(living, "curtains", "Curtains", 1.25, 1.45, -1.55, 0.9, 1.4, 0.35);
+  wallX(interiors, plasterKit, trim, hx, kz, z1, { doorZ: 2.05, open: -1.05 });
+  wallX(interiors, plaster, trim, hx, bz, kz, { doorZ: 0.05, open: -0.35 });
+  wallZ(interiors, plasterKit, trim, kz, x0, hx);
+  wallZ(interiors, plasterBed, trim, bz, x0, lx, { doorX: -0.15, open: 1.15 });
+  wallX(interiors, plaster, trim, lx, z0, bz);
 
+  ceilingLamp(interiors, -3.2, 2.05);
+  ceilingLamp(interiors, 2.6, 0.35);
+  ceilingLamp(interiors, 2.6, -2.4);
+  ceilingLamp(interiors, -2.6, -2.5);
+  ceilingLamp(interiors, -3.2, 0.05);
+  ceilingLamp(interiors, -0.3, 1.6);
+
+  // Kitchen (front-left)
+  const kitchen = new THREE.Group();
+  interiors.add(kitchen);
+  mark(kitchen, "kitchen", "Kitchen");
+  await addModel(kitchen, "fridge.glb", -5.28, 1.25, { height: 1.9, rotY: Math.PI / 2 });
+  await addModel(kitchen, "stove.glb", -5.28, 2.15, { height: 0.98, rotY: Math.PI / 2 });
+  await addModel(kitchen, "hood.glb", -5.28, 2.15, { width: 0.78, lift: 1.38, rotY: Math.PI / 2 });
+  await addModel(kitchen, "sink.glb", -5.28, 2.95, { width: 0.82, rotY: Math.PI / 2, id: "kitchen-sink", label: "Kitchen sink" });
+  await addModel(kitchen, "cabinet.glb", -5.28, 1.7, { height: 0.9, rotY: Math.PI / 2 });
+  await addModel(kitchen, "cabinet-drawer.glb", -5.28, 2.55, { height: 0.9, rotY: Math.PI / 2 });
+  await addModel(kitchen, "cabinet-upper.glb", -5.28, 2.95, { width: 0.78, lift: 1.42, rotY: Math.PI / 2 });
+  await addModel(kitchen, "cabinet-upper.glb", -5.28, 1.7, { width: 0.78, lift: 1.42, rotY: Math.PI / 2 });
+  await addModel(kitchen, "kitchen-island.glb", -3.15, 2.05, { width: 1.45 });
+  await addModel(kitchen, "stool.glb", -3.15, 1.55, { height: 0.72 });
+  await addModel(kitchen, "stool.glb", -2.65, 2.45, { height: 0.72, rotY: 0.25 });
+  await addModel(kitchen, "plant-small.glb", -1.45, 1.45, { height: 0.32 });
+
+  // Bathroom
+  await addModel(interiors, "shower.glb", -5.15, 0.05, { height: 2.05 });
+  await addModel(interiors, "bath-sink.glb", -2.05, 0.35, { height: 0.85, rotY: Math.PI / 2 });
+
+  // Bedroom (back-left)
+  await addModel(interiors, "bed-q.glb", -2.85, -3.15, { width: 2.25, rotY: Math.PI, id: "bed", label: "Bed" });
+  await addModel(interiors, "pillow.glb", -2.45, -3.55, { width: 0.55 });
+  await addModel(interiors, "pillow.glb", -3.25, -3.55, { width: 0.55 });
+  await addModel(interiors, "nightstand.glb", -1.55, -3.35, { height: 0.62, id: "nightstand", label: "Bedside table" });
+  await addModel(interiors, "lamp.glb", -1.55, -3.35, { height: 0.4, lift: 0.62 });
+  await addModel(interiors, "nightstand.glb", -4.15, -3.35, { height: 0.62 });
+  await addModel(interiors, "lamp.glb", -4.15, -3.35, { height: 0.4, lift: 0.62 });
+  await addModel(interiors, "ph/drawer/drawer_1k.gltf", -5.25, -2.15, { height: 1.15, rotY: Math.PI / 2, id: "dresser-his", label: "His dresser" });
+  await addModel(interiors, "ph/drawer/drawer_1k.gltf", -5.25, -3.35, { height: 1.08, rotY: Math.PI / 2, tint: "#e8c4b8", id: "dresser-hers", label: "Her dresser" });
+  await addModel(interiors, "wardrobe.glb", -0.22, -3.45, { height: 2.05, rotY: Math.PI, id: "wardrobe", label: "Wardrobe" });
+  await addModel(interiors, "plant.glb", -0.55, -1.35, { height: 0.8 });
+  const bedRug = mesh(new THREE.BoxGeometry(2.4, 0.04, 1.7), fabric, -2.85, 0.12, -2.35, interiors);
+  mark(bedRug, "rug", "Living room rug");
+
+  // Living (east)
+  const sofa = await addModel(interiors, "ph/Sofa_01/Sofa_01_1k.gltf", 2.45, 0.95, { width: 2.6, rotY: Math.PI / 2, tint: "#6a4a38", id: "sofa", label: "Living room sofa" });
+  await addModel(interiors, "coffee-table.glb", 3.5, 0.95, { width: 1.2 });
+  await addModel(interiors, "sofa-kenney.glb", 3.85, 2.25, { width: 1.45, rotY: Math.PI, tint: "#7a3d32" });
+  await addModel(interiors, "plant.glb", 1.15, 1.15, { height: 0.95 });
+  const rugMat = std("#8a4332", { roughness: 0.9 });
+  const liveRug = mesh(new THREE.BoxGeometry(3.25, 0.05, 2.7), rugMat, 3.3, 0.12, 0.85, interiors);
+  mark(liveRug, "rug", "Living room rug");
+  const media = new THREE.Group();
+  media.position.set(5.15, 0, 0.85);
+  mark(media, "media", "Media console");
+  interiors.add(media);
+  mesh(new THREE.BoxGeometry(0.42, 0.48, 1.55), pbr("wood", { rx: 1, ry: 1, rough: 0.45 }), 0, 0.3, 0, media);
+  await addModel(media, "ph/Television_01/Television_01_1k.gltf", 0, 0, { width: 1.1, lift: 0.52, rotY: -Math.PI / 2 });
+  await addModel(interiors, "lamp-floor.glb", 4.85, 2.25, { height: 1.45 });
+  await addModel(interiors, "sidetable.glb", 4.85, -0.85, { height: 0.72 });
+  await addModel(interiors, "plant.glb", 1.05, 2.85, { height: 0.95 });
+  await addModel(interiors, "bookcase.glb", 5.2, -3.35, { height: 1.85, rotY: -Math.PI / 2 });
+  await addModel(interiors, "table.glb", 2.45, -1.85, { width: 1.4 });
+  await addModel(interiors, "chair.glb", 2.45, -1.3, { height: 0.88 });
+  await addModel(interiors, "chair.glb", 2.45, -2.4, { height: 0.88, rotY: Math.PI });
+  await addModel(interiors, "chair.glb", 1.85, -1.85, { height: 0.88, rotY: Math.PI / 2 });
+  const curtains = new THREE.Group();
+  interiors.add(curtains);
+  mark(curtains, "curtains", "Curtains");
+  mesh(new THREE.BoxGeometry(0.12, 1.55, 0.08), fabric, 2.05, 1.55, 3.15, curtains);
+  mesh(new THREE.BoxGeometry(0.12, 1.55, 0.08), fabric, 3.35, 1.55, 3.15, curtains);
+
+  await addModel(interiors, "sidetable.glb", -0.25, 2.65, { height: 0.75 });
+  await addModel(interiors, "plant-small.glb", -0.25, 2.65, { height: 0.28, lift: 0.75 });
+  await addModel(interiors, "chair.glb", 2.05, 1.45, { height: 0.88, rotY: 0.4 });
+  hungDoor(interiors, 5.66, 0, 1.35, Math.PI / 2, -1.2);
+
+  // Attached garage wing on the +X side
   const garage = new THREE.Group();
-  garage.position.set(2, 0, 2);
+  garage.position.set(0, 0, 0);
   interiors.add(garage);
-  const conc = pbr("concrete", { rx: 2, ry: 2, rough: 0.86 });
-  mesh(new THREE.BoxGeometry(4, 0.08, 4), conc, 0, 0.04, 0, garage, { cast: false });
-  mesh(new THREE.BoxGeometry(0.12, 2.6, 4), pbr("plaster", { rx: 2, ry: 2, color: 0xf4eee6 }), -1.94, 1.3, 0, garage);
-  mesh(new THREE.BoxGeometry(4, 2.6, 0.12), pbr("plaster", { rx: 2, ry: 2, color: 0xf4eee6 }), 0, 1.3, -1.94, garage);
-  await addModel(garage, "workbench.glb", 0.15, -0.85, { width: 2.15, rotY: 0, id: "garage-workstation", label: "Garage workstation" });
-  await addModel(garage, "box.glb", 1.35, 1.2, { height: 0.4 });
-  await addModel(garage, "box-open.glb", -1.2, 1.15, { height: 0.35 });
+  const gx0 = 6.42, gx1 = 11.55, gz0 = -3.05, gz1 = 3.05;
+  mesh(new THREE.BoxGeometry(gx1 - gx0, 0.08, gz1 - gz0), conc, (gx0 + gx1) / 2, 0.06, (gz0 + gz1) / 2, garage, { cast: false });
+  const siding = std("#e6c45c", { roughness: 0.72 });
+  const stone = pbr("concrete", { rx: 2, ry: 0.6, color: 0xc5bba8, rough: 0.86 });
+  const roofMat = std("#de7a62", { roughness: 0.56, map: loadMap("roof_diff.jpg", { color: true, rx: 4, ry: 2 }) });
+  roofMat.color.multiply(new THREE.Color("#ffd2c4"));
+  // inner (house) wall is the bungalow itself; build the other three
+  mesh(new THREE.BoxGeometry(gx1 - gx0, 0.4, WALL_T), stone, (gx0 + gx1) / 2, 0.2, gz0, garage);
+  mesh(new THREE.BoxGeometry(gx1 - gx0, WALL_H - 0.4, WALL_T), siding, (gx0 + gx1) / 2, 0.4 + (WALL_H - 0.4) / 2, gz0, garage);
+  mesh(new THREE.BoxGeometry(gx1 - gx0, 0.4, WALL_T), stone, (gx0 + gx1) / 2, 0.2, gz1, garage);
+  mesh(new THREE.BoxGeometry(gx1 - gx0, WALL_H - 0.4, WALL_T), siding, (gx0 + gx1) / 2, 0.4 + (WALL_H - 0.4) / 2, gz1, garage);
+  const pane = new THREE.MeshStandardMaterial({ color: "#cfe7f2", roughness: 0.08, metalness: 0.15, transparent: true, opacity: 0.45 });
+  mesh(new THREE.BoxGeometry(1.15, 0.85, 0.04), pane, 8.4, 1.55, gz1 + 0.04, garage, { cast: false });
+  mesh(new THREE.BoxGeometry(1.25, 0.08, 0.06), std("#6a5844"), 8.4, 1.12, gz1 + 0.05, garage);
+  mesh(new THREE.BoxGeometry(1.25, 0.08, 0.06), std("#6a5844"), 8.4, 1.98, gz1 + 0.05, garage);
+  // outer wall with roll-up opening
+  const openW = 2.7, openH = 2.15, midZ = 0;
+  const side = ((gz1 - gz0) - openW) / 2;
+  mesh(new THREE.BoxGeometry(WALL_T, WALL_H, side), siding, gx1, WALL_H / 2, gz0 + side / 2, garage);
+  mesh(new THREE.BoxGeometry(WALL_T, WALL_H, side), siding, gx1, WALL_H / 2, gz1 - side / 2, garage);
+  mesh(new THREE.BoxGeometry(WALL_T, WALL_H - openH, openW), siding, gx1, openH + (WALL_H - openH) / 2, midZ, garage);
+  mesh(new THREE.BoxGeometry(WALL_T, 0.4, gz1 - gz0), stone, gx1, 0.2, 0, garage);
+  const gMetal = new THREE.MeshStandardMaterial({ color: "#8b9096", metalness: 0.45, roughness: 0.38 });
+  for (let i = 0; i < 10; i++) {
+    mesh(new THREE.BoxGeometry(0.06, 0.13, openW - 0.1), gMetal, gx1 - 0.04, 1.72 + i * 0.08, midZ, garage);
+  }
+  const roof = mesh(new THREE.BoxGeometry(gx1 - gx0 + 0.45, 0.12, gz1 - gz0 + 0.5), roofMat, (gx0 + gx1) / 2, 3.55, 0, garage);
+  roof.rotation.x = 0.12;
+  ceilingLamp(garage, 8.9, 0);
+  await addModel(garage, "workbench.glb", 8.15, -2.15, { width: 2.05, rotY: 0, id: "garage-workstation", label: "Garage workstation" });
+  // pegboard
+  mesh(new THREE.BoxGeometry(0.06, 1.15, 1.7), pbr("wood", { rx: 1, ry: 1, color: 0x8a5a32 }), 8.15, 1.55, -2.55, garage);
+  for (let i = 0; i < 5; i++) {
+    mesh(new THREE.BoxGeometry(0.04, 0.35, 0.04), std("#888"), 8.22, 1.35, -2.15 + i * 0.28, garage);
+  }
+  mesh(new THREE.BoxGeometry(0.42, 1.55, 1.15), pbr("wood", { rx: 1, ry: 1 }), 10.95, 0.85, -2.15, garage);
+  mesh(new THREE.BoxGeometry(0.42, 1.55, 1.15), pbr("wood", { rx: 1, ry: 1 }), 10.95, 0.85, 2.15, garage);
+  await addModel(garage, "box.glb", 10.95, -2.15, { height: 0.32, lift: 1.55 });
+  await addModel(garage, "box-open.glb", 10.95, 2.15, { height: 0.3, lift: 0.55 });
+  await addModel(garage, "bookcase.glb", 7.15, 2.45, { height: 1.65, rotY: Math.PI });
 
   const drive = pbr("asphalt", { rx: 3, ry: 3, rough: 0.9 });
-  mesh(new THREE.BoxGeometry(6.4, 0.06, 10.2), drive, 8.15, 0.03, 0.15, root, { cast: false });
+  mesh(new THREE.BoxGeometry(7.4, 0.05, 8.6), drive, 13.3, 0.03, 0.15, root, { cast: false });
 
   const yard = new THREE.Group();
-  yard.position.set(-7.4, 0, 0.2);
+  yard.position.set(-7.6, 0, 0.15);
   mark(yard, "yard", "Yard & garden");
   root.add(yard);
   await addModel(yard, "bush.glb", 0.15, 0.2, { height: 0.85 });
   await addModel(yard, "bush-small.glb", -0.7, 0.85, { height: 0.5 });
   await addModel(yard, "plant.glb", 0.9, 0.55, { height: 0.7 });
-  await addModel(root, "tree.glb", -8.2, -3.1, { height: 3.1, tint: "#7d8f4a" });
-  await addModel(root, "tree-oak.glb", -7.6, 3.8, { height: 2.9, tint: "#6e8242" });
+  await addModel(root, "tree.glb", -8.4, -3.2, { height: 3.1, tint: "#7d8f4a" });
+  await addModel(root, "tree-oak.glb", -7.8, 3.9, { height: 2.9, tint: "#6e8242" });
 
   const garden = new THREE.Group();
-  garden.position.set(-6.6, 0, 3.15);
+  garden.position.set(-6.8, 0, 3.2);
   mark(garden, "garden", "Garden bed");
   root.add(garden);
   mesh(new THREE.BoxGeometry(2.6, 0.14, 1.15), std("#6b4b32"), 0, 0.08, 0, garden);
   await addModel(garden, "flower-red.glb", -0.8, 0.1, { height: 0.26 });
   await addModel(garden, "flower-yellow.glb", -0.15, -0.15, { height: 0.24 });
   await addModel(garden, "flower-purple.glb", 0.45, 0.12, { height: 0.25 });
-  await addModel(garden, "flower-red.glb", 0.85, -0.1, { height: 0.24 });
 
   const carWrap = new THREE.Group();
-  carWrap.position.set(7.55, 0, 2.15);
+  carWrap.position.set(8.7, 0, 0.15);
   mark(carWrap, "car", "Car");
   root.add(carWrap);
-  await addModel(carWrap, "sedan.glb", 0, 0, { depth: 3.8, rotY: 0 });
+  await addModel(carWrap, "sedan.glb", 0, 0, { depth: 3.7, rotY: Math.PI / 2 });
 
   const rvWrap = new THREE.Group();
-  rvWrap.position.set(8.15, 0, -2.55);
+  rvWrap.position.set(12.6, 0, -4.85);
   mark(rvWrap, "rv", "RV");
   root.add(rvWrap);
-  await addModel(rvWrap, "rv.glb", 0, 0, { depth: 4.7, rotY: 0 });
+  await addModel(rvWrap, "rv.glb", 0, 0, { depth: 4.6, rotY: Math.PI / 2 });
 
-  shell.visible = false;
-  interiors.visible = true;
-  return { shell, interiors };
+  return { shell, interiors, bungalow };
 }
 
 async function buildRVInterior(root) {
@@ -278,12 +467,12 @@ export async function initHouse(container, options = {}) {
 
   let aspect = width() / height();
   let peek = true;
-  const houseFrustum = () => (width() < 700 ? (peek ? 6.2 : 6.6) : (peek ? 6.5 : 6.95));
+  const houseFrustum = () => (width() < 700 ? (peek ? 7.15 : 7.45) : (peek ? 7.45 : 7.7));
   let frustum = houseFrustum();
   const camera = new THREE.OrthographicCamera(-frustum * aspect, frustum * aspect, frustum, -frustum, 0.1, 200);
 
-  const peekTarget = new THREE.Vector3(0.15, 1.55, 0.1);
-  const exteriorTarget = new THREE.Vector3(0.4, 2.15, 0.35);
+  const peekTarget = new THREE.Vector3(1.35, 1.45, 0.05);
+  const exteriorTarget = new THREE.Vector3(1.6, 2.05, 0.25);
   const rvTarget = new THREE.Vector3(40, 0.25, 0);
 
   function houseCamPos(isPeek) {
@@ -331,16 +520,6 @@ export async function initHouse(container, options = {}) {
   const fill = new THREE.DirectionalLight(0xe8f0ff, 0.42);
   fill.position.set(-14, 10, -8);
   scene.add(fill);
-  [
-    [-2.0, 2.4, -2.0],
-    [2.0, 2.4, -2.0],
-    [-2.0, 2.4, 2.0],
-    [2.0, 2.4, 2.0],
-  ].forEach(([x, y, z]) => {
-    const p = new THREE.PointLight(0xffe0b8, 0.38, 6.5, 1.6);
-    p.position.set(x, y, z);
-    scene.add(p);
-  });
 
   try {
     const hdr = await new RGBELoader().loadAsync(`${BASE}textures/venice_sunset_1k.hdr`);
@@ -355,9 +534,36 @@ export async function initHouse(container, options = {}) {
 
   let shell = null;
   let interiors = null;
+  const roofClip = new THREE.Plane(new THREE.Vector3(0, -1, 0), CLIP_Y);
+  const waistClip = new THREE.Plane(new THREE.Vector3(0, -1, 0), 1.28);
+  function applyPlanes(obj, planes) {
+    if (!obj) return;
+    obj.traverse((c) => {
+      if (!c.isMesh) return;
+      if (c.name === "bungalow_door_l" || c.parent?.name === "bungalow_door_l") {
+        c.material.clippingPlanes = planes ? [roofClip] : [];
+        return;
+      }
+      const mats = Array.isArray(c.material) ? c.material : [c.material];
+      mats.forEach((m) => {
+        if (!m) return;
+        m.clippingPlanes = planes || [];
+        m.clipShadows = true;
+      });
+    });
+  }
+  function setBungalowDoor(open) {
+    if (!shell) return;
+    shell.traverse((o) => {
+      if (o.name === "bungalow_door_l") o.rotation.y = open ? -1.15 : 0;
+    });
+  }
   function applyPeekVisibility() {
-    if (shell) shell.visible = !peek;
-    if (interiors) interiors.visible = peek;
+    if (shell) shell.visible = true;
+    if (interiors) interiors.visible = true;
+    renderer.clippingPlanes = peek ? [roofClip] : [];
+    applyPlanes(shell, peek ? [roofClip, waistClip] : []);
+    setBungalowDoor(peek);
   }
 
   const world = new THREE.Group();

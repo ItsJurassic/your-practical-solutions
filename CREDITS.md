@@ -7,10 +7,7 @@ All models and textures on the Your Practical Solutions storefront are free for 
 - License: CC0 1.0 Universal
 - House: Bungalow — single-storey craftsman house with a coral tiled gable roof
   https://grab3d.com/models/buildings/bungalow/
-- Furnished rooms (Cozy Isometric Rooms Kit): Bedroom, Kitchen, Living Room
-  https://grab3d.com/models/furniture/bedroom/
-  https://grab3d.com/models/furniture/kitchen/
-  https://grab3d.com/models/furniture/living-room/
+- Interior walls, hinged doors, flooring, baseboards, ceiling lights and the attached garage wing are custom scene geometry matching the bungalow.
 
 ## Poly Haven (CC0 1.0)
 - Author: Poly Haven contributors (polyhaven.com)
@@ -38,6 +35,6 @@ All models and textures on the Your Practical Solutions storefront are free for 
 - Camper van: https://3dassets.dev/assets/car-park-and-road-vehicle-fleet-camper-van-40d26940
 - Shed workbench: https://3dassets.dev/assets/halloween-slasher-street-shed-workbench-5fe9a216
 
-House walls, roof, windows, doors, porch, kitchen cabinets, counters and garage door are scene geometry dressed with the Poly Haven PBR textures above.
+Interior partition walls, hinged doors, room floors, baseboards, ceiling lights and the attached garage wing (siding, roll-up door, concrete slab) are scene geometry dressed with the Poly Haven PBR textures above.
 
 three.js r160.1 is vendored locally (`vendor/three`) so the scene does not depend on a CDN.
