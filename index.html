@@ -55,16 +55,23 @@
     <section id="house">
       <div class="wrap">
         <h2>A house full of practical solutions</h2>
-        <p class="lede">Hover to highlight a piece. Click to see products for that spot. Click the RV to step inside a top-down interior.</p>
-        <div class="house-frame">
+        <p class="lede">Hover or tap a furnished spot to see matching products. Click the RV to step inside.</p>
+        <div class="house-hero" id="house-hero">
           <div class="house-toolbar">
-            <span class="hint" id="view-hint">Isometric house</span>
+            <span class="hint" id="view-hint">Click around the house</span>
             <button class="btn btn-ghost" id="back-house" hidden type="button">Back to house</button>
-            <button class="btn btn-ghost" id="toggle-3d" type="button">Use simple map</button>
           </div>
-          <div id="house-stage"></div>
-          <div id="fallback-map"></div>
-          <div id="hover-label"></div>
+          <div class="stage" id="house-stage">
+            <div class="stage-frame" id="house-frame">
+              <img src="renders/house.jpg" width="1280" height="720" alt="Cutaway of a modern house with bedroom, kitchen, living room, garage, yard, car and RV" />
+            </div>
+          </div>
+          <div class="stage rv-stage" id="rv-stage" hidden>
+            <div class="stage-frame rv-frame" id="rv-frame">
+              <img src="renders/rv.jpg" width="720" height="1280" alt="Top-down view of an RV interior" />
+            </div>
+          </div>
+          <div id="hover-label" role="status"></div>
         </div>
       </div>
     </section>
@@ -108,14 +115,6 @@
       </nav>
     </div>
   </footer>
-    <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
-    }
-  }
-  </script>
   <script type="module" src="./app.js"></script>
 </body>
 </html>
