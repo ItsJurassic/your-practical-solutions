@@ -1,5 +1,6 @@
 import { CONFIG, shopUrl, collectionUrl, productUrl } from "./config.js";
 import { fetchCatalog, collectionsFallback, matchProducts } from "./shopify.js";
+import { initHouse } from "./house-scene.js";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 export const HOTSPOT_META = {
@@ -75,6 +76,9 @@ const viewHint = document.getElementById("view-hint");
 
 let catalog = { products: [], collections: collectionsFallback() };
 let view = "house";
+let houseApi = null;
+const sceneStatus = document.getElementById("scene-status");
+const imageFallback = document.getElementById("image-fallback");
 
 function productCard(p) {
   const price = p.price != null && p.price !== "" ? `$${Number(p.price).toFixed(2)}` : "";
@@ -172,7 +176,84 @@ function showHouse() {
   }, 450);
 }
 
-backHouse.onclick = showHouse;
+backHouse.onclick = () => {
+  if (houseApi) {
+    houseApi.setView("house");
+    backHouse.hidden = true;
+    viewHint.textContent = "Explore the 3D house";
+    view = "house";
+    return;
+  }
+  showHouse();
+};
+
+function webglOk() {
+  try {
+    const c = document.createElement("canvas");
+    return !!(c.getContext("webgl") || c.getContext("experimental-webgl"));
+  } catch {
+    return false;
+  }
+}
+
+function showImageFallback(reason) {
+  console.warn("3D house unavailable, using image hotspots:", reason || "WebGL missing");
+  if (sceneStatus) sceneStatus.textContent = "Showing a still house — 3D is not available on this device.";
+  if (imageFallback) imageFallback.hidden = false;
+  if (houseStage) houseStage.style.display = "none";
+  placeHotspots(houseFrame, HOUSE_SPOTS);
+  placeHotspots(rvFrame, RV_SPOTS);
+  window.__SCENE_READY__ = true;
+  window.__SCENE_MODE__ = "fallback";
+}
+
+async function startHouse() {
+  if (!webglOk()) {
+    showImageFallback("no-webgl");
+    return;
+  }
+  try {
+    houseApi = await initHouse(houseStage, {
+      onHover(hs) {
+        if (!hs) {
+          hideTip();
+          return;
+        }
+        hoverLabel.textContent = hs.label || hs.id;
+        hoverLabel.style.display = "block";
+      },
+      onSelect(hs) {
+        if (!hs) return;
+        const meta = HOTSPOT_META[hs.id] || hs;
+        openSheet(meta, matchProducts(catalog.products, meta));
+      },
+      onView(next) {
+        view = next;
+        if (next === "rv") {
+          backHouse.hidden = false;
+          viewHint.textContent = "Inside the RV";
+        } else {
+          backHouse.hidden = true;
+          viewHint.textContent = "Explore the 3D house";
+        }
+      },
+      onReady() {
+        if (sceneStatus) sceneStatus.remove();
+        window.__SCENE_READY__ = true;
+        window.__SCENE_MODE__ = "3d";
+      },
+    });
+    document.addEventListener("pointermove", (e) => {
+      if (hoverLabel.style.display === "block") {
+        hoverLabel.style.left = e.clientX + "px";
+        hoverLabel.style.top = e.clientY + "px";
+      }
+    });
+  } catch (err) {
+    console.warn(err);
+    showImageFallback(err && err.message);
+  }
+}
 
 function renderCollections() {
   const html = catalog.collections.filter((c) => c.handle !== "frontpage").map((c) =>
@@ -211,9 +292,6 @@ async function loadPublicStats() {
   }
 }
 
-placeHotspots(houseFrame, HOUSE_SPOTS);
-placeHotspots(rvFrame, RV_SPOTS);
-
 catalog = await fetchCatalog();
 if (!catalog.products.length) {
   try {
@@ -226,5 +304,5 @@ if (!catalog.products.length) {
 }
 renderCollections();
 renderProducts();
-await loadPublicStats();
-window.__SCENE_READY__ = true;
+await Promise.all([loadPublicStats(), startHouse()]);
+if (!window.__SCENE_READY__) window.__SCENE_READY__ = true;

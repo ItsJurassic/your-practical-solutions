@@ -89,3 +89,26 @@ th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; }
   .hotspot::before { inset: -16px; }
   .rv-frame { width: min(100%, 360px); }
 }
+
+.stage-3d {
+  position: relative;
+  width: 100%;
+  height: min(72vh, 760px);
+  min-height: 420px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #e7dcc8;
+  box-shadow: var(--shadow);
+  touch-action: none;
+}
+.stage-3d canvas { display: block; width: 100%; height: 100%; }
+.scene-status {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: var(--green); font-weight: 600; background: #efe6d6;
+}
+.image-fallback { margin-top: 0; }
+.credits { margin: 0 auto 18px; font-size: .82rem; color: var(--muted); }
+.credits a { color: var(--green); }
+@media (max-width: 720px) {
+  .stage-3d { height: min(68vh, 560px); min-height: 360px; }
+}

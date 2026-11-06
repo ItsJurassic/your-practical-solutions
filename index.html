@@ -4,10 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>
-    window.__SITE_BASE__ = location.pathname.indexOf("/your-practical-solutions") === 0
-      ? "/your-practical-solutions/"
-      : "/";
-    document.write('<base href="' + window.__SITE_BASE__ + '">');
+    (function () {
+      var path = location.pathname;
+      var base = "/";
+      if (path.indexOf("/your-practical-solutions") === 0) base = "/your-practical-solutions/";
+      else {
+        var marker = "/yps-kpi";
+        var idx = path.indexOf(marker);
+        if (idx >= 0) {
+          base = path.slice(0, idx + marker.length);
+          if (base.charAt(base.length - 1) !== "/") base += "/";
+        }
+      }
+      window.__SITE_BASE__ = base;
+      var assets = base;
+      if (location.hostname.indexOf("supabase.co") !== -1) {
+        assets = "https://itsjurassic.github.io/your-practical-solutions/";
+      }
+      window.__ASSET_BASE__ = assets;
+      document.write('<base href="' + base + '">');
+      document.write('<script type="importmap">{"imports":{"three":"' + assets + 'vendor/three/three.module.js","three/addons/":"' + assets + 'vendor/three/addons/"}}<\/script>');
+    })();
   </script>
   <title>Your Practical Solutions | Useful goods for home, garage, car and RV</title>
   <meta name="description" content="Your Practical Solutions is a warm, practical shop for storage, pet, garage, car and RV, home decor, and everyday household goods. Explore our house and shop on Shopify." />
@@ -55,20 +72,25 @@
     <section id="house">
       <div class="wrap">
         <h2>A house full of practical solutions</h2>
-        <p class="lede">Hover or tap a furnished spot to see matching products. Click the RV to step inside.</p>
+        <p class="lede">Drag to look around, scroll or pinch to zoom. Hover or tap a furnished spot to see matching products. Click the RV to step inside.</p>
         <div class="house-hero" id="house-hero">
           <div class="house-toolbar">
-            <span class="hint" id="view-hint">Click around the house</span>
+            <span class="hint" id="view-hint">Explore the 3D house</span>
             <button class="btn btn-ghost" id="back-house" hidden type="button">Back to house</button>
           </div>
-          <div class="stage" id="house-stage">
-            <div class="stage-frame" id="house-frame">
-              <img src="renders/house.jpg" width="1280" height="720" alt="Cutaway of a modern house with bedroom, kitchen, living room, garage, yard, car and RV" />
-            </div>
+          <div class="stage-3d" id="house-stage">
+            <div class="scene-status" id="scene-status">Loading the house…</div>
           </div>
-          <div class="stage rv-stage" id="rv-stage" hidden>
-            <div class="stage-frame rv-frame" id="rv-frame">
-              <img src="renders/rv.jpg" width="720" height="1280" alt="Top-down view of an RV interior" />
+          <div class="image-fallback" id="image-fallback" hidden>
+            <div class="stage" id="fallback-house-stage">
+              <div class="stage-frame" id="house-frame">
+                <img src="renders/house.jpg" width="1280" height="720" alt="Cutaway of a modern house with bedroom, kitchen, living room, garage, yard, car and RV" />
+              </div>
+            </div>
+            <div class="stage rv-stage" id="rv-stage" hidden>
+              <div class="stage-frame rv-frame" id="rv-frame">
+                <img src="renders/rv.jpg" width="720" height="1280" alt="Top-down view of an RV interior" />
+              </div>
             </div>
           </div>
           <div id="hover-label" role="status"></div>
@@ -114,6 +136,7 @@
         <a href="./admin/">Admin</a>
       </nav>
     </div>
+    <p class="wrap credits">3D models by <a href="https://kenney.nl">Kenney</a> and <a href="https://quaternius.com">Quaternius</a> (CC0), with a camper and workbench from <a href="https://3dassets.dev">3dassets.dev</a> (CC0).</p>
   </footer>
   <script type="module" src="./app.js"></script>
 </body>
