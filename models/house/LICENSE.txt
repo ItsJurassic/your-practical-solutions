@@ -1,0 +1,8 @@
+CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+
+Grab3D models in this folder (Bungalow, Bedroom, Kitchen, Living Room) are CC0 1.0:
+https://grab3d.com/models/buildings/bungalow/
+https://grab3d.com/models/furniture/bedroom/
+https://grab3d.com/models/furniture/kitchen/
+https://grab3d.com/models/furniture/living-room/
+https://creativecommons.org/publicdomain/zero/1.0/legalcode

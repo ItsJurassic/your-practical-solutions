@@ -2,6 +2,16 @@
 
 All models and textures on the Your Practical Solutions storefront are free for commercial use.
 
+## Grab3D (CC0 1.0)
+- Author: Grab3D (grab3d.com)
+- License: CC0 1.0 Universal
+- House: Bungalow — single-storey craftsman house with a coral tiled gable roof
+  https://grab3d.com/models/buildings/bungalow/
+- Furnished rooms (Cozy Isometric Rooms Kit): Bedroom, Kitchen, Living Room
+  https://grab3d.com/models/furniture/bedroom/
+  https://grab3d.com/models/furniture/kitchen/
+  https://grab3d.com/models/furniture/living-room/
+
 ## Poly Haven (CC0 1.0)
 - Author: Poly Haven contributors (polyhaven.com)
 - License: CC0 1.0 Universal

@@ -72,6 +72,7 @@ const houseFrame = document.getElementById("house-frame");
 const rvFrame = document.getElementById("rv-frame");
 const houseHero = document.getElementById("house-hero");
 const backHouse = document.getElementById("back-house");
+const peekHouse = document.getElementById("peek-house");
 const viewHint = document.getElementById("view-hint");
 
 let catalog = { products: [], collections: collectionsFallback() };
@@ -237,10 +238,19 @@ async function startHouse() {
           viewHint.textContent = "Explore the 3D house";
         }
       },
+      onPeek(isPeek) {
+        if (peekHouse) {
+          peekHouse.textContent = isPeek ? "Show exterior" : "Peek inside";
+          peekHouse.setAttribute("aria-pressed", isPeek ? "true" : "false");
+        }
+      },
       onReady() {
         if (sceneStatus) sceneStatus.remove();
         window.__SCENE_READY__ = true;
         window.__SCENE_MODE__ = "3d";
+        if (peekHouse) {
+          peekHouse.onclick = () => houseApi?.setPeek(!houseApi.getPeek());
+        }
       },
     });
     document.addEventListener("pointermove", (e) => {
