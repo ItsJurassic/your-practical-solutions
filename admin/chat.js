@@ -1,4 +1,4 @@
-import { supabase, CONFIG } from "./client.js";
+import { supabase, CONFIG } from "./client.js?v=13";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -46,8 +46,12 @@ function render() {
 async function loadMembers() {
   const { data } = await supabase.from("yps_chat_members").select("email, display_name, role").order("role", { ascending: true });
   const list = data || [];
-  $("chat-avatars").innerHTML = [...list.map((m) => m.display_name), "Shoppie"].map((n) => `<span class="avatar" title="${esc(n)}" style="background:${colorFor(n)}">${n === "Shoppie" ? "🤖" : esc(initials(n))}</span>`).join("");
-  $("chat-members").innerHTML = list.map((m) => `<li><b>${esc(m.display_name)}</b> <span class="muted">${esc(m.email)} · ${m.role}</span></li>`).join("") + `<li><b>Shoppie</b> <span class="muted">bot · replies via webhook</span></li>`;
+  const { data: botRows } = await supabase.from("yps_chat_bots").select("bot_name, status").eq("status", "approved");
+  const bots = (botRows || []).map((b) => b.bot_name);
+  $("chat-avatars").innerHTML = [...list.map((m) => m.display_name), "Shoppie", ...bots].map((n) => `<span class="avatar" title="${esc(n)}" style="background:${colorFor(n)}">${n === "Shoppie" || bots.includes(n) ? "🤖" : esc(initials(n))}</span>`).join("");
+  $("chat-members").innerHTML = list.map((m) => `<li><b>${esc(m.display_name)}</b> <span class="muted">${esc(m.email)} · ${m.role}</span></li>`).join("")
+    + `<li><b>Shoppie</b> <span class="muted">bot · replies via webhook</span></li>`
+    + bots.map((n) => `<li><b>${esc(n)}</b> <span class="muted">bot · approved</span></li>`).join("");
 }
 
 async function loadMode() {
@@ -71,6 +75,7 @@ export async function startChat(user) {
   render();
   loadMembers();
   loadAdmins();
+  loadBots();
   loadMode();
   stopChat();
   channel = supabase.channel("yps-chat")
@@ -248,5 +253,104 @@ $("admin-list")?.addEventListener("click", async (e) => {
     loadAdmins();
   } catch (err) {
     out.textContent = err.message;
+  }
+});
+
+
+async function callBotAdmin(payload) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.access_token) throw new Error("Sign in required.");
+  const res = await fetch(CONFIG.botAdminUrl, {
+    method: "POST",
+    headers: { "content-type": "application/json", Authorization: `Bearer ${session.access_token}` },
+    body: JSON.stringify(payload),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body.error || body.message || res.statusText);
+  return body;
+}
+
+function webhookHost(u) {
+  try { return new URL(u).host; } catch { return ""; }
+}
+
+async function loadBots() {
+  const pending = $("bot-pending-list");
+  const approved = $("bot-approved-list");
+  if (!pending || !approved) return;
+  try {
+    const data = await callBotAdmin({ action: "list" });
+    const bots = data.bots || [];
+    const pend = bots.filter((b) => b.status === "pending");
+    const appr = bots.filter((b) => b.status === "approved");
+    pending.innerHTML = pend.length ? pend.map((b) => `
+      <li class="admin-row bot-row" data-id="${esc(b.id)}">
+        <div>
+          <b>${esc(b.bot_name)}</b>
+          <span class="muted">${esc(b.owner_contact)} · ${esc(b.webhook_host || webhookHost(b.webhook_url))}</span>
+          ${b.note ? `<span class="muted">${esc(b.note)}</span>` : ""}
+          <span class="muted">${esc(new Date(b.created_at).toLocaleString())}</span>
+        </div>
+        <div class="bot-actions">
+          <button type="button" class="btn btn-primary btn-sm bot-approve">Approve</button>
+          <button type="button" class="btn btn-ghost btn-sm bot-deny">Deny</button>
+        </div>
+      </li>`).join("") : `<li class="muted">No pending bot requests.</li>`;
+    approved.innerHTML = appr.length ? appr.map((b) => `
+      <li class="admin-row bot-row" data-id="${esc(b.id)}">
+        <div>
+          <b>${esc(b.bot_name)}</b>
+          <span class="muted">${esc(b.owner_contact)} · ${esc(b.webhook_host || webhookHost(b.webhook_url))}</span>
+          <label class="muted">Notify
+            <select class="bot-mode">
+              <option value="mention" ${b.notify_mode === "mention" ? "selected" : ""}>@mention only</option>
+              <option value="all" ${b.notify_mode === "all" ? "selected" : ""}>All messages</option>
+            </select>
+          </label>
+        </div>
+        <div class="bot-actions">
+          <button type="button" class="btn btn-ghost btn-sm bot-revoke">Revoke</button>
+        </div>
+      </li>`).join("") : `<li class="muted">No approved bots yet.</li>`;
+  } catch (err) {
+    pending.innerHTML = `<li class="muted">${esc(err.message)}</li>`;
+    approved.innerHTML = "";
+  }
+}
+
+document.getElementById("owner-tools")?.addEventListener("click", async (e) => {
+  const row = e.target.closest(".bot-row");
+  if (!row) return;
+  const id = row.dataset.id;
+  try {
+    if (e.target.classList.contains("bot-approve")) {
+      if (!confirm("Approve this bot to join the team chat?")) return;
+      const body = await callBotAdmin({ action: "approve", id });
+      alert(body.message || "Approved.");
+      loadBots(); loadMembers();
+    } else if (e.target.classList.contains("bot-deny")) {
+      if (!confirm("Deny this bot join request?")) return;
+      await callBotAdmin({ action: "deny", id });
+      loadBots();
+    } else if (e.target.classList.contains("bot-revoke")) {
+      if (!confirm("Revoke this bot? It will stop receiving messages and cannot post.")) return;
+      await callBotAdmin({ action: "revoke", id });
+      loadBots(); loadMembers();
+    }
+  } catch (err) {
+    alert(err.message);
+  }
+});
+
+document.getElementById("owner-tools")?.addEventListener("change", async (e) => {
+  if (!e.target.classList.contains("bot-mode")) return;
+  const row = e.target.closest(".bot-row");
+  if (!row) return;
+  try {
+    await callBotAdmin({ action: "set_mode", id: row.dataset.id, notify_mode: e.target.value });
+    loadBots();
+  } catch (err) {
+    alert(err.message);
+    loadBots();
   }
 });

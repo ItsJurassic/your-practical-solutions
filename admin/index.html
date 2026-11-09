@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=12" />
+  <link rel="stylesheet" href="styles.css?v=14" />
   <title>Team | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
 </head>
@@ -112,6 +112,11 @@
                 <button class="btn btn-ghost btn-sm" type="submit">Send partner invite</button>
                 <p class="muted" id="invite-msg" style="font-size:.85rem"></p>
               </form>
+              <h3 class="admin-subhead">Bot join requests</h3>
+              <ul id="bot-pending-list" class="admin-list"></ul>
+              <h3 class="admin-subhead">Approved bots</h3>
+              <ul id="bot-approved-list" class="admin-list"></ul>
+              <p class="muted" style="font-size:.82rem">External bots request access via <code>bot-join-request</code>. See <a href="BOT_JOIN.md" target="_blank" rel="noopener">BOT_JOIN.md</a>.</p>
               <h3 class="admin-subhead">Your password</h3>
               <form id="change-password-form" class="stack-form">
                 <label>New password <input name="password" type="password" required minlength="8" autocomplete="new-password" /></label>
@@ -193,6 +198,6 @@
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script type="module" src="admin/admin.js?v=12"></script>
+  <script type="module" src="admin/admin.js?v=14"></script>
 </body>
 </html>

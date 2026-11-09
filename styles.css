@@ -396,3 +396,10 @@ mark.fill-in { background: #fff3c4; color: #7a5200; padding: 1px 6px; border-rad
 @media (max-width: 720px) {
   .temp-pass-row .btn { width: 100%; }
 }
+
+.bot-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.bot-row .bot-mode { font-size: .85rem; margin-top: 4px; }
+@media (max-width: 720px) {
+  .bot-actions { width: 100%; }
+  .bot-actions .btn { flex: 1 1 auto; }
+}

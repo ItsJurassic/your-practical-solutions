@@ -10,6 +10,9 @@ export const CONFIG = {
   syncFunctionUrl: "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/kpi-sync",
   inviteFunctionUrl: "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/kpi-invite",
   chatInviteUrl: "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/chat-invite",
+  botJoinUrl: "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/bot-join-request",
+  botAdminUrl: "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/bot-admin",
+  botReplyUrl: "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/bot-reply",
 };
 
 export const shopUrl = () => CONFIG.shopPublicUrl;

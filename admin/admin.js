@@ -1,6 +1,6 @@
 import { CONFIG } from "../config.js";
-import { supabase } from "./client.js?v=12";
-import { startChat, stopChat } from "./chat.js?v=12";
+import { supabase } from "./client.js?v=14";
+import { startChat, stopChat } from "./chat.js?v=14";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");
