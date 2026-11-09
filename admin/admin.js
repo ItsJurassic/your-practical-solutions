@@ -1,6 +1,6 @@
 import { CONFIG } from "../config.js";
-import { supabase } from "./client.js?v=9";
-import { startChat, stopChat } from "./chat.js?v=9";
+import { supabase } from "./client.js?v=11";
+import { startChat, stopChat } from "./chat.js?v=11";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");
@@ -21,10 +21,40 @@ async function sessionUser() {
   return data.session?.user;
 }
 
+const recoveryView = document.getElementById("recovery-view");
+const recoveryMsg = document.getElementById("recovery-msg");
+let pendingRecovery = false;
+
 function showDash(on) {
-  loginView.hidden = on;
-  dashView.hidden = !on;
-  logout.hidden = !on;
+  loginView.hidden = on || pendingRecovery;
+  if (recoveryView) recoveryView.hidden = !pendingRecovery;
+  dashView.hidden = !on || pendingRecovery;
+  logout.hidden = !on && !pendingRecovery;
+}
+
+function showRecovery() {
+  pendingRecovery = true;
+  booted = null;
+  stopChat();
+  if (loginView) loginView.hidden = true;
+  if (recoveryView) recoveryView.hidden = false;
+  dashView.hidden = true;
+  logout.hidden = false;
+  if (recoveryMsg) recoveryMsg.textContent = "";
+}
+
+function clearRecoveryUi() {
+  pendingRecovery = false;
+  if (recoveryView) recoveryView.hidden = true;
+}
+
+function hashParams() {
+  const h = (location.hash || "").replace(/^#/, "");
+  return new URLSearchParams(h);
+}
+
+function isRecoveryType(type) {
+  return String(type || "").toLowerCase() === "recovery";
 }
 
 function selectTab(name) {
@@ -43,22 +73,24 @@ document.getElementById("login-form").onsubmit = async (e) => {
   msg.textContent = error ? error.message : "";
 };
 
+const ADMIN_REDIRECT = "https://yourpracticalsolutions.com/admin/";
+
 document.getElementById("magic").onclick = async () => {
   const email = document.querySelector("[name=email]").value;
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: location.href.split("#")[0] },
+    options: { emailRedirectTo: ADMIN_REDIRECT },
   });
   msg.textContent = error ? error.message : `Check ${email} for a sign-in link.`;
 };
 
 document.getElementById("reset").onclick = async () => {
   const email = document.querySelector("[name=email]").value;
-  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: location.href.split("#")[0] });
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: ADMIN_REDIRECT });
   msg.textContent = error ? error.message : "Password reset email sent if that inbox can receive mail.";
 };
 
-logout.onclick = async () => { stopChat(); await supabase.auth.signOut(); showDash(false); };
+logout.onclick = async () => { stopChat(); clearRecoveryUi(); await supabase.auth.signOut(); showDash(false); };
 
 async function loadKpis() {
   const range = document.getElementById("range").value;
@@ -222,25 +254,42 @@ document.getElementById("sync").onclick = async () => {
 
 let booted = null;
 
+function scrubAuthParams() {
+  const path = location.pathname.startsWith("/admin") ? location.pathname : "/admin/";
+  history.replaceState({}, "", path);
+}
+
 async function consumeEmailLink() {
   const params = new URLSearchParams(location.search);
-  const token_hash = params.get("token_hash");
-  const type = params.get("type");
-  if (!token_hash || !type) return;
-  const { error } = await supabase.auth.verifyOtp({ token_hash, type });
-  // Clear the one-time params whether or not verify succeeded.
-  const url = location.pathname + (location.hash || "");
-  history.replaceState({}, "", url.startsWith("/admin") ? url : "/admin/");
-  if (error) {
-    msg.textContent = error.message || "That sign-in link is invalid or expired.";
-    showDash(false);
+  const hp = hashParams();
+  const token_hash = params.get("token_hash") || hp.get("token_hash");
+  const type = params.get("type") || hp.get("type");
+  if (token_hash && type) {
+    const { error } = await supabase.auth.verifyOtp({ token_hash, type });
+    scrubAuthParams();
+    if (error) {
+      msg.textContent = error.message || "That sign-in link is invalid or expired.";
+      clearRecoveryUi();
+      showDash(false);
+      return;
+    }
+    if (isRecoveryType(type)) showRecovery();
+    return;
+  }
+  // Implicit recovery redirect: #access_token=...&type=recovery (detectSessionInUrl handles session)
+  if (isRecoveryType(hp.get("type"))) {
+    showRecovery();
   }
 }
 
 async function boot() {
+  if (pendingRecovery) {
+    showRecovery();
+    return;
+  }
   const user = await sessionUser();
   const email = String(user?.email || "").toLowerCase();
-  if (!user) { stopChat(); booted = null; showDash(false); return; }
+  if (!user) { stopChat(); booted = null; clearRecoveryUi(); showDash(false); return; }
   if (booted === user.id) return;
   let member = null;
   const { data } = await supabase.from("yps_chat_members").select("email, display_name, role").eq("email", email).maybeSingle();
@@ -255,6 +304,7 @@ async function boot() {
     return;
   }
   booted = user.id;
+  clearRecoveryUi();
   showDash(true);
   document.getElementById("tab-btn-kpis").hidden = !isAdmin;
   document.getElementById("whoami").textContent = `${member?.display_name || (isAdmin ? "Admin" : "Partner")} · ${email}`;
@@ -268,6 +318,73 @@ async function boot() {
   });
   selectTab("chat");
 }
+
+document.getElementById("recovery-form")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const password = String(fd.get("password") || "");
+  const confirm = String(fd.get("confirm") || "");
+  if (password.length < 8) {
+    recoveryMsg.textContent = "Password must be at least 8 characters.";
+    return;
+  }
+  if (password !== confirm) {
+    recoveryMsg.textContent = "Passwords do not match.";
+    return;
+  }
+  recoveryMsg.textContent = "Saving…";
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    recoveryMsg.textContent = error.message;
+    return;
+  }
+  recoveryMsg.textContent = "Password saved.";
+  clearRecoveryUi();
+  scrubAuthParams();
+  e.target.reset();
+  booted = null;
+  await boot();
+});
+
+document.getElementById("change-password-form")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const out = document.getElementById("change-password-msg");
+  const fd = new FormData(e.target);
+  const password = String(fd.get("password") || "");
+  const confirm = String(fd.get("confirm") || "");
+  if (password.length < 8) {
+    out.textContent = "Password must be at least 8 characters.";
+    return;
+  }
+  if (password !== confirm) {
+    out.textContent = "Passwords do not match.";
+    return;
+  }
+  out.textContent = "Saving…";
+  const { error } = await supabase.auth.updateUser({ password });
+  out.textContent = error ? error.message : "Password updated.";
+  if (!error) e.target.reset();
+});
+
 consumeEmailLink().finally(() => {
-  supabase.auth.onAuthStateChange((evt) => { if (evt === "SIGNED_IN" || evt === "SIGNED_OUT" || evt === "INITIAL_SESSION") setTimeout(boot, 0); });
+  supabase.auth.onAuthStateChange((evt) => {
+    if (evt === "PASSWORD_RECOVERY") {
+      showRecovery();
+      return;
+    }
+    if (evt === "SIGNED_IN" || evt === "SIGNED_OUT" || evt === "INITIAL_SESSION") {
+      if (evt === "SIGNED_OUT") clearRecoveryUi();
+      // After implicit recovery redirect, INITIAL_SESSION/SIGNED_IN may race with PASSWORD_RECOVERY.
+      if (pendingRecovery) {
+        showRecovery();
+        return;
+      }
+      const hp = hashParams();
+      if (isRecoveryType(hp.get("type"))) {
+        showRecovery();
+        return;
+      }
+      setTimeout(boot, 0);
+    }
+  });
 });

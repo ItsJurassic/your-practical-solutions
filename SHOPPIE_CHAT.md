@@ -22,7 +22,7 @@ only when a webhook URL is configured.
 |---|---|---|
 | Webhook URL | Vault `shoppie_webhook_url` = `https://api2.cursor.sh/automations/webhook/0b5c8c1b-a25b-592e-87c7-ac1672ecb396` | Where messages are POSTed. Edge secret `SHOPPIE_WEBHOOK_URL` overrides it if set. |
 | Webhook key | Vault `shoppie_webhook_key` (copied from the box env var `SHOPPIE_WEBHOOK_KEY`) | Sent as `Authorization: Bearer <key>`. Edge secret `SHOPPIE_WEBHOOK_KEY` overrides it if set. |
-| Mode | `private.yps_chat_config.notify_mode` = `mention` | `mention` = only messages containing `@Shoppie`; `all` = every message. Edge secret `SHOPPIE_NOTIFY_MODE` overrides. |
+| Mode | `private.yps_chat_config.notify_mode` = `mention` | `mention` = `@Shoppie` **or** any message from an owner/admin; `all` = every human message. Edge secret `SHOPPIE_NOTIFY_MODE` overrides. |
 | `SHOPPIE_WEBHOOK_SECRET` | optional edge secret | If set, also sent as header `x-yps-webhook-secret`. |
 
 To rotate the webhook key from the box without it appearing in any log:

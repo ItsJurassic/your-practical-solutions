@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=11" />
   <title>Team | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
 </head>
@@ -43,9 +43,19 @@
         <label>Password <input name="password" type="password" autocomplete="current-password" /></label>
         <button class="btn btn-primary btn-block" type="submit">Sign in</button>
         <button class="btn btn-ghost btn-block" id="magic" type="button" style="margin-top:8px">Email me a sign-in link</button>
-        <button class="btn btn-ghost btn-block" id="reset" type="button" style="margin-top:8px">Send password reset</button>
+        <button class="btn btn-ghost btn-block" id="reset" type="button" style="margin-top:8px">Forgot password</button>
       </form>
       <p class="muted" id="login-msg"></p>
+    </section>
+    <section class="login" id="recovery-view" hidden>
+      <h1>Set a new password</h1>
+      <p class="lede">Choose a password for your team account (at least 8 characters).</p>
+      <form id="recovery-form">
+        <label>New password <input name="password" type="password" required minlength="8" autocomplete="new-password" /></label>
+        <label>Confirm password <input name="confirm" type="password" required minlength="8" autocomplete="new-password" /></label>
+        <button class="btn btn-primary btn-block" type="submit">Save password</button>
+      </form>
+      <p class="muted" id="recovery-msg"></p>
     </section>
     <section class="dash" id="dash-view" hidden>
       <div class="tabs" role="tablist">
@@ -90,6 +100,13 @@
                 <label>Display name <input name="name" placeholder="e.g. Sam" /></label>
                 <button class="btn btn-ghost btn-sm" type="submit">Send partner invite</button>
                 <p class="muted" id="invite-msg" style="font-size:.85rem"></p>
+              </form>
+              <h3 class="admin-subhead">Your password</h3>
+              <form id="change-password-form" class="stack-form">
+                <label>New password <input name="password" type="password" required minlength="8" autocomplete="new-password" /></label>
+                <label>Confirm <input name="confirm" type="password" required minlength="8" autocomplete="new-password" /></label>
+                <button class="btn btn-ghost btn-sm" type="submit">Change password</button>
+                <p class="muted" id="change-password-msg" style="font-size:.85rem"></p>
               </form>
             </div>
           </div>
@@ -165,6 +182,6 @@
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script type="module" src="admin/admin.js?v=10"></script>
+  <script type="module" src="admin/admin.js?v=11"></script>
 </body>
 </html>
