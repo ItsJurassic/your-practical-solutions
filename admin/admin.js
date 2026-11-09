@@ -1,6 +1,6 @@
 import { CONFIG } from "../config.js";
-import { supabase } from "./client.js";
-import { startChat, stopChat } from "./chat.js";
+import { supabase } from "./client.js?v=9";
+import { startChat, stopChat } from "./chat.js?v=9";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");
@@ -221,16 +221,34 @@ document.getElementById("sync").onclick = async () => {
 };
 
 let booted = null;
+
+async function consumeEmailLink() {
+  const params = new URLSearchParams(location.search);
+  const token_hash = params.get("token_hash");
+  const type = params.get("type");
+  if (!token_hash || !type) return;
+  const { error } = await supabase.auth.verifyOtp({ token_hash, type });
+  // Clear the one-time params whether or not verify succeeded.
+  const url = location.pathname + (location.hash || "");
+  history.replaceState({}, "", url.startsWith("/admin") ? url : "/admin/");
+  if (error) {
+    msg.textContent = error.message || "That sign-in link is invalid or expired.";
+    showDash(false);
+  }
+}
+
 async function boot() {
   const user = await sessionUser();
   const email = String(user?.email || "").toLowerCase();
   if (!user) { stopChat(); booted = null; showDash(false); return; }
   if (booted === user.id) return;
-  const isOwner = email === CONFIG.adminEmail;
   let member = null;
   const { data } = await supabase.from("yps_chat_members").select("email, display_name, role").eq("email", email).maybeSingle();
   member = data;
-  if (!isOwner && !member) {
+  const role = String(member?.role || (email === String(CONFIG.adminEmail || "").toLowerCase() ? "owner" : ""));
+  const isAdmin = role === "owner" || role === "admin";
+  const isOwner = role === "owner";
+  if (!isAdmin && !member) {
     msg.textContent = "This area is limited to the store team. Ask the owner for an invite.";
     await supabase.auth.signOut();
     showDash(false);
@@ -238,9 +256,18 @@ async function boot() {
   }
   booted = user.id;
   showDash(true);
-  document.getElementById("tab-btn-kpis").hidden = !isOwner;
-  document.getElementById("whoami").textContent = `${member?.display_name || "Owner"} · ${email}`;
-  await startChat({ user, email, isOwner, displayName: member?.display_name || (isOwner ? "Joe" : email.split("@")[0]) });
+  document.getElementById("tab-btn-kpis").hidden = !isAdmin;
+  document.getElementById("whoami").textContent = `${member?.display_name || (isAdmin ? "Admin" : "Partner")} · ${email}`;
+  await startChat({
+    user,
+    email,
+    isOwner,
+    isAdmin,
+    role: role || "partner",
+    displayName: member?.display_name || (isAdmin ? "Joe" : email.split("@")[0]),
+  });
   selectTab("chat");
 }
-supabase.auth.onAuthStateChange((evt) => { if (evt === "SIGNED_IN" || evt === "SIGNED_OUT" || evt === "INITIAL_SESSION") setTimeout(boot, 0); });
+consumeEmailLink().finally(() => {
+  supabase.auth.onAuthStateChange((evt) => { if (evt === "SIGNED_IN" || evt === "SIGNED_OUT" || evt === "INITIAL_SESSION") setTimeout(boot, 0); });
+});

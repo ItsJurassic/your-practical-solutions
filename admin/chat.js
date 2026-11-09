@@ -62,12 +62,15 @@ export async function startChat(user) {
   me = user;
   render.first = true;
   $("chat-me").textContent = user.displayName;
-  $("owner-tools").hidden = !user.isOwner;
+  $("owner-tools").hidden = !user.isAdmin;
+  const remHint = $("admin-remove-hint");
+  if (remHint) remHint.hidden = !!user.isOwner;
   const { data, error } = await supabase.from("yps_chat_messages").select("*").order("created_at", { ascending: false }).limit(300);
   if (error) $("chat-log").innerHTML = `<div class="chat-empty">Could not load messages: ${esc(error.message)}</div>`;
   messages = (data || []).reverse();
   render();
   loadMembers();
+  loadAdmins();
   loadMode();
   stopChat();
   channel = supabase.channel("yps-chat")
@@ -109,14 +112,88 @@ $("shoppie-mode")?.addEventListener("change", async (e) => {
   if (error) alert(error.message);
   loadMode();
 });
-$("invite-form").addEventListener("submit", async (e) => {
+async function callInvite(payload) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.access_token) throw new Error("Sign in required.");
+  const res = await fetch(CONFIG.chatInviteUrl, {
+    method: "POST",
+    headers: { "content-type": "application/json", Authorization: `Bearer ${session.access_token}` },
+    body: JSON.stringify(payload),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body.error || body.message || res.statusText);
+  return body;
+}
+
+async function loadAdmins() {
+  const box = $("admin-list");
+  if (!box) return;
+  try {
+    const data = await callInvite({ action: "list" });
+    const members = (data.members || []).filter((m) => m.role === "owner" || m.role === "admin");
+    if (!members.length) {
+      box.innerHTML = `<li class="muted">No admins yet.</li>`;
+      return;
+    }
+    box.innerHTML = members.map((m) => {
+      const mine = m.email === me?.email;
+      const canRemove = data.canRemove && !mine;
+      return `<li class="admin-row">
+        <div><b>${esc(m.display_name || m.email)}</b>
+        <span class="muted">${esc(m.email)} · ${esc(m.role)}</span></div>
+        ${canRemove ? `<button type="button" class="btn btn-ghost btn-sm admin-remove" data-email="${esc(m.email)}">Remove</button>` : mine ? `<span class="muted">you</span>` : ""}
+      </li>`;
+    }).join("");
+  } catch (err) {
+    box.innerHTML = `<li class="muted">${esc(err.message)}</li>`;
+  }
+}
+
+$("invite-form")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const fd = new FormData(e.target);
   const out = $("invite-msg");
   out.textContent = "Sending invite…";
-  const { data: { session } } = await supabase.auth.getSession();
-  const res = await fetch(CONFIG.chatInviteUrl, { method: "POST", headers: { "content-type": "application/json", Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ email: fd.get("email"), name: fd.get("name") }) });
-  const body = await res.json().catch(() => ({}));
-  out.textContent = body.message || body.error || res.statusText;
-  if (res.ok) { e.target.reset(); loadMembers(); }
+  try {
+    const body = await callInvite({ action: "invite", email: fd.get("email"), name: fd.get("name"), role: "partner" });
+    out.textContent = body.message || "Invite sent.";
+    e.target.reset();
+    loadMembers();
+    loadAdmins();
+  } catch (err) {
+    out.textContent = err.message;
+  }
+});
+
+$("admin-invite-form")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const out = $("admin-invite-msg");
+  out.textContent = "Sending admin invite…";
+  try {
+    const body = await callInvite({ action: "invite", email: fd.get("email"), name: fd.get("name"), role: "admin" });
+    out.textContent = body.message || "Admin invite sent.";
+    e.target.reset();
+    loadMembers();
+    loadAdmins();
+  } catch (err) {
+    out.textContent = err.message;
+  }
+});
+
+$("admin-list")?.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".admin-remove");
+  if (!btn) return;
+  const email = btn.dataset.email;
+  if (!email || !confirm(`Remove ${email} from admins?`)) return;
+  const out = $("admin-invite-msg");
+  out.textContent = "Removing…";
+  try {
+    const body = await callInvite({ action: "remove", email });
+    out.textContent = body.message || "Removed.";
+    loadMembers();
+    loadAdmins();
+  } catch (err) {
+    out.textContent = err.message;
+  }
 });

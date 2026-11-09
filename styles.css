@@ -377,3 +377,14 @@ mark.fill-in { background: #fff3c4; color: #7a5200; padding: 1px 6px; border-rad
   .toc-details[open] summary { margin-bottom: 10px; }
   .toc-details summary h4 { margin: 0; }
 }
+
+.admin-subhead { font-size: .95rem; margin: 14px 0 8px; color: var(--ink); }
+.admin-list { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 8px; }
+.admin-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: .9rem; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.admin-row:last-child { border-bottom: 0; }
+.admin-row .muted { display: block; font-size: .8rem; }
+.stack-form { display: grid; gap: 8px; margin-top: 8px; }
+@media (max-width: 720px) {
+  .admin-row { flex-wrap: wrap; }
+  .admin-row .btn { width: 100%; }
+}

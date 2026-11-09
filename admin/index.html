@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
   <title>Team | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
 </head>
@@ -37,9 +37,9 @@
   <main>
     <section class="login" id="login-view">
       <h1>Team sign in</h1>
-      <p class="lede">Owner: <strong>contact@yourpracticalsolutions.com</strong>. Partners sign in with the email they were invited with. Use your invite / magic link — we never set a password for you.</p>
+      <p class="lede">Sign in with your team email (owners and admins use the address they were invited with). Prefer the magic link — we never set a password for you.</p>
       <form id="login-form">
-        <label>Email <input name="email" type="email" required value="contact@yourpracticalsolutions.com" autocomplete="username" /></label>
+        <label>Email <input name="email" type="email" required value="josephcaldwell12321@gmail.com" autocomplete="username" /></label>
         <label>Password <input name="password" type="password" autocomplete="current-password" /></label>
         <button class="btn btn-primary btn-block" type="submit">Sign in</button>
         <button class="btn btn-ghost btn-block" id="magic" type="button" style="margin-top:8px">Email me a sign-in link</button>
@@ -71,14 +71,24 @@
             <div class="panel" style="margin:0"><h2>Shoppie bot</h2><p class="muted" style="font-size:.9rem;margin:0 0 8px" id="shoppie-mode-label"></p>
                             <p class="muted" style="font-size:.82rem;margin:8px 0 0">New messages are forwarded to Shoppie's webhook once its URL is configured. Shoppie's replies appear here in orange.</p></div>
             <div class="panel" style="margin:0" id="owner-tools" hidden>
-              <h2>Owner tools</h2>
+              <h2>Admin tools</h2>
               <label>Shoppie receives
                 <select id="shoppie-mode"><option value="mention">Only @Shoppie mentions</option><option value="all">All messages</option></select>
               </label>
-              <form id="invite-form">
+              <h3 class="admin-subhead">Admins</h3>
+              <ul id="admin-list" class="admin-list"></ul>
+              <p class="muted" id="admin-remove-hint" style="font-size:.82rem" hidden>Only an owner can remove an admin.</p>
+              <form id="admin-invite-form" class="stack-form">
+                <label>Add admin <input name="email" type="email" placeholder="admin@example.com" required /></label>
+                <label>Display name <input name="name" placeholder="e.g. Sam" /></label>
+                <button class="btn btn-primary btn-sm" type="submit">Send admin invite</button>
+                <p class="muted" id="admin-invite-msg" style="font-size:.85rem"></p>
+              </form>
+              <h3 class="admin-subhead">Partners (chat only)</h3>
+              <form id="invite-form" class="stack-form">
                 <label>Invite a partner <input name="email" type="email" placeholder="partner@example.com" required /></label>
                 <label>Display name <input name="name" placeholder="e.g. Sam" /></label>
-                <button class="btn btn-primary btn-sm" type="submit">Send invite</button>
+                <button class="btn btn-ghost btn-sm" type="submit">Send partner invite</button>
                 <p class="muted" id="invite-msg" style="font-size:.85rem"></p>
               </form>
             </div>
@@ -155,6 +165,6 @@
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script type="module" src="admin/admin.js?v=7"></script>
+  <script type="module" src="admin/admin.js?v=10"></script>
 </body>
 </html>

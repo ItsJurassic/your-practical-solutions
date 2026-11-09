@@ -103,7 +103,11 @@ curl -s -X POST https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/shoppie-re
 - Table `public.yps_chat_members` lists allowed emails. RLS on `public.yps_chat_messages` lets only
   members (plus the KPI admin) read and post. Members can post only as themselves, and only the
   `shoppie-reply` path can post as Shoppie.
-- Owner: `contact@yourpracticalsolutions.com` (seeded).
-- Invite a partner: Admin → Team chat → Owner tools → *Invite a partner*. That calls edge function
-  `chat-invite`, which adds the email to `yps_chat_members` and sends a Supabase Auth invite (or a
-  sign-in link if the account already exists). Partners see the chat only, not the KPI tab.
+- Owners / admins: seeded as `josephcaldwell12321@gmail.com` and `contact@yourpracticalsolutions.com`.
+  Membership lives in `yps_chat_members` (`owner` | `admin` | `partner`).
+- Add an admin: Admin → Team chat → Admin tools → *Add admin*. Calls edge function `chat-invite`
+  (`action: "invite", role: "admin"`), which verifies the caller is already an owner/admin, upserts
+  the member, and sends a Supabase Auth invite (or magic link) with redirect
+  `https://yourpracticalsolutions.com/admin/`.
+- Remove an admin: owners only (cannot remove yourself), via the same function (`action: "remove"`).
+- Invite a partner: same panel → *Invite a partner* (`role: "partner"`). Partners see chat only, not KPIs.
