@@ -197,7 +197,8 @@ h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -.01em; 
   .desktop-only { display: none !important; }
   .wrap { width: calc(100% - 32px); }
   body.has-bottom-nav { padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom)); }
-  .main-nav, .header-actions .btn-ghost { display: none; }
+  .main-nav, .header-actions .btn-ghost:not(.keep) { display: none; }
+  .announce .a-long { display: none; }
   .header-actions .btn { padding: 9px 14px; font-size: .85rem; }
   .logo small { display: none; }
   .announce { font-size: .78rem; }
@@ -210,7 +211,7 @@ h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -.01em; 
   .m-search { display: block !important; margin-top: 16px; }
   .trust .wrap { grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px 0; }
   .trust-item .ico { width: 34px; height: 34px; border-radius: 10px; }
-  .trust-item span { display: none; }
+  .trust-item div span { display: none; }
   .section { padding: 40px 0; }
   .section-head { margin-bottom: 18px; }
   .section-head .btn { display: none; }

@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=7.1" />
   <title>Team | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
 </head>
@@ -30,7 +30,7 @@
       <a class="logo" href="./"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#1f4a3d"/><path d="M9 19.5 20 10l11 9.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="m14.5 22.5 4 4 7.5-8" fill="none" stroke="#e08a3c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>YPS Team<small id="whoami">Store admin</small></span></a>
       <div class="header-actions">
         <a class="btn btn-ghost btn-sm" href="./">Public site</a>
-        <button class="btn btn-ghost btn-sm" id="logout" type="button" hidden>Log out</button>
+        <button class="btn btn-ghost btn-sm keep" id="logout" type="button" hidden>Log out</button>
       </div>
     </div>
   </header>
@@ -62,15 +62,14 @@
             </div>
             <div class="chat-log" id="chat-log" aria-live="polite"></div>
             <form class="chat-form" id="chat-form">
-              <textarea id="chat-input" rows="1" placeholder="Message the team…  (@Shoppie to ask the bot)" aria-label="Message"></textarea>
+              <textarea id="chat-input" rows="1" placeholder="Message… (@Shoppie for the bot)" aria-label="Message"></textarea>
               <button class="btn btn-primary" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
             </form>
           </div>
           <div class="chat-side">
             <div class="panel" style="margin:0"><h2>Members</h2><ul id="chat-members" style="list-style:none;padding:0;margin:0;display:grid;gap:8px;font-size:.9rem"></ul></div>
             <div class="panel" style="margin:0"><h2>Shoppie bot</h2><p class="muted" style="font-size:.9rem;margin:0 0 8px" id="shoppie-mode-label"></p>
-              <div id="owner-tools-mode"></div>
-              <p class="muted" style="font-size:.82rem;margin:8px 0 0">New messages are forwarded to Shoppie's webhook once its URL is configured. Shoppie's replies appear here in orange.</p></div>
+                            <p class="muted" style="font-size:.82rem;margin:8px 0 0">New messages are forwarded to Shoppie's webhook once its URL is configured. Shoppie's replies appear here in orange.</p></div>
             <div class="panel" style="margin:0" id="owner-tools" hidden>
               <h2>Owner tools</h2>
               <label>Shoppie receives
