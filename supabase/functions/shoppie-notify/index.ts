@@ -18,7 +18,10 @@ Deno.serve(async (req) => {
   if (!rec || rec.is_bot) return json({ skipped: "no human message" });
 
   const { data: cfg } = await db.rpc("yps_chat_config_get");
-  const webhook = Deno.env.get("SHOPPIE_WEBHOOK_URL") || cfg?.webhook_url || "";
+  const { data: vault } = await db.rpc("yps_shoppie_webhook");
+  // Env secrets win; otherwise use the Vault values (shoppie_webhook_url / shoppie_webhook_key).
+  const webhook = Deno.env.get("SHOPPIE_WEBHOOK_URL") || vault?.url || cfg?.webhook_url || "";
+  const bearer = Deno.env.get("SHOPPIE_WEBHOOK_KEY") || vault?.key || "";
   const mode = (Deno.env.get("SHOPPIE_NOTIFY_MODE") || cfg?.notify_mode || "mention").toLowerCase();
   if (!webhook) return json({ skipped: "SHOPPIE_WEBHOOK_URL not set" });
   if (mode !== "all" && !/@shoppie\b/i.test(rec.body || "")) return json({ skipped: "no @Shoppie mention" });
@@ -30,6 +33,7 @@ Deno.serve(async (req) => {
     reply_url: `${Deno.env.get("SUPABASE_URL")}/functions/v1/shoppie-reply`,
   };
   const headers: Record<string, string> = { "content-type": "application/json", "user-agent": "yps-chat/1" };
+  if (bearer) headers["authorization"] = `Bearer ${bearer}`;
   const sig = Deno.env.get("SHOPPIE_WEBHOOK_SECRET");
   if (sig) headers["x-yps-webhook-secret"] = sig;
   const res = await fetch(webhook, { method: "POST", headers, body: JSON.stringify(out) }).catch((e) => ({ ok: false, status: 0, statusText: String(e) } as Response));

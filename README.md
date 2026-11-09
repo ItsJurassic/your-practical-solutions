@@ -7,11 +7,25 @@ Live: https://itsjurassic.github.io/your-practical-solutions/ (custom domain pla
 |---|---|
 | `/` (`index.html`) | Home. Desktop (≥900px) loads the interactive floor plan (`app.js` + `house-plan.js`); mobile never downloads it and gets a compact shop layout with a bottom nav. |
 | `/shop.html` | Every Shopify product from `products.json`, with category filters, search and sort. Each card links to the live Shopify product page. |
+| `/shipping.html`, `/returns.html`, `/privacy.html`, `/terms.html` | Policy pages (templates — have them reviewed; fill `[State]`/`[County]` in Terms). Built from `content/legal/*.html` + `templates/legal.html`. |
 | `/admin/` | Team area: realtime **Team chat** (Supabase) and the **KPIs** dashboard (owner only). See `SHOPPIE_CHAT.md`. |
 
-## Rebuild the catalog
+## Catalog: live sync + baked fallback
 
-`products.json` is baked at build time, so no Storefront token is needed:
+The shop loads `https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/yps-products` first (4.5 s timeout).
+That edge function (`supabase/functions/yps-products`) reads the live store — Storefront API if the
+`SHOPIFY_STOREFRONT_TOKEN` secret is set, else Admin API if `SHOPIFY_ADMIN_TOKEN` is set, else the public
+`https://xvdkyq-xg.myshopify.com/products.json` — caches it 5 min in memory and keeps the last good copy in
+`public.yps_products_cache`. If the live source fails (e.g. the store password page → `ok:false,
+reason:"store_password"`), the site uses the baked `products.json`. `?refresh` forces a re-fetch.
+
+### Rebuild the baked snapshot (e.g. daily)
+
+1. Run the Admin GraphQL query from `scripts/build-products.py` with the Shopify connector (`write_to_file: true`).
+2. `bash scripts/refresh-catalog.sh <that output file>` — extracts the JSON, rebuilds `products.json` and pages,
+   and commits + pushes to `main` and `gh-pages` only if the catalog changed (prints `no change` otherwise).
+
+Manual equivalent:
 
 1. Refresh `data/shopify-snapshot.json` with the Admin GraphQL query documented in `scripts/build-products.py`.
 2. `python3 scripts/build-products.py`  → `products.json`

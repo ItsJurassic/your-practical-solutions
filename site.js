@@ -35,12 +35,32 @@ const TILE = {
   "best-sellers": ["#eaf2ee", "#1f4a3d", "What customers love most"],
 };
 
+const LIVE_URL = "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/yps-products";
+const EMPTY = { products: [], collections: [], product_count: 0 };
+
+async function fetchJson(url, ms) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms);
+  try {
+    const r = await fetch(url, { signal: ctl.signal, cache: "no-cache" });
+    return r.ok ? await r.json() : null;
+  } catch { return null; } finally { clearTimeout(t); }
+}
+
+// Live Shopify catalog (Supabase edge function yps-products) first; baked products.json as fallback.
 let catalogPromise;
 export function loadCatalog() {
-  catalogPromise ||= fetch(`${BASE}products.json`, { cache: "no-cache" })
-    .then((r) => (r.ok ? r.json() : null))
-    .catch(() => null)
-    .then((j) => j || { products: [], collections: [], product_count: 0 });
+  catalogPromise ||= (async () => {
+    const [live, baked] = await Promise.all([fetchJson(LIVE_URL, 4500), fetchJson(`${BASE}products.json`, 8000)]);
+    let cat, source;
+    if (live?.ok && Array.isArray(live.products)) { cat = live; source = "live"; }
+    else if (baked?.products?.length) { cat = baked; source = "baked"; }
+    else if (live?.stale && live.products?.length) { cat = live; source = "stale-cache"; }
+    else { cat = baked || live || EMPTY; source = baked ? "baked" : "none"; }
+    if (!cat.collections?.length && baked?.collections?.length) cat = { ...cat, collections: baked.collections };
+    window.__CATALOG_SOURCE__ = { source, liveOk: !!live?.ok, liveReason: live?.reason || null, count: cat.products?.length || 0 };
+    return { ...EMPTY, ...cat };
+  })();
   return catalogPromise;
 }
 

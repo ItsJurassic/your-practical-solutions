@@ -24,8 +24,15 @@ Deno.serve(async (req) => {
   const auth = req.headers.get("authorization") || "";
   const key = req.headers.get("x-shoppie-key") || (auth.toLowerCase().startsWith("bearer ") ? auth.slice(7).trim() : "");
   if (!key) return json({ error: "missing key" }, 401);
-  let body: { text?: string; message?: string };
+  let body: { text?: string; message?: string; set_webhook_key?: string };
   try { body = await req.json(); } catch { return json({ error: "body must be JSON" }, 400); }
+  const db0 = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  // Owner-side config: store the outbound webhook bearer key in Vault without it passing through any chat/tool log.
+  if (typeof (body as Record<string, unknown>).set_webhook_key === "string") {
+    const { data, error } = await db0.rpc("yps_shoppie_set_webhook_key", { p_reply_key: key, p_value: (body as Record<string, string>).set_webhook_key });
+    if (error) return json({ error: error.message.includes("invalid key") ? "invalid key" : error.message }, error.message.includes("invalid key") ? 401 : 400);
+    return json({ ok: true, stored_length: data });
+  }
   const text = String(body.text ?? body.message ?? "").trim();
   if (!text) return json({ error: "text is required" }, 400);
   if (text.length > 4000) return json({ error: "text is over 4000 characters" }, 400);

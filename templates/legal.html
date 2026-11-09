@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{HEAD}}
+  <title>{{TITLE}} | Your Practical Solutions</title>
+  <meta name="description" content="{{DESC}}" />
+  <link rel="canonical" href="https://yourpracticalsolutions.com/{{SLUG}}" />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Your Practical Solutions" />
+  <meta property="og:title" content="{{TITLE}} | Your Practical Solutions" />
+  <meta property="og:description" content="{{DESC}}" />
+  <meta property="og:url" content="https://yourpracticalsolutions.com/{{SLUG}}" />
+  <meta property="og:image" content="https://itsjurassic.github.io/your-practical-solutions/og-image.png" />
+  <script type="application/ld+json">
+{{JSONLD_PAGE}}
+  </script>
+</head>
+<body data-page="legal" class="has-bottom-nav legal-page">
+{{HEADER}}
+  <main id="main">
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="crumbs"><a href="./">Home</a> / Policies / {{TITLE}}</div>
+        <h1>{{TITLE}}</h1>
+        <p class="muted legal-meta">Last updated: <time datetime="2026-11-09">November 9, 2026</time> · <button class="linklike" type="button" onclick="window.print()">Print this page</button></p>
+      </div>
+    </section>
+    <div class="wrap legal-layout">
+      <nav class="legal-toc" aria-label="On this page">
+        <details class="toc-details" open>
+          <summary><h4>On this page</h4></summary>
+          <ol>{{TOC}}</ol>
+        </details>
+        <script>if (matchMedia("(max-width: 899px)").matches) document.currentScript.previousElementSibling.removeAttribute("open");</script>
+        <div class="legal-other"><h4>Other policies</h4>{{OTHERS}}</div>
+      </nav>
+      <article class="legal-body">
+{{BODY}}
+        <section class="legal-contact-card">
+          <b>Questions?</b> Email <a href="mailto:contact@yourpracticalsolutions.com">contact@yourpracticalsolutions.com</a> — a real person on our team will reply, usually within 1–2 business days.
+        </section>
+      </article>
+    </div>
+  </main>
+{{FOOTER}}
+{{BOTTOMNAV}}
+  <script type="module" src="site.js?v=8"></script>
+</body>
+</html>

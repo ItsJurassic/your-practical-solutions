@@ -30,11 +30,30 @@ for name in ("index.html", "shop.html"):
     page = "home" if name == "index.html" else "shop"
     t = t.replace(f'data-nav="{page}"', f'data-nav="{page}" aria-current="page"')
     (ROOT / name).write_text(t)
+import re, html
+LEGAL = [("shipping", "Shipping Policy"), ("returns", "Return & Refund Policy"), ("privacy", "Privacy Policy"), ("terms", "Terms of Service")]
+legal_t = (ROOT / "templates" / "legal.html").read_text()
+for slug, _ in LEGAL:
+    src = (ROOT / "content" / "legal" / f"{slug}.html").read_text()
+    title = re.search(r"<!-- title: (.*?) -->", src).group(1)
+    desc = re.search(r"<!-- desc: (.*?) -->", src).group(1)
+    body = re.sub(r"<!-- (title|desc): .*? -->\n?", "", src)
+    toc = "".join(f'<li><a href="{slug}.html#{i}">{t}</a></li>' for i, t in re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', body))
+    others = "".join(f'<a href="{s2}.html">{html.escape(t2)}</a>' for s2, t2 in LEGAL if s2 != slug)
+    ld = {"@context": "https://schema.org", "@type": "WebPage", "name": html.unescape(title), "url": f"{SITE}/{slug}.html",
+          "dateModified": "2026-11-09", "isPartOf": {"@id": f"{SITE}/#website"}, "publisher": {"@id": f"{SITE}/#org"}}
+    t = (legal_t.replace("{{HEAD}}", P("head-common.html")).replace("{{HEADER}}", P("header.html"))
+         .replace("{{FOOTER}}", P("footer.html")).replace("{{BOTTOMNAV}}", P("bottom-nav.html"))
+         .replace("{{TITLE}}", title).replace("{{DESC}}", desc).replace("{{SLUG}}", f"{slug}.html")
+         .replace("{{TOC}}", toc).replace("{{OTHERS}}", others).replace("{{BODY}}", body.strip())
+         .replace("{{JSONLD_PAGE}}", json.dumps(ld, indent=2)))
+    (ROOT / f"{slug}.html").write_text(t)
 today = datetime.date.today().isoformat()
+legal_urls = "".join(f"  <url><loc>{SITE}/{s}.html</loc><lastmod>2026-11-09</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>\n" for s, _ in LEGAL)
 (ROOT / "sitemap.xml").write_text(f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{SITE}/</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>{SITE}/shop.html</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-</urlset>
+{legal_urls}</urlset>
 """)
-print("built index.html, shop.html, sitemap.xml")
+print("built index.html, shop.html, " + ", ".join(f"{s}.html" for s, _ in LEGAL) + ", sitemap.xml")

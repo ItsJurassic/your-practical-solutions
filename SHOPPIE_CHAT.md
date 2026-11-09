@@ -16,13 +16,27 @@ Every new **human** message fires the `yps_chat_notify` trigger, which calls
 token kept in Supabase Vault as `shoppie_notify_token`). The function forwards the message to Shoppie
 only when a webhook URL is configured.
 
-**Configure (Supabase Dashboard → Edge Functions → Secrets):**
+**Configuration (currently ON, mode = mention):**
 
-| Secret | Required | Meaning |
+| Setting | Where it lives now | Meaning |
 |---|---|---|
-| `SHOPPIE_WEBHOOK_URL` | yes, to turn forwarding on | Where to POST messages. **Currently unset**, so nothing is forwarded. |
-| `SHOPPIE_NOTIFY_MODE` | optional | `mention` (default) = only messages containing `@Shoppie`; `all` = every message. Overrides the toggle in the admin page. |
-| `SHOPPIE_WEBHOOK_SECRET` | optional | If set, sent as header `x-yps-webhook-secret` so Shoppie can verify the caller. |
+| Webhook URL | Vault `shoppie_webhook_url` = `https://api2.cursor.sh/automations/webhook/0b5c8c1b-a25b-592e-87c7-ac1672ecb396` | Where messages are POSTed. Edge secret `SHOPPIE_WEBHOOK_URL` overrides it if set. |
+| Webhook key | Vault `shoppie_webhook_key` (copied from the box env var `SHOPPIE_WEBHOOK_KEY`) | Sent as `Authorization: Bearer <key>`. Edge secret `SHOPPIE_WEBHOOK_KEY` overrides it if set. |
+| Mode | `private.yps_chat_config.notify_mode` = `mention` | `mention` = only messages containing `@Shoppie`; `all` = every message. Edge secret `SHOPPIE_NOTIFY_MODE` overrides. |
+| `SHOPPIE_WEBHOOK_SECRET` | optional edge secret | If set, also sent as header `x-yps-webhook-secret`. |
+
+To rotate the webhook key from the box without it appearing in any log:
+
+```bash
+python3 - <<'PY'
+import os, json, urllib.request
+k = open('/workspace/kpi-site/.secrets/shoppie_reply_key').read().strip()
+req = urllib.request.Request("https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/shoppie-reply",
+    data=json.dumps({"set_webhook_key": os.environ["SHOPPIE_WEBHOOK_KEY"]}).encode(), method="POST",
+    headers={"authorization": "Bearer " + k, "content-type": "application/json"})
+print(urllib.request.urlopen(req).read().decode())   # {"ok":true,"stored_length":N}
+PY
+```
 
 The owner can also switch the mode in the admin page (Owner tools → "Shoppie receives"); that writes
 `private.yps_chat_config.notify_mode`. The `SHOPPIE_NOTIFY_MODE` secret, if set, wins.
@@ -32,6 +46,7 @@ The owner can also switch the mode in the admin page (Owner tools → "Shoppie r
 ```http
 POST <SHOPPIE_WEBHOOK_URL>
 Content-Type: application/json
+Authorization: Bearer <shoppie_webhook_key>
 x-yps-webhook-secret: <SHOPPIE_WEBHOOK_SECRET>   (only if that secret is set)
 
 {
