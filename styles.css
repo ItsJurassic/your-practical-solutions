@@ -388,3 +388,11 @@ mark.fill-in { background: #fff3c4; color: #7a5200; padding: 1px 6px; border-rad
   .admin-row { flex-wrap: wrap; }
   .admin-row .btn { width: 100%; }
 }
+
+.check-row { display: flex; align-items: center; gap: 8px; font-size: .9rem; }
+.check-row input { width: auto; margin: 0; }
+.temp-pass-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.temp-pass-row input { flex: 1 1 160px; min-width: 0; }
+@media (max-width: 720px) {
+  .temp-pass-row .btn { width: 100%; }
+}

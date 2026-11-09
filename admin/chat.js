@@ -165,21 +165,74 @@ $("invite-form")?.addEventListener("submit", async (e) => {
   }
 });
 
+function genTempPassword() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("");
+}
+
+function syncTempUi() {
+  const on = !!$("admin-use-temp")?.checked;
+  const wrap = $("admin-temp-wrap");
+  const submit = $("admin-invite-submit");
+  const pass = $("admin-temp-password");
+  if (wrap) wrap.hidden = !on;
+  if (pass) pass.required = on;
+  if (submit) submit.textContent = on ? "Create admin with temp password" : "Send admin invite";
+  if (on && pass && !pass.value) pass.value = genTempPassword();
+}
+
+$("admin-use-temp")?.addEventListener("change", syncTempUi);
+$("admin-temp-generate")?.addEventListener("click", () => {
+  const pass = $("admin-temp-password");
+  if (pass) pass.value = genTempPassword();
+});
+$("admin-temp-copy")?.addEventListener("click", async () => {
+  const pass = $("admin-temp-password");
+  const out = $("admin-invite-msg");
+  if (!pass?.value) return;
+  try {
+    await navigator.clipboard.writeText(pass.value);
+    if (out) out.textContent = "Temporary password copied.";
+  } catch {
+    pass.select();
+    if (out) out.textContent = "Copy failed — select and copy manually.";
+  }
+});
+
 $("admin-invite-form")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const fd = new FormData(e.target);
   const out = $("admin-invite-msg");
-  out.textContent = "Sending admin invite…";
+  const useTemp = !!fd.get("use_temp");
+  const temp = String(fd.get("temp_password") || "");
+  out.textContent = useTemp ? "Creating admin…" : "Sending admin invite…";
   try {
-    const body = await callInvite({ action: "invite", email: fd.get("email"), name: fd.get("name"), role: "admin" });
-    out.textContent = body.message || "Admin invite sent.";
-    e.target.reset();
+    const payload = { action: "invite", email: fd.get("email"), name: fd.get("name"), role: "admin" };
+    if (useTemp) {
+      if (temp.length < 8) throw new Error("Temporary password must be at least 8 characters.");
+      payload.temp_password = temp;
+    }
+    const body = await callInvite(payload);
+    out.textContent = useTemp
+      ? `${body.message || "Admin created."} Temporary password: ${temp}`
+      : (body.message || "Admin invite sent.");
+    // Keep temp password visible; clear only email/name if temp mode
+    if (useTemp) {
+      e.target.email.value = "";
+      e.target.name.value = "";
+    } else {
+      e.target.reset();
+      syncTempUi();
+    }
     loadMembers();
     loadAdmins();
   } catch (err) {
     out.textContent = err.message;
   }
 });
+syncTempUi();
 
 $("admin-list")?.addEventListener("click", async (e) => {
   const btn = e.target.closest(".admin-remove");

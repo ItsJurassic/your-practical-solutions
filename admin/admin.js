@@ -1,6 +1,6 @@
 import { CONFIG } from "../config.js";
-import { supabase } from "./client.js?v=11";
-import { startChat, stopChat } from "./chat.js?v=11";
+import { supabase } from "./client.js?v=12";
+import { startChat, stopChat } from "./chat.js?v=12";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");
@@ -290,6 +290,12 @@ async function boot() {
   const user = await sessionUser();
   const email = String(user?.email || "").toLowerCase();
   if (!user) { stopChat(); booted = null; clearRecoveryUi(); showDash(false); return; }
+  if (user?.user_metadata?.must_change_password) {
+    const lede = document.getElementById("recovery-lede");
+    if (lede) lede.textContent = "Your temporary password must be changed before you can use the admin tools (at least 8 characters).";
+    showRecovery();
+    return;
+  }
   if (booted === user.id) return;
   let member = null;
   const { data } = await supabase.from("yps_chat_members").select("email, display_name, role").eq("email", email).maybeSingle();
@@ -333,7 +339,10 @@ document.getElementById("recovery-form")?.addEventListener("submit", async (e) =
     return;
   }
   recoveryMsg.textContent = "Saving…";
-  const { error } = await supabase.auth.updateUser({ password });
+  const { error } = await supabase.auth.updateUser({
+    password,
+    data: { must_change_password: false },
+  });
   if (error) {
     recoveryMsg.textContent = error.message;
     return;
@@ -361,7 +370,7 @@ document.getElementById("change-password-form")?.addEventListener("submit", asyn
     return;
   }
   out.textContent = "Saving…";
-  const { error } = await supabase.auth.updateUser({ password });
+  const { error } = await supabase.auth.updateUser({ password, data: { must_change_password: false } });
   out.textContent = error ? error.message : "Password updated.";
   if (!error) e.target.reset();
 });
