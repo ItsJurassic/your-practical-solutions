@@ -10,7 +10,7 @@ org = {
     "@context": "https://schema.org",
     "@graph": [
         {"@type": "OnlineStore", "@id": f"{SITE}/#org", "name": "Your Practical Solutions", "url": f"{SITE}/",
-         "logo": "https://itsjurassic.github.io/your-practical-solutions/apple-touch-icon.png",
+         "logo": "https://yourpracticalsolutions.com/apple-touch-icon.png",
          "email": "contact@yourpracticalsolutions.com",
          "description": "Practical goods for home, garage, car and RV.",
          "sameAs": [cat["store"]["url"]]},

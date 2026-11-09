@@ -17,7 +17,7 @@ No Storefront token is needed at runtime: the site only reads products.json.
 import json, datetime, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SHOP_LINK_BASE = "https://xvdkyq-xg.myshopify.com"  # always resolves to the store's current primary domain
+SHOP_LINK_BASE = "https://shop.yourpracticalsolutions.com"  # Shopify primary domain
 
 snap = json.loads((ROOT / "data/shopify-snapshot.json").read_text())["data"]
 products = []

@@ -4,7 +4,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 // Owner-only: POST { email, name } with the owner's Supabase session token.
 // Adds the email to yps_chat_members and sends a Supabase Auth invite (or magic link if the account exists).
 const OWNER = "contact@yourpracticalsolutions.com";
-const REDIRECT = "https://itsjurassic.github.io/your-practical-solutions/admin/";
+const REDIRECT = "https://yourpracticalsolutions.com/admin/";
 const cors = {
   "access-control-allow-origin": "*",
   "access-control-allow-headers": "authorization, x-client-info, apikey, content-type",

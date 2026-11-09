@@ -1,3 +1,7 @@
+# Domain setup — DONE 2026-11-09
+
+Apex A/AAAA → GitHub Pages, www → itsjurassic.github.io, shop → shops.myshopify.com (Shopify primary domain). `CNAME` is committed. The original plan follows for reference.
+
 # Domain plan (not applied — DNS changes need the owner)
 
 ## What DNS looks like today (checked 2026-11-09)

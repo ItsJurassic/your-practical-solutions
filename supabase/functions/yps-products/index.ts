@@ -11,7 +11,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 // available, the last good cached catalog; the website then falls back to its baked products.json.
 const SHOP = Deno.env.get("SHOPIFY_STORE_DOMAIN") || "xvdkyq-xg.myshopify.com";
 const ORIGIN = Deno.env.get("SHOPIFY_ORIGIN_OVERRIDE") || `https://${SHOP}`; // testing hook
-const LINK_BASE = Deno.env.get("SHOP_LINK_BASE") || `https://${SHOP}`;
+const LINK_BASE = Deno.env.get("SHOP_LINK_BASE") || "https://shop.yourpracticalsolutions.com"; // public links use the primary domain
 const API_VERSION = "2025-10";
 const TTL_MS = 5 * 60 * 1000;
 const cors = { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type, apikey, authorization, x-client-info", "access-control-allow-methods": "GET, OPTIONS" };
