@@ -15,9 +15,10 @@ function defs() {
     `<pattern id="${id}" patternUnits="userSpaceOnUse" width="${size}" height="${size}"${extra}>${base ? `<rect width="${size}" height="${size}" fill="${base}"/>` : ""}<image href="${T(img)}" width="${size}" height="${size}" preserveAspectRatio="none" opacity="${op}"/></pattern>`;
   return `<defs>
     ${pat("p-grass", "grass_diff.jpg", 220, "", "#6f9a45", 0.28)}
-    ${pat("p-oak", "parquet_diff.jpg", 140, "", "#e2c79f", 0.55)}
-    ${pat("p-parq", "wood_diff.jpg", 150, ' patternTransform="rotate(90)"', "#d9b98c", 0.5)}
-    ${pat("p-tile", "tile_diff.jpg", 80, "", "#eeeae3", 0.55)}
+    ${pat("p-oak", "parquet_diff.jpg", 140, "", "#e8dac3", 0.38)}
+    <pattern id="p-parq" patternUnits="userSpaceOnUse" width="400" height="400"><rect width="400" height="400" fill="#e2dccf"/><rect width="400" height="400" filter="url(#carpet)"/></pattern>
+    <filter id="carpet" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 .45  0 0 0 0 .41  0 0 0 0 .36  0 0 0 .22 0"/></filter>
+    ${pat("p-tile", "tile_diff.jpg", 80, "", "#f2f0eb", 0.32)}
     ${pat("p-conc", "concrete_diff.jpg", 240)}
     ${pat("p-asph", "asphalt_diff.jpg", 300, "", "#4a4a4a", 0.6)}
     ${pat("p-kwood", "kwood_diff.jpg", 120)}
@@ -231,7 +232,7 @@ const H = { x0: 0, y0: 0, x1: 1400, y1: 1300 }; // house
 const G = { x0: 1400, y0: 300, x1: 2060, y1: 1300 }; // garage
 
 function roomLabel(x, y, name, w, h) {
-  return `<g class="lbl" data-x="${x}" data-y="${y}"><text x="${x}" y="${y}" class="room-label" text-anchor="middle">${name}</text><text x="${x}" y="${y + 24}" class="room-dim" text-anchor="middle">${ftin(w)} × ${ftin(h)}</text></g>`;
+  return `<g class="lbl" data-x="${x}" data-y="${y}"><text x="${x}" y="${y}" class="room-label" text-anchor="middle">${name}</text><text x="${x}" y="${y + 34}" class="room-dim" text-anchor="middle">${ftin(w)} × ${ftin(h)}</text></g>`;
 }
 
 function buildPlan() {
@@ -250,9 +251,9 @@ function buildPlan() {
   ground += r(1400, 288, 672, 1024, 'fill="#000" opacity=".2" filter="url(#tree)"');
 
   // floors
-  floors += r(0, 0, 560, 520, 'fill="url(#p-parq)"');           // bedroom
+  floors += r(0, 0, 1400, 1300, 'fill="url(#p-oak)"');          // open plan (light oak)
+  floors += r(0, 0, 560, 520, 'fill="url(#p-parq)"');           // bedroom (soft greige carpet)
   floors += r(560, 0, 300, 520, 'fill="url(#p-tile)"');         // bath + laundry
-  floors += r(0, 0, 1400, 1300, 'fill="url(#p-oak)"');          // open plan
   floors += r(770, 1120, 190, 180, 'fill="url(#p-tile)"');      // entry
   floors += r(G.x0, G.y0, G.x1 - G.x0, G.y1 - G.y0, 'fill="url(#p-garconc)"');
 
@@ -317,6 +318,10 @@ function buildPlan() {
   furn += r(1412, 560, 60, 220, 'fill="#8b8f93" stroke="#555" stroke-width="2"') + [575, 645, 715].map((y) => r(1418, y, 48, 55, 'rx="3" fill="#5b7fa6" stroke="#3b5a7a"')).join("");
   furn += r(1790, 1080, 90, 140, 'rx="10" fill="#2e7d32" stroke="#1b5e20"') + c(1835, 1140, 28, 'fill="#1f2937"');
   furn += `<ellipse cx="1610" cy="1040" rx="40" ry="26" fill="#000" opacity=".12"/>`;
+  // garage extras: bikes, kayak, ladder, storage tubs, chest freezer, bins, shop vac
+  const bike = (x, y) => `<g>${c(x, y, 30, 'fill="none" stroke="#1f2937" stroke-width="6"')}${c(x + 108, y, 30, 'fill="none" stroke="#1f2937" stroke-width="6"')}${ln(x, y, x + 54, y - 4, 'stroke="#0f766e" stroke-width="7" stroke-linecap="round"')}${ln(x + 54, y - 4, x + 108, y, 'stroke="#0f766e" stroke-width="7" stroke-linecap="round"')}${r(x + 46, y - 12, 22, 9, 'rx="4" fill="#111"')}${ln(x + 100, y - 18, x + 100, y + 18, 'stroke="#374151" stroke-width="5" stroke-linecap="round"')}</g>`;
+  furn += hs("garage-storage", "Garage storage", `<g>${bike(1770, 470)}${bike(1770, 560)}${r(1752, 640, 236, 44, 'rx="22" fill="#f59e0b" stroke="#b45309" stroke-width="2"')}${r(1840, 650, 60, 24, 'rx="12" fill="#1f2937" opacity=".75"')}${[0, 1, 2].map((i) => r(1890, 820 + i * 74, 96, 64, 'rx="5" fill="#cbd5e1" stroke="#64748b" stroke-width="2"') + r(1896, 826 + i * 74, 84, 12, 'rx="3" fill="#2563eb"')).join("")}${r(1752, 820, 34, 230, 'fill="none" stroke="#a3a3a3" stroke-width="5"')}${[0,1,2,3,4,5,6].map((i) => ln(1752, 845 + i * 30, 1786, 845 + i * 30, 'stroke="#a3a3a3" stroke-width="5"')).join("")}${r(1880, 1060, 110, 70, 'rx="6" fill="url(#g-steel)" stroke="#8a9196" stroke-width="2"')}${r(1890, 1070, 90, 6, 'fill="#9aa0a5"')}${r(1416, 1160, 56, 56, 'rx="8" fill="#334155"')}${r(1416, 1222, 56, 56, 'rx="8" fill="#15803d"')}${c(1950, 1220, 24, 'fill="#dc2626" stroke="#7f1d1d" stroke-width="2"')}${c(1950, 1220, 9, 'fill="#1f2937"')}</g>`);
+
   furn += hs("car", "Car", car(1520, 760));
 
   // ---- RV
@@ -331,14 +336,14 @@ function buildPlan() {
   outdoor += shrub(990, 1360, 34) + shrub(1060, 1370, 26) + shrub(1340, 1360, 30);
 
   // labels
-  labels += roomLabel(300, 300, "PRIMARY BEDROOM", 560, 520);
+  labels += roomLabel(268, 432, "PRIMARY BEDROOM", 560, 520);
   labels += roomLabel(640, 115, "BATH", 300, 300);
   labels += roomLabel(690, 420, "LAUNDRY", 300, 220);
   labels += roomLabel(1130, 200, "KITCHEN", 540, 520);
   labels += roomLabel(1175, 1050, "DINING", 540, 780);
   labels += roomLabel(300, 1150, "LIVING ROOM", 860, 780);
   labels += roomLabel(865, 1080, "ENTRY", 190, 180);
-  labels += roomLabel(1760, 560, "GARAGE", 660, 1000);
+  labels += roomLabel(1830, 748, "GARAGE", 660, 1000);
   labels += roomLabel(-230, 990, "PATIO", 460, 460);
   labels += `<g class="lbl" data-x="1730" data-y="1700"><text x="1730" y="1700" class="room-label" text-anchor="middle">DRIVEWAY</text></g>`;
 

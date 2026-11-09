@@ -1,0 +1,2 @@
+{ "name": "Your Practical Solutions", "short_name": "YPS", "start_url": "./", "display": "standalone", "background_color": "#ffffff", "theme_color": "#1f4a3d",
+  "icons": [{ "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }, { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }] }

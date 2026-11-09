@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{HEAD}}
+  <title>Shop all products | Your Practical Solutions</title>
+  <meta name="description" content="Browse every product from Your Practical Solutions — storage, pet supplies, garage tools, car &amp; RV gear, tech accessories and home decor. Secure Shopify checkout." />
+  <link rel="canonical" href="https://yourpracticalsolutions.com/shop.html" />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Your Practical Solutions" />
+  <meta property="og:title" content="Shop | Your Practical Solutions" />
+  <meta property="og:description" content="Practical goods for home, garage, car and RV." />
+  <meta property="og:url" content="https://yourpracticalsolutions.com/shop.html" />
+  <meta property="og:image" content="https://itsjurassic.github.io/your-practical-solutions/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">
+{{JSONLD_SHOP}}
+  </script>
+</head>
+<body data-page="shop" class="has-bottom-nav">
+{{HEADER}}
+  <main id="main">
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="crumbs"><a href="./">Home</a> / Shop</div>
+        <h1 id="shop-title">All products</h1>
+        <p class="muted" style="margin:0">Every item links to its product page in our Shopify store for secure checkout.</p>
+      </div>
+    </section>
+    <div class="wrap shop-layout">
+      <aside class="filters" aria-label="Filters">
+        <div><h4>Categories</h4><div class="filter-list" id="filter-list"></div></div>
+        <div class="panel" style="margin:0"><b style="color:var(--ink)">Need help choosing?</b><p class="muted" style="font-size:.9rem;margin:6px 0 10px">Email the owners and we'll point you to the right product.</p><a class="btn btn-ghost btn-sm" href="mailto:contact@yourpracticalsolutions.com">Email us</a></div>
+      </aside>
+      <div>
+        <div class="chips" id="chips" role="toolbar" aria-label="Categories"></div>
+        <div class="toolbar">
+          <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="shop-q" type="search" placeholder="Search products" aria-label="Search products" style="margin:0" /></label>
+          <span class="result-count" id="result-count"></span>
+          <label class="sort"><span class="sr" hidden>Sort</span><select id="shop-sort" aria-label="Sort products" style="margin:0"><option value="featured">Featured</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="az">Name: A–Z</option></select></label>
+        </div>
+        <div class="products" id="shop-grid"></div>
+      </div>
+    </div>
+  </main>
+{{FOOTER}}
+{{BOTTOMNAV}}
+  <script type="module" src="site.js?v=7"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{
+  "data": {
+    "shop": {
+      "primaryDomain": {
+        "host": "yourpracticalsolutions.com",
+        "url": "https://yourpracticalsolutions.com"
+      },
+      "myshopifyDomain": "xvdkyq-xg.myshopify.com"
+    },
+    "products": {
+      "pageInfo": {
+        "hasNextPage": false
+      },
+      "nodes": []
+    },
+    "collections": {
+      "nodes": [
+        {
+          "handle": "frontpage",
+          "title": "Home page",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "storage-organization",
+          "title": "Storage & Organization",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "pet-supplies",
+          "title": "Pet Supplies",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "garage-tools",
+          "title": "Garage & Tools",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "car-rv",
+          "title": "Car & RV",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "tech-accessories",
+          "title": "Tech Accessories",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "home-decor",
+          "title": "Home & Decor",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "new-arrivals",
+          "title": "New Arrivals",
+          "productsCount": {
+            "count": 0
+          }
+        },
+        {
+          "handle": "best-sellers",
+          "title": "Best Sellers",
+          "productsCount": {
+            "count": 0
+          }
+        }
+      ]
+    }
+  }
+}

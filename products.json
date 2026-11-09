@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-11-09T20:12:25+00:00",
+  "source": "Shopify Admin API snapshot (data/shopify-snapshot.json)",
+  "store": {
+    "name": "Your Practical Solutions",
+    "url": "https://xvdkyq-xg.myshopify.com",
+    "primary_domain": "yourpracticalsolutions.com",
+    "myshopify": "xvdkyq-xg.myshopify.com"
+  },
+  "product_count": 0,
+  "products": [],
+  "collections": [
+    {
+      "handle": "storage-organization",
+      "title": "Storage & Organization",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/storage-organization"
+    },
+    {
+      "handle": "pet-supplies",
+      "title": "Pet Supplies",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/pet-supplies"
+    },
+    {
+      "handle": "garage-tools",
+      "title": "Garage & Tools",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/garage-tools"
+    },
+    {
+      "handle": "car-rv",
+      "title": "Car & RV",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/car-rv"
+    },
+    {
+      "handle": "tech-accessories",
+      "title": "Tech Accessories",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/tech-accessories"
+    },
+    {
+      "handle": "home-decor",
+      "title": "Home & Decor",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/home-decor"
+    },
+    {
+      "handle": "new-arrivals",
+      "title": "New Arrivals",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/new-arrivals"
+    },
+    {
+      "handle": "best-sellers",
+      "title": "Best Sellers",
+      "count": 0,
+      "url": "https://xvdkyq-xg.myshopify.com/collections/best-sellers"
+    }
+  ]
+}

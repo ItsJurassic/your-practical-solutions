@@ -1,0 +1,20 @@
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <script>
+    (function () {
+      var p = location.pathname, base = "/";
+      if (p.indexOf("/your-practical-solutions") === 0) base = "/your-practical-solutions/";
+      window.__SITE_BASE__ = base;
+      window.__ASSET_BASE__ = location.hostname.indexOf("supabase.co") !== -1 ? "https://itsjurassic.github.io/your-practical-solutions/" : base;
+      document.write('<base href="' + base + '">');
+    })();
+  </script>
+  <meta name="theme-color" content="#1f4a3d" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=7" />

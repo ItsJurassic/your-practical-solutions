@@ -2,143 +2,238 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <script>
     (function () {
-      var path = location.pathname;
-      var base = "/";
-      if (path.indexOf("/your-practical-solutions") === 0) base = "/your-practical-solutions/";
-      else {
-        var marker = "/yps-kpi";
-        var idx = path.indexOf(marker);
-        if (idx >= 0) {
-          base = path.slice(0, idx + marker.length);
-          if (base.charAt(base.length - 1) !== "/") base += "/";
-        }
-      }
+      var p = location.pathname, base = "/";
+      if (p.indexOf("/your-practical-solutions") === 0) base = "/your-practical-solutions/";
       window.__SITE_BASE__ = base;
-      var assets = base;
-      if (location.hostname.indexOf("supabase.co") !== -1) {
-        assets = "https://itsjurassic.github.io/your-practical-solutions/";
-      }
-      window.__ASSET_BASE__ = assets;
+      window.__ASSET_BASE__ = location.hostname.indexOf("supabase.co") !== -1 ? "https://itsjurassic.github.io/your-practical-solutions/" : base;
       document.write('<base href="' + base + '">');
-      document.write('<script type="importmap">{"imports":{"three":"' + assets + 'vendor/three/three.module.js","three/addons/":"' + assets + 'vendor/three/addons/"}}<\/script>');
     })();
   </script>
-  <title>Your Practical Solutions | Useful goods for home, garage, car and RV</title>
-  <meta name="description" content="Your Practical Solutions is a warm, practical shop for storage, pet, garage, car and RV, home decor, and everyday household goods. Explore our house and shop on Shopify." />
-  <link rel="canonical" href="https://yourpracticalsolutions.com/" />
-  <meta name="robots" content="index,follow" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Your Practical Solutions" />
-  <meta property="og:title" content="Your Practical Solutions | Practical household goods" />
-  <meta property="og:description" content="Explore a livable house of useful goods — then check out on our Shopify shop." />
-  <meta property="og:url" content="https://yourpracticalsolutions.com/" />
-  <meta property="og:image" content="https://yourpracticalsolutions.com/og-image.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Your Practical Solutions" />
-  <meta name="twitter:description" content="Useful goods for home, garage, car and RV." />
-  <meta name="twitter:image" content="https://yourpracticalsolutions.com/og-image.png" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='12' width='64' height='64' fill='%232c4a3e'/><text x='32' y='42' text-anchor='middle' font-size='28' fill='%23f7f1e8'>Y</text></svg>" />
+  <meta name="theme-color" content="#1f4a3d" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=7" />
+  <title>Your Practical Solutions — Practical goods for home, garage, car &amp; RV</title>
+  <meta name="description" content="Shop practical, well-made goods for storage, pets, the garage, car and RV, tech, and home decor. Secure Shopify checkout, shipping in 5–12 business days." />
+  <link rel="canonical" href="https://yourpracticalsolutions.com/" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Your Practical Solutions" />
+  <meta property="og:title" content="Your Practical Solutions — Practical goods for everyday life" />
+  <meta property="og:description" content="Storage, pet, garage, car &amp; RV, tech and home goods that earn their keep. Secure checkout on Shopify." />
+  <meta property="og:url" content="https://yourpracticalsolutions.com/" />
+  <meta property="og:image" content="https://itsjurassic.github.io/your-practical-solutions/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Your Practical Solutions" />
+  <meta name="twitter:description" content="Practical goods for home, garage, car and RV." />
+  <meta name="twitter:image" content="https://itsjurassic.github.io/your-practical-solutions/og-image.png" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "OnlineStore",
+      "@id": "https://yourpracticalsolutions.com/#org",
+      "name": "Your Practical Solutions",
+      "url": "https://yourpracticalsolutions.com/",
+      "logo": "https://itsjurassic.github.io/your-practical-solutions/apple-touch-icon.png",
+      "email": "contact@yourpracticalsolutions.com",
+      "description": "Practical goods for home, garage, car and RV.",
+      "sameAs": [
+        "https://xvdkyq-xg.myshopify.com"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://yourpracticalsolutions.com/#website",
+      "url": "https://yourpracticalsolutions.com/",
+      "name": "Your Practical Solutions",
+      "publisher": {
+        "@id": "https://yourpracticalsolutions.com/#org"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://yourpracticalsolutions.com/shop.html?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}
+  </script>
 </head>
-<body>
+<body data-page="home" class="has-bottom-nav">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="announce">Secure checkout on Shopify · Ships in 5–12 business days · <a data-shop-link href="#">Visit the store</a></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="logo" href="./"><span class="mark">Y</span> Your Practical Solutions</a>
-      <nav>
-        <a href="#house">Explore the house</a>
-        <a href="#shop">Shop</a>
-        <a href="#about">About</a>
-        <a class="btn btn-primary" id="shop-cta" href="https://shop.yourpracticalsolutions.com">Visit the shop</a>
+      <a class="logo" href="./" aria-label="Your Practical Solutions home">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#1f4a3d"/><path d="M9 19.5 20 10l11 9.5V30a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1z" fill="#fff" opacity=".14"/><path d="M9 19.5 20 10l11 9.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="m14.5 22.5 4 4 7.5-8" fill="none" stroke="#e08a3c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Your Practical Solutions<small>Useful goods for everyday life</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="./" data-nav="home" aria-current="page">Home</a>
+        <a href="shop.html" data-nav="shop">Shop</a>
+        <a href="./#categories">Categories</a>
+        <a href="./#about">About</a>
       </nav>
+      <div class="header-actions">
+        <a class="btn btn-ghost btn-sm" href="mailto:contact@yourpracticalsolutions.com">Contact</a>
+        <a class="btn btn-primary btn-sm" href="shop.html">Shop now</a>
+      </div>
     </div>
   </header>
-
-  <main>
+  <main id="main">
     <section class="hero">
-      <div class="wrap">
-        <h1>Useful things, thoughtfully placed.</h1>
-        <p>Browse our home as if you lived here — bedroom, kitchen, living room, garage, yard, car and RV. Click what you see to find matching products. When you are ready to buy, checkout happens on our Shopify shop.</p>
-        <a class="btn btn-primary" href="#house">Explore the house</a>
-        <a class="btn btn-ghost" id="shop-cta-2" href="https://shop.yourpracticalsolutions.com">Shop on Shopify</a>
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">Home · Garage · Car &amp; RV</span>
+          <h1>Practical goods that <em>earn their place</em> in your home.</h1>
+          <p class="lead">Smart storage, pet supplies, garage tools, road-trip gear and home comforts — chosen for everyday usefulness and shipped straight to your door.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="shop.html">Shop all products</a>
+            <a class="btn btn-ghost desktop-only" href="#house">Explore the house</a>
+            <a class="btn btn-ghost m-only" href="./#categories" >Browse categories</a>
+          </div>
+          <form class="m-search" action="shop.html" role="search">
+            <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input name="q" type="search" placeholder="Search products" aria-label="Search products" style="margin:0" /></label>
+          </form>
+        </div>
+        <aside class="hero-card" aria-label="Why shop with us">
+          <h3>Why customers shop with us</h3>
+          <ul>
+            <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span><span><b>Secure Shopify checkout</b>Cards, Shop Pay and more — we never see your card.</span></li>
+            <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><span><b>Ships in 5–12 business days</b>Tracking sent by email as soon as it ships.</span></li>
+            <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/></svg></span><span><b>Real people, real answers</b>Email the owners directly any time.</span></li>
+          </ul>
+        </aside>
       </div>
     </section>
 
-    <section id="house">
+    <div class="trust" aria-label="Store promises">
       <div class="wrap">
-        <h2>A house full of practical solutions</h2>
-        <p class="lede">Drag to pan, scroll or pinch to zoom. Hover or tap furniture to see matching products. Tap the RV to look inside.</p>
+        <div class="trust-item"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span><div><b>Secure checkout</b><span>Powered by Shopify</span></div></div>
+        <div class="trust-item"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><div><b>Tracked shipping</b><span>5–12 business days</span></div></div>
+        <div class="trust-item"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><div><b>Hand-picked</b><span>Only genuinely useful goods</span></div></div>
+        <div class="trust-item"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/></svg></span><div><b>Owner support</b><span>Email us — we reply fast</span></div></div>
+      </div>
+    </div>
+
+    <section class="house-section desktop-only" id="house" aria-label="Interactive floor plan">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Shop by room</span>
+            <h2>Walk through our house</h2>
+            <p>Drag to pan, scroll to zoom, and click any piece of furniture — the bed, the garage workbench, the car or the RV — to see products for that spot.</p>
+          </div>
+          <a class="btn btn-ghost" href="shop.html">Skip to the shop</a>
+        </div>
         <div class="house-hero" id="house-hero">
           <div class="house-toolbar">
-            <span class="hint" id="view-hint">Explore the floor plan</span>
-            <button class="btn btn-ghost" id="peek-house" type="button" >Reset view</button>
-            <button class="btn btn-ghost" id="back-house" hidden type="button">Back to house</button>
-          </div>
-          <div class="stage-3d" id="house-stage">
-            <div class="scene-status" id="scene-status">Loading the house…</div>
-          </div>
-          <div class="image-fallback" id="image-fallback" hidden>
-            <div class="stage" id="fallback-house-stage">
-              <div class="stage-frame" id="house-frame">
-                <img src="renders/house.jpg" width="1280" height="720" alt="Cutaway of a modern house with bedroom, kitchen, living room, garage, yard, car and RV" />
-              </div>
-            </div>
-            <div class="stage rv-stage" id="rv-stage" hidden>
-              <div class="stage-frame rv-frame" id="rv-frame">
-                <img src="renders/rv.jpg" width="720" height="1280" alt="Top-down view of an RV interior" />
-              </div>
+            <span class="hint" id="view-hint">Live floor plan — click anything</span>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-ghost btn-sm" id="back-house" hidden type="button">Back to house</button>
+              <button class="btn btn-ghost btn-sm" id="peek-house" type="button">Reset view</button>
             </div>
           </div>
+          <div class="stage-3d" id="house-stage"><div class="scene-status" id="scene-status">Loading the floor plan…</div></div>
           <div id="hover-label" role="status"></div>
+        </div>
+      </div>
+      <aside id="product-sheet" class="sheet" aria-live="polite">
+        <div class="sheet-head">
+          <h3 id="sheet-title">Products</h3>
+          <button class="btn btn-ghost btn-sm" id="close-sheet" type="button">Close</button>
+          <p class="muted" id="sheet-blurb"></p>
+        </div>
+        <div class="sheet-body" id="sheet-body"></div>
+      </aside>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="wrap">
+        <div class="section-head">
+          <div><span class="eyebrow">Categories</span><h2>Shop by category</h2><p>Everything we sell is organised into a handful of practical collections.</p></div>
+          <a class="btn btn-ghost" href="shop.html">View all</a>
+        </div>
+        <div class="cats" id="home-cats"></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="featured">
+      <div class="wrap">
+        <div class="section-head">
+          <div><span class="eyebrow">Featured</span><h2>Popular right now</h2><p>Every product links straight to its page in our Shopify store.</p></div>
+          <a class="btn btn-ghost" href="shop.html">Shop all</a>
+        </div>
+        <div class="products" id="home-products"></div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="wrap split">
+        <div>
+          <span class="eyebrow">About us</span>
+          <h2>A small shop with a simple idea: useful things only.</h2>
+          <p>Your Practical Solutions is run by a small team that gets tired of clutter and gimmicks. We look for products that solve a real problem around the house, in the garage, or on the road — then make them easy to order.</p>
+          <p class="muted">Orders are processed by Shopify, and most arrive within 5–12 business days with tracking.</p>
+          <div class="stats">
+            <div class="stat"><b id="stat-products">0</b><span>Products listed</span></div>
+            <div class="stat"><b>8</b><span>Collections</span></div>
+            <div class="stat"><b>5–12</b><span>Days to deliver</span></div>
+          </div>
+        </div>
+        <div class="features">
+          <div class="feature"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><b>Chosen for usefulness</b><p>If we wouldn't use it at home, we don't list it.</p></div>
+          <div class="feature"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span><b>Checkout you trust</b><p>Payments run on Shopify's secure checkout.</p></div>
+          <div class="feature"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><b>Tracked delivery</b><p>You'll get a tracking link by email.</p></div>
+          <div class="feature"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/></svg></span><b>Talk to the owners</b><p>contact@yourpracticalsolutions.com</p></div>
         </div>
       </div>
     </section>
 
-    <aside id="product-sheet" class="sheet" aria-live="polite">
-      <div class="sheet-head">
-        <h3 id="sheet-title">Products</h3>
-        <p class="muted" id="sheet-blurb"></p>
-        <button class="btn btn-ghost" id="close-sheet" type="button">Close</button>
-      </div>
-      <div class="sheet-body" id="sheet-body"></div>
-    </aside>
-
-    <section id="shop">
+    <section class="section" style="padding-top:0">
       <div class="wrap">
-        <h2>Shop by room and category</h2>
-        <p class="lede">These are our live Shopify collections. Product pages and checkout live on shop.yourpracticalsolutions.com.</p>
-        <div class="grid" id="collection-grid"></div>
-        <h2 style="margin-top:48px">Everything we sell</h2>
-        <p class="lede">Pulled from Shopify. Nothing here is sample or placeholder inventory.</p>
-        <div class="grid" id="product-grid"></div>
-      </div>
-    </section>
-
-    <section id="about">
-      <div class="wrap">
-        <h2>About Your Practical Solutions</h2>
-        <p class="lede">We focus on household goods that earn their keep: storage, pet supplies, garage and tools, car and RV gear, tech accessories, carpets, curtains, and everyday home comforts. Delivery typically takes 5–12 business days.</p>
-        <div class="stats" id="public-stats"></div>
+        <div class="cta-band">
+          <div><h2>Ready to find something useful?</h2><p>Browse the full catalog and check out securely on Shopify.</p></div>
+          <a class="btn btn-accent" href="shop.html">Start shopping</a>
+        </div>
       </div>
     </section>
   </main>
-
   <footer class="site-footer">
     <div class="wrap">
-      <span>© Your Practical Solutions</span>
-      <nav>
-        <a href="https://shop.yourpracticalsolutions.com">Shop</a>
-        <a href="https://shop.yourpracticalsolutions.com/pages/contact">Contact</a>
-        <a href="./admin/">Admin</a>
-      </nav>
+      <div class="footer-grid">
+        <div>
+          <a class="logo" href="./"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#2d6a57"/><path d="M9 19.5 20 10l11 9.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="m14.5 22.5 4 4 7.5-8" fill="none" stroke="#e08a3c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Your Practical Solutions</span></a>
+          <p style="margin:14px 0 0;max-width:340px;font-size:.93rem">Practical, well-made goods for the home, garage, car and RV — picked by a small team and checked out securely on Shopify.</p>
+        </div>
+        <div><h4>Shop</h4><a href="shop.html">All products</a><a href="shop.html?c=new-arrivals">New arrivals</a><a href="shop.html?c=best-sellers">Best sellers</a><a data-shop-link href="#">Online store</a></div>
+        <div><h4>Categories</h4><a href="shop.html?c=storage-organization">Storage &amp; Organization</a><a href="shop.html?c=garage-tools">Garage &amp; Tools</a><a href="shop.html?c=car-rv">Car &amp; RV</a><a href="shop.html?c=home-decor">Home &amp; Decor</a></div>
+        <div><h4>Help</h4><a href="mailto:contact@yourpracticalsolutions.com">contact@yourpracticalsolutions.com</a><a data-shop-link href="#">Order on our store</a><a href="./#about">About us</a></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> Your Practical Solutions. All rights reserved.</span>
+        <span>Floor-plan textures from <a href="https://polyhaven.com">Poly Haven</a> (CC0) · <a href="admin/" rel="nofollow">Team login</a></span>
+      </div>
     </div>
-        <p class="wrap credits">Floor plan drawn for Your Practical Solutions. Floor, grass, concrete and asphalt textures from <a href="https://polyhaven.com">Poly Haven</a> (CC0).</p>
   </footer>
-  <script type="module" src="./app.js"></script>
+  <nav class="bottom-nav" aria-label="Mobile">
+    <a href="./" data-nav="home" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="shop.html" data-nav="shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12.5H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>Shop</a>
+    <a href="./#categories" data-nav="cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Categories</a>
+    <a href="mailto:contact@yourpracticalsolutions.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/></svg>Help</a>
+  </nav>
+  <script type="module" src="site.js?v=7"></script>
 </body>
 </html>

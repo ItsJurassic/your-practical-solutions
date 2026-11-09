@@ -1,7 +1,6 @@
 import { CONFIG } from "../config.js";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const supabase = createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
+import { supabase } from "./client.js";
+import { startChat, stopChat } from "./chat.js";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");
@@ -28,12 +27,20 @@ function showDash(on) {
   logout.hidden = !on;
 }
 
+function selectTab(name) {
+  document.querySelectorAll(".tabs [data-tab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+  document.getElementById("tab-chat").hidden = name !== "chat";
+  document.getElementById("tab-kpis").hidden = name !== "kpis";
+  if (name === "kpis" && !kpisLoaded) { kpisLoaded = true; loadKpis(); }
+}
+let kpisLoaded = false;
+document.querySelectorAll(".tabs [data-tab]").forEach((b) => (b.onclick = () => selectTab(b.dataset.tab)));
+
 document.getElementById("login-form").onsubmit = async (e) => {
   e.preventDefault();
   const fd = new FormData(e.target);
   const { error } = await supabase.auth.signInWithPassword({ email: fd.get("email"), password: fd.get("password") });
   msg.textContent = error ? error.message : "";
-  if (!error) boot();
 };
 
 document.getElementById("magic").onclick = async () => {
@@ -42,7 +49,7 @@ document.getElementById("magic").onclick = async () => {
     email,
     options: { emailRedirectTo: location.href.split("#")[0] },
   });
-  msg.textContent = error ? error.message : "Check contact@yourpracticalsolutions.com for a sign-in link.";
+  msg.textContent = error ? error.message : `Check ${email} for a sign-in link.`;
 };
 
 document.getElementById("reset").onclick = async () => {
@@ -51,7 +58,7 @@ document.getElementById("reset").onclick = async () => {
   msg.textContent = error ? error.message : "Password reset email sent if that inbox can receive mail.";
 };
 
-logout.onclick = async () => { await supabase.auth.signOut(); showDash(false); };
+logout.onclick = async () => { stopChat(); await supabase.auth.signOut(); showDash(false); };
 
 async function loadKpis() {
   const range = document.getElementById("range").value;
@@ -213,18 +220,27 @@ document.getElementById("sync").onclick = async () => {
   loadKpis();
 };
 
+let booted = null;
 async function boot() {
   const user = await sessionUser();
-  if (!user || String(user.email || "").toLowerCase() !== CONFIG.adminEmail) {
-    if (user && String(user.email || "").toLowerCase() !== CONFIG.adminEmail) {
-      msg.textContent = "This dashboard is limited to contact@yourpracticalsolutions.com.";
-      await supabase.auth.signOut();
-    }
+  const email = String(user?.email || "").toLowerCase();
+  if (!user) { stopChat(); booted = null; showDash(false); return; }
+  if (booted === user.id) return;
+  const isOwner = email === CONFIG.adminEmail;
+  let member = null;
+  const { data } = await supabase.from("yps_chat_members").select("email, display_name, role").eq("email", email).maybeSingle();
+  member = data;
+  if (!isOwner && !member) {
+    msg.textContent = "This area is limited to the store team. Ask the owner for an invite.";
+    await supabase.auth.signOut();
     showDash(false);
     return;
   }
+  booted = user.id;
   showDash(true);
-  await loadKpis();
+  document.getElementById("tab-btn-kpis").hidden = !isOwner;
+  document.getElementById("whoami").textContent = `${member?.display_name || "Owner"} · ${email}`;
+  await startChat({ user, email, isOwner, displayName: member?.display_name || (isOwner ? "Joe" : email.split("@")[0]) });
+  selectTab("chat");
 }
-supabase.auth.onAuthStateChange(() => boot());
-boot();
+supabase.auth.onAuthStateChange((evt) => { if (evt === "SIGNED_IN" || evt === "SIGNED_OUT" || evt === "INITIAL_SESSION") setTimeout(boot, 0); });
