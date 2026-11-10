@@ -103,6 +103,15 @@ function dayLabel(d) {
   return dayFmt.format(d);
 }
 
+// Turn http(s) links in already-escaped message text into clickable links (open in a new tab).
+function linkify(escaped) {
+  return escaped.replace(/\bhttps?:\/\/[^\s<>"']+/gi, (url) => {
+    let tail = "";
+    while (/[.,!?;:)\]]$/.test(url)) { tail = url.slice(-1) + tail; url = url.slice(0, -1); }
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;word-break:break-all">${url}</a>${tail}`;
+  });
+}
+
 function render() {
   const log = $("chat-log");
   if (!messages.length) {
@@ -116,7 +125,7 @@ function render() {
     if (day !== lastDay) { html += `<div class="day-sep">${dayLabel(d)}</div>`; lastDay = day; lastSender = ""; }
     const mine = m.user_id && m.user_id === me.user.id;
     const cont = lastSender === (m.sender_email || m.sender_name) && d - lastTime < 5 * 60 * 1000;
-    const body = esc(m.body).replace(/@shoppie\b/gi, (x) => `<span class="mention">${x}</span>`);
+    const body = linkify(esc(m.body)).replace(/(^|[^\w/])(@(?:shoppie|scout)\b)/gi, (_, pre, x) => `${pre}<span class="mention">${x}</span>`);
     html += `<div class="msg${mine ? " me" : ""}${m.is_bot ? " bot" : ""}${cont ? " cont" : ""}" data-id="${m.id}">
       <span class="avatar" style="background:${colorFor(m.sender_name)}">${m.is_bot ? "🤖" : esc(initials(m.sender_name))}</span>
       <div><div class="meta">${esc(mine ? "You" : m.sender_name)}${m.is_bot ? " · bot" : ""}</div>
