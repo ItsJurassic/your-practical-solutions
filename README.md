@@ -7,7 +7,7 @@ Live: https://itsjurassic.github.io/your-practical-solutions/ (custom domain pla
 |---|---|
 | `/` (`index.html`) | Home. Desktop (≥900px) loads the interactive floor plan (`app.js` + `house-plan.js`); mobile never downloads it and gets a compact shop layout with a bottom nav. |
 | `/shop.html` | Every Shopify product from `products.json`, with category filters, search and sort. Each card links to the live Shopify product page. |
-| `/shipping.html`, `/returns.html`, `/privacy.html`, `/terms.html` | Policy pages (templates — have them reviewed; fill `[State]`/`[County]` in Terms). Built from `content/legal/*.html` + `templates/legal.html`. |
+| `/shipping.html`, `/returns.html`, `/privacy.html`, `/terms.html` | Policy pages (templates — have them reviewed). Built from `content/legal/*.html` + `templates/legal.html`. |
 | `/admin/` | Team area: realtime **Team chat** (Supabase) and the **KPIs** dashboard (owner only). See `SHOPPIE_CHAT.md`. |
 
 ## Catalog: live sync + baked fallback
