@@ -1,5 +1,5 @@
 {
- "note": "Draft products still unpublished in Shopify. The live catalog hides them; the site shows them as Coming soon from this file. When a product is published (ACTIVE) the live catalog includes its Shopify handle and the site drops the Coming-soon card. Matching uses shopify_handle. Photos live in images/products/<handle>-N.jpg and are the same files uploaded to Shopify. Archived products are omitted.",
+ "note": "Photo and layout fallback for DRAFT products. Live title, handle, price, and image come from the yps-products edge function (coming_soon: true). This file supplies the local photo handle, blurb, collections, and rank when the live catalog has no image or is unavailable. Matching uses shopify_handle. Photos live in images/products/<handle>-N.jpg. When a product is ACTIVE, the live catalog includes its handle and the Coming soon card is dropped. Archived products are omitted.",
  "products": [
   {
    "rank": 1,

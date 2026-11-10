@@ -16,8 +16,11 @@ The shop loads `https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/yps-produc
 That edge function (`supabase/functions/yps-products`) reads the live store — Storefront API if the
 `SHOPIFY_STOREFRONT_TOKEN` secret is set, else Admin API if `SHOPIFY_ADMIN_TOKEN` is set, else the public
 `https://xvdkyq-xg.myshopify.com/products.json` — caches it 5 min in memory and keeps the last good copy in
-`public.yps_products_cache`. If the live source fails (e.g. the store password page → `ok:false,
-reason:"store_password"`), the site uses the baked `products.json`. `?refresh` forces a re-fetch.
+`public.yps_products_cache`. Active products are unchanged. When the Admin token is set, DRAFT products are
+added with `coming_soon: true` and their live title, handle, price, and image. ARCHIVED products are omitted.
+`data/coming-soon.json` is only the fallback for local photos, blurbs, collections, and rank. If the live
+source fails (e.g. the store password page → `ok:false, reason:"store_password"`), the site uses the baked
+`products.json` and that JSON fallback. `?refresh` forces a re-fetch.
 
 ### Rebuild the baked snapshot (e.g. daily)
 
@@ -36,3 +39,4 @@ Edit `templates/*.html` and `partials/*.html`, not the generated `index.html` / 
 ## Deploy
 
 `git push origin main && git push origin main:gh-pages` (GitHub Pages serves the `gh-pages` branch).
+A push to `main` also runs `.github/workflows/pages.yml`, which publishes that same commit to `gh-pages` and leaves `CNAME` in the tree.

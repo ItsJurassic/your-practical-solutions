@@ -1,0 +1,26 @@
+name: Deploy to GitHub Pages
+
+# GitHub Pages serves the gh-pages branch. Publish the main tree there on every push
+# so the two branches cannot drift. CNAME stays in the tree; this is a fast-forward
+# of the same commit the repo already deploys with `git push origin main:gh-pages`.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Publish main to gh-pages
+        run: git push origin HEAD:gh-pages

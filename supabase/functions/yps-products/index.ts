@@ -2,13 +2,16 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 // GET → live catalog JSON in the same shape as the site's baked products.json.
-// Source priority:
+// Source priority for ACTIVE products (unchanged):
 //   1. SHOPIFY_STOREFRONT_TOKEN secret  → Storefront GraphQL API
-//   2. SHOPIFY_ADMIN_TOKEN secret       → Admin GraphQL API
+//   2. SHOPIFY_ADMIN_TOKEN secret       → Admin GraphQL API (query status:active)
 //   3. no token                         → public https://<store>/products.json (+ collections.json)
+// When SHOPIFY_ADMIN_TOKEN is set, DRAFT products are appended with coming_soon: true
+// (live title, handle, price, image). ARCHIVED products are never queried.
 // Results are cached in memory (5 min) and the last good result is kept in public.yps_products_cache.
 // If the live source fails (e.g. store password page → 401) the response has ok:false and, when
-// available, the last good cached catalog; the website then falls back to its baked products.json.
+// available, the last good cached catalog; the website then falls back to its baked products.json
+// and data/coming-soon.json.
 const SHOP = Deno.env.get("SHOPIFY_STORE_DOMAIN") || "xvdkyq-xg.myshopify.com";
 const ORIGIN = Deno.env.get("SHOPIFY_ORIGIN_OVERRIDE") || `https://${SHOP}`; // testing hook
 const LINK_BASE = Deno.env.get("SHOP_LINK_BASE") || "https://shop.yourpracticalsolutions.com"; // public links use the primary domain
@@ -16,7 +19,7 @@ const API_VERSION = "2025-10";
 const TTL_MS = 5 * 60 * 1000;
 const cors = { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type, apikey, authorization, x-client-info", "access-control-allow-methods": "GET, OPTIONS" };
 
-type Product = { title: string; handle: string; url: string; image: string | null; image_alt: string; price: string | null; price_max: string | null; currency: string; product_type: string; tags: string[]; collections: string[] };
+type Product = { title: string; handle: string; url: string | null; image: string | null; image_alt: string; price: string | null; price_max: string | null; currency: string; product_type: string; tags: string[]; collections: string[]; coming_soon?: boolean };
 type Collection = { handle: string; title: string; count: number; url: string };
 
 let mem: { at: number; body: Record<string, unknown> } | null = null;
@@ -111,6 +114,35 @@ async function fromGraphql(kind: "storefront" | "admin", token: string) {
   return { source: `${kind} API`, products, collections };
 }
 
+// Drafts only. status:active stays in fromGraphql so published products are unchanged.
+// status:archived is never requested.
+async function adminDrafts(token: string): Promise<Product[]> {
+  const url = `https://${SHOP}/admin/api/${API_VERSION}/graphql.json`;
+  const headers = { "content-type": "application/json", "X-Shopify-Access-Token": token };
+  const products: Product[] = [];
+  let after: string | null = null;
+  for (let i = 0; i < 20; i++) {
+    const q = `query($after:String){ products(first:100, after:$after, query:"status:draft"){ pageInfo{hasNextPage endCursor} nodes{ title handle productType tags featuredMedia{preview{image{url altText}}} priceRangeV2{minVariantPrice{amount currencyCode} maxVariantPrice{amount}} collections(first:10){nodes{handle}} } } }`;
+    const j = await getJson(url, { method: "POST", headers, body: JSON.stringify({ query: q, variables: { after } }) });
+    if (j.errors) throw Object.assign(new Error(JSON.stringify(j.errors).slice(0, 200)), { code: "graphql" });
+    const conn = j.data.products;
+    for (const p of conn.nodes) {
+      const img = p.featuredMedia?.preview?.image;
+      const pr = p.priceRangeV2;
+      products.push({
+        title: p.title, handle: p.handle, url: null, coming_soon: true,
+        image: img?.url || null, image_alt: img?.altText || p.title,
+        price: pr?.minVariantPrice?.amount ?? null, price_max: pr?.maxVariantPrice?.amount ?? null,
+        currency: pr?.minVariantPrice?.currencyCode || "USD", product_type: p.productType || "", tags: p.tags || [],
+        collections: (p.collections?.nodes || []).map((c: { handle: string }) => c.handle),
+      });
+    }
+    if (!conn.pageInfo.hasNextPage) break;
+    after = conn.pageInfo.endCursor;
+  }
+  return products;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   const force = new URL(req.url).searchParams.has("refresh");
@@ -121,6 +153,15 @@ Deno.serve(async (req) => {
   const admin = Deno.env.get("SHOPIFY_ADMIN_TOKEN");
   try {
     const live = sf ? await fromGraphql("storefront", sf) : admin ? await fromGraphql("admin", admin) : await fromPublicJson();
+    // Append drafts after collection counts are computed from active products only.
+    if (admin) {
+      try {
+        const have = new Set(live.products.map((p) => p.handle));
+        for (const d of await adminDrafts(admin)) if (!have.has(d.handle)) live.products.push(d);
+      } catch (draftErr) {
+        if (!sf) throw draftErr; // storefront catalog still stands if the draft query fails
+      }
+    }
     const body = {
       ok: true, generated_at: new Date().toISOString(), source: `live: ${live.source}`,
       store: { name: "Your Practical Solutions", url: LINK_BASE, myshopify: SHOP },
