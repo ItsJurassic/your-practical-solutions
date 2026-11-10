@@ -1,4 +1,4 @@
-import { supabase, CONFIG } from "./client.js?v=13";
+import { supabase, CONFIG } from "./client.js?v=15";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -9,6 +9,92 @@ const timeFmt = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2
 const dayFmt = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "short", day: "numeric" });
 
 let channel = null, me = null, messages = [];
+let typingNames = new Set(); // other humans currently typing
+let botStatuses = new Map(); // bot_name -> { state, updated_at }
+let typingExpireTimer = null;
+let myTyping = false;
+let botStatusPoll = null;
+const HUMAN_TYPING_MS = 4000;
+const BOT_STATUS_TTL_MS = 3 * 60 * 1000;
+
+function formatActorList(names) {
+  const list = [...names].filter(Boolean);
+  if (!list.length) return "";
+  if (list.length === 1) return list[0];
+  if (list.length === 2) return `${list[0]} and ${list[1]}`;
+  return `${list.slice(0, -1).join(", ")}, and ${list[list.length - 1]}`;
+}
+
+function renderTypingBar() {
+  const bar = $("typing-bar");
+  const textEl = $("typing-text");
+  if (!bar || !textEl) return;
+  const now = Date.now();
+  const parts = [];
+  const humans = [...typingNames].filter((n) => n && (!me || n !== me.displayName));
+  if (humans.length) {
+    const who = formatActorList(humans);
+    parts.push(`${who} ${humans.length === 1 ? "is" : "are"} typing`);
+  }
+  for (const [name, info] of botStatuses) {
+    const age = now - new Date(info.updated_at).getTime();
+    if (age > BOT_STATUS_TTL_MS) continue;
+    const verb = info.state === "typing" ? "typing" : "thinking";
+    parts.push(`${name} is ${verb}`);
+  }
+  if (!parts.length) {
+    bar.hidden = true;
+    textEl.textContent = "";
+    return;
+  }
+  bar.hidden = false;
+  textEl.textContent = parts.join(" · ") + "…";
+}
+
+function syncPresenceTyping() {
+  if (!channel || !me) return;
+  const state = channel.presenceState() || {};
+  const names = new Set();
+  for (const metas of Object.values(state)) {
+    for (const m of metas || []) {
+      if (m?.typing && m?.name && (!me || m.user_id !== me.user.id)) names.add(m.name);
+    }
+  }
+  typingNames = names;
+  renderTypingBar();
+}
+
+async function setMyTyping(on) {
+  if (!channel || !me) return;
+  if (myTyping === on) return;
+  myTyping = on;
+  try {
+    await channel.track({ user_id: me.user.id, name: me.displayName, typing: !!on, at: Date.now() });
+  } catch (_) { /* presence may not be ready yet */ }
+}
+
+function bumpMyTyping() {
+  setMyTyping(true);
+  clearTimeout(typingExpireTimer);
+  typingExpireTimer = setTimeout(() => setMyTyping(false), HUMAN_TYPING_MS);
+}
+
+function applyBotStatusRows(rows) {
+  const next = new Map();
+  const now = Date.now();
+  for (const r of rows || []) {
+    if (!r?.bot_name || !r?.state) continue;
+    if (now - new Date(r.updated_at).getTime() > BOT_STATUS_TTL_MS) continue;
+    next.set(r.bot_name, { state: r.state, updated_at: r.updated_at });
+  }
+  botStatuses = next;
+  renderTypingBar();
+}
+
+async function loadBotStatuses() {
+  const { data } = await supabase.from("yps_chat_bot_status").select("bot_name, state, updated_at");
+  applyBotStatusRows(data || []);
+}
 
 function dayLabel(d) {
   const today = new Date(); const y = new Date(); y.setDate(today.getDate() - 1);
@@ -78,21 +164,45 @@ export async function startChat(user) {
   loadBots();
   loadMode();
   stopChat();
-  channel = supabase.channel("yps-chat")
+  loadBotStatuses();
+  channel = supabase.channel("yps-chat", { config: { presence: { key: user.user.id } } })
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "yps_chat_messages" }, ({ new: m }) => {
       if (!messages.some((x) => x.id === m.id)) { messages.push(m); render(); }
+      if (m.is_bot && m.sender_name) {
+        botStatuses.delete(m.sender_name);
+        renderTypingBar();
+      }
     })
     .on("postgres_changes", { event: "DELETE", schema: "public", table: "yps_chat_messages" }, ({ old }) => {
       messages = messages.filter((x) => x.id !== old.id); render();
     })
-    .subscribe((status) => {
+    .on("postgres_changes", { event: "*", schema: "public", table: "yps_chat_bot_status" }, () => {
+      loadBotStatuses();
+    })
+    .on("presence", { event: "sync" }, () => syncPresenceTyping())
+    .on("presence", { event: "join" }, () => syncPresenceTyping())
+    .on("presence", { event: "leave" }, () => syncPresenceTyping())
+    .subscribe(async (status) => {
       const on = status === "SUBSCRIBED";
       $("live-dot").classList.toggle("on", on);
       $("live-text").textContent = on ? "Live" : status === "CHANNEL_ERROR" ? "Reconnecting…" : "Connecting…";
+      if (on) {
+        try { await channel.track({ user_id: user.user.id, name: user.displayName, typing: false, at: Date.now() }); } catch (_) {}
+        syncPresenceTyping();
+      }
     });
+  clearInterval(botStatusPoll);
+  botStatusPoll = setInterval(() => renderTypingBar(), 15000);
 }
 
 export function stopChat() {
+  clearTimeout(typingExpireTimer);
+  clearInterval(botStatusPoll);
+  botStatusPoll = null;
+  myTyping = false;
+  typingNames = new Set();
+  botStatuses = new Map();
+  renderTypingBar();
   if (channel) { supabase.removeChannel(channel); channel = null; }
 }
 
@@ -101,6 +211,8 @@ async function send() {
   const body = ta.value.trim();
   if (!body || !me) return;
   ta.value = ""; ta.style.height = "";
+  clearTimeout(typingExpireTimer);
+  await setMyTyping(false);
   const { data, error } = await supabase.from("yps_chat_messages")
     .insert({ user_id: me.user.id, sender_email: me.email, sender_name: me.displayName, body })
     .select().single();
@@ -110,7 +222,13 @@ async function send() {
 
 $("chat-form").addEventListener("submit", (e) => { e.preventDefault(); send(); });
 $("chat-input").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
-$("chat-input").addEventListener("input", (e) => { const t = e.target; t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 140) + "px"; });
+$("chat-input").addEventListener("input", (e) => {
+  const t = e.target;
+  t.style.height = "auto";
+  t.style.height = Math.min(t.scrollHeight, 140) + "px";
+  if (t.value.trim()) bumpMyTyping();
+  else { clearTimeout(typingExpireTimer); setMyTyping(false); }
+});
 $("mention-btn").addEventListener("click", () => { const t = $("chat-input"); t.value = (t.value ? t.value.trimEnd() + " " : "") + "@Shoppie "; t.focus(); });
 $("shoppie-mode")?.addEventListener("change", async (e) => {
   const { error } = await supabase.rpc("yps_chat_set_mode", { p_mode: e.target.value });

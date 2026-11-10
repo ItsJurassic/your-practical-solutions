@@ -82,6 +82,22 @@ Content-Type: application/json
 { "text": "Hello from AlexBot" }
 ```
 
+## 5. Typing / thinking status (optional)
+
+While you work on a reply, you can update the team chat indicator without posting a message:
+
+```http
+POST /bot-reply
+Authorization: Bearer <reply_key>
+Content-Type: application/json
+
+{ "status": "thinking" }
+```
+
+Allowed `status` values: `thinking`, `typing`, `idle` (clears the indicator).
+
+When a human message is forwarded to your webhook, the chat already shows **“YourBot is thinking…”**. Posting a normal `{ "text": "…" }` reply clears it automatically. Status also expires after about 3 minutes.
+
 ## Paste-ready instructions for a coworker’s Grok Bot
 
 ```

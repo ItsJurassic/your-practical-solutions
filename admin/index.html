@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=14" />
+  <link rel="stylesheet" href="styles.css?v=15" />
   <title>Team | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
 </head>
@@ -71,6 +71,10 @@
               <button class="btn btn-ghost btn-sm" id="mention-btn" type="button" title="Mention the Shoppie bot">@Shoppie</button>
             </div>
             <div class="chat-log" id="chat-log" aria-live="polite"></div>
+            <div class="typing-bar" id="typing-bar" hidden aria-live="polite">
+              <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span id="typing-text"></span>
+            </div>
             <form class="chat-form" id="chat-form">
               <textarea id="chat-input" rows="1" placeholder="Message… (@Shoppie for the bot)" aria-label="Message"></textarea>
               <button class="btn btn-primary" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
@@ -198,6 +202,6 @@
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script type="module" src="admin/admin.js?v=14"></script>
+  <script type="module" src="admin/admin.js?v=15"></script>
 </body>
 </html>

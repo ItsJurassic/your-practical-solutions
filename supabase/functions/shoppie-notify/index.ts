@@ -2,6 +2,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 // Fan-out human chat messages to Shoppie + every approved external bot.
+// Sets bot "thinking" status when a message is forwarded (UI only; never forwarded to bots).
 const json = (b: unknown, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "content-type": "application/json" } });
 
 Deno.serve(async (req) => {
@@ -10,6 +11,9 @@ Deno.serve(async (req) => {
   const tok = req.headers.get("x-notify-token") || "";
   const { data: ok } = await db.rpc("yps_notify_token_ok", { p_tok: tok });
   if (!ok) return json({ error: "unauthorized" }, 401);
+
+  // Drop stale thinking/typing rows so indicators never stick forever.
+  await db.rpc("yps_bot_status_expire", { p_minutes: 3 });
 
   const payload = await req.json().catch(() => null);
   const rec = payload?.record;
@@ -33,6 +37,10 @@ Deno.serve(async (req) => {
     text: bodyText,
   };
 
+  const markThinking = async (name: string) => {
+    await db.rpc("yps_bot_status_set", { p_bot_name: name, p_state: "thinking" });
+  };
+
   // Shoppie (legacy vault/env)
   const { data: cfg } = await db.rpc("yps_chat_config_get");
   const { data: vault } = await db.rpc("yps_shoppie_webhook");
@@ -52,6 +60,7 @@ Deno.serve(async (req) => {
       from_staff: fromStaff,
       reply_url: `${Deno.env.get("SUPABASE_URL")}/functions/v1/shoppie-reply`,
     };
+    await markThinking("Shoppie");
     const res = await fetch(shoppieUrl, { method: "POST", headers, body: JSON.stringify(out) }).catch(
       (e) => ({ ok: false, status: 0, statusText: String(e) } as Response),
     );
@@ -88,6 +97,7 @@ Deno.serve(async (req) => {
       reply_url: `${Deno.env.get("SUPABASE_URL")}/functions/v1/bot-reply`,
       bot_name: name,
     };
+    await markThinking(name);
     const res = await fetch(String(bot.webhook_url), {
       method: "POST",
       headers,

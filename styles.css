@@ -403,3 +403,26 @@ mark.fill-in { background: #fff3c4; color: #7a5200; padding: 1px 6px; border-rad
   .bot-actions { width: 100%; }
   .bot-actions .btn { flex: 1 1 auto; }
 }
+
+/* ---------- chat typing / thinking ---------- */
+.typing-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 16px 2px; min-height: 28px;
+  font-size: .82rem; color: var(--muted);
+  border-top: 1px solid transparent; background: #fafbf9;
+}
+.typing-bar[hidden] { display: none !important; }
+.typing-dots { display: inline-flex; gap: 3px; align-items: center; }
+.typing-dots i {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--muted);
+  display: block; animation: typing-bounce 1.2s infinite ease-in-out;
+}
+.typing-dots i:nth-child(2) { animation-delay: .15s; }
+.typing-dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: .45; }
+  30% { transform: translateY(-3px); opacity: 1; }
+}
+@media (max-width: 899px) {
+  .typing-bar { padding: 6px 12px 0; font-size: .8rem; }
+}
