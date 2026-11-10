@@ -9,6 +9,15 @@
       document.write('<base href="' + base + '">');
     })();
   </script>
+  <script>
+    (function () {
+      var ok = { default:1, christmas:1, halloween:1, valentines:1, "new-years":1, "fourth-of-july":1 };
+      try {
+        var t = localStorage.getItem("yps-theme");
+        if (t && ok[t]) document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
   <meta name="theme-color" content="#1f4a3d" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
@@ -18,4 +27,5 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=14" />
+  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="themes.css?v=1" />

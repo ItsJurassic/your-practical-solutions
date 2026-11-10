@@ -12,6 +12,15 @@
       document.write('<base href="' + base + '">');
     })();
   </script>
+  <script>
+    (function () {
+      var ok = { default:1, christmas:1, halloween:1, valentines:1, "new-years":1, "fourth-of-july":1 };
+      try {
+        var t = localStorage.getItem("yps-theme");
+        if (t && ok[t]) document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
   <meta name="theme-color" content="#1f4a3d" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
@@ -20,7 +29,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=15" />
+  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="themes.css?v=1" />
   <title>Team | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
 </head>
@@ -61,6 +71,7 @@
       <div class="tabs" role="tablist">
         <button type="button" role="tab" data-tab="chat" aria-selected="true">Team chat</button>
         <button type="button" role="tab" data-tab="kpis" id="tab-btn-kpis" aria-selected="false">KPIs</button>
+        <button type="button" role="tab" data-tab="site" id="tab-btn-site" aria-selected="false" hidden>Site</button>
       </div>
 
       <div id="tab-chat">
@@ -199,9 +210,21 @@
         <div id="notes"></div>
       </div>
       </div>
+
+      <div id="tab-site" hidden>
+        <h1 style="font-size:1.8rem">Site theme</h1>
+        <p class="lede">Pick a look for the public website. The change applies to every visitor right away — open tabs update live. Default is the everyday store design.</p>
+        <div class="panel site-theme-panel">
+          <h2>Holiday themes</h2>
+          <p class="muted" style="margin:0 0 4px">Christmas, Halloween, Valentine’s Day, New Year’s, and the 4th of July add lightweight animation. Visitors who prefer reduced motion still get the colors, without the motion.</p>
+          <div class="theme-picks" id="theme-picks" role="group" aria-label="Site theme"></div>
+          <p class="muted" id="theme-msg" style="font-size:.9rem;margin:12px 0 0"></p>
+        </div>
+      </div>
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script type="module" src="admin/admin.js?v=16"></script>
+  <script>window.__YPS_THEME_MANUAL__ = true;</script>
+  <script type="module" src="admin/admin.js?v=17"></script>
 </body>
 </html>

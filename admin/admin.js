@@ -1,6 +1,7 @@
 import { CONFIG } from "../config.js";
 import { supabase } from "./client.js?v=15";
 import { startChat, stopChat } from "./chat.js?v=16";
+import { THEMES, applyTheme, initTheme, setSiteTheme } from "../theme.js?v=1";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");
@@ -61,9 +62,36 @@ function selectTab(name) {
   document.querySelectorAll(".tabs [data-tab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
   document.getElementById("tab-chat").hidden = name !== "chat";
   document.getElementById("tab-kpis").hidden = name !== "kpis";
+  const siteTab = document.getElementById("tab-site");
+  if (siteTab) siteTab.hidden = name !== "site";
   if (name === "kpis" && !kpisLoaded) { kpisLoaded = true; loadKpis(); }
 }
 let kpisLoaded = false;
+
+function renderThemePicks() {
+  const box = document.getElementById("theme-picks");
+  if (!box || box.dataset.ready) return;
+  box.dataset.ready = "1";
+  box.innerHTML = Object.entries(THEMES).map(([id, t]) =>
+    `<button type="button" class="theme-pick" data-theme-pick="${id}" aria-pressed="false">
+      <span class="swatch" style="background:${t.swatch}"></span>${t.label}
+    </button>`
+  ).join("");
+  box.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-theme-pick]");
+    if (!btn) return;
+    const msg = document.getElementById("theme-msg");
+    msg.textContent = "Updating the live site…";
+    try {
+      await setSiteTheme(supabase, btn.dataset.themePick);
+      msg.textContent = `Theme set to ${THEMES[btn.dataset.themePick].label}. Every open page will switch to it.`;
+    } catch (err) {
+      msg.textContent = err?.message || "Could not save the theme. Check that you are signed in as an admin.";
+    }
+  });
+}
+
+
 document.querySelectorAll(".tabs [data-tab]").forEach((b) => (b.onclick = () => selectTab(b.dataset.tab)));
 
 document.getElementById("login-form").onsubmit = async (e) => {
@@ -313,6 +341,14 @@ async function boot() {
   clearRecoveryUi();
   showDash(true);
   document.getElementById("tab-btn-kpis").hidden = !isAdmin;
+  const siteBtn = document.getElementById("tab-btn-site");
+  if (siteBtn) siteBtn.hidden = !isAdmin;
+  if (isAdmin) {
+    renderThemePicks();
+    window.__YPS_THEME_MANUAL__ = true;
+    applyTheme(localStorage.getItem("yps-theme") || "default");
+    initTheme(supabase);
+  }
   document.getElementById("whoami").textContent = `${member?.display_name || (isAdmin ? "Admin" : "Partner")} · ${email}`;
   await startChat({
     user,
