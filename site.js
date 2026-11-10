@@ -145,7 +145,7 @@ async function initHome() {
   const maybeLoad = () => {
     if (loaded || !mq.matches) return;
     loaded = true;
-    import("./app.js?v=11").then((m) => m.startHouse(cat)).catch((e) => console.warn("house failed", e));
+    import("./app.js?v=12").then((m) => m.startHouse(cat)).catch((e) => console.warn("house failed", e));
   };
   maybeLoad();
   mq.addEventListener?.("change", maybeLoad);
