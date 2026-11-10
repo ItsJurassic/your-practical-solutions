@@ -373,6 +373,7 @@ function initProduct() {
 }
 
 wireShopLinks();
+import("./nav.js?v=1").then((m) => m.initNav(ICONS)).catch((err) => console.warn("nav failed", err));
 const page = document.body.dataset.page;
 if (page === "home") initHome();
 if (page === "shop") initShop();

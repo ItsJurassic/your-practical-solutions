@@ -8,13 +8,45 @@
       </a>
       <nav class="main-nav" aria-label="Main">
         <a href="./" data-nav="home">Home</a>
-        <a href="shop.html" data-nav="shop">Shop</a>
-        <a href="./#categories">Categories</a>
-        <a href="./#about">About</a>
+        <div class="nav-item has-menu">
+          <button type="button" class="nav-trigger" data-menu="shop-menu" aria-expanded="false" aria-haspopup="true" aria-controls="shop-menu" data-nav="shop">Shop</button>
+          <div class="mega-menu" id="shop-menu" role="menu" hidden>
+            <div class="mega-featured" id="shop-menu-featured"></div>
+            <div class="mega-cols" id="shop-menu-cats"></div>
+          </div>
+        </div>
+        <div class="nav-item has-menu" id="seasonal-item" hidden>
+          <button type="button" class="nav-trigger" data-menu="seasonal-menu" aria-expanded="false" aria-haspopup="true" aria-controls="seasonal-menu">Seasonal</button>
+          <div class="mega-menu mega-menu-sm" id="seasonal-menu" role="menu" hidden></div>
+        </div>
+        <a href="./#about" data-nav="about">About</a>
       </nav>
       <div class="header-actions">
         <a class="btn btn-ghost btn-sm" href="mailto:support@yourpracticalsolutions.com">Contact</a>
         <a class="btn btn-primary btn-sm" href="shop.html">Shop now</a>
+        <button type="button" class="menu-toggle" data-open-menu aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
+  <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+  <div class="nav-drawer" id="nav-drawer" hidden role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="nav-drawer-head">
+      <strong>Menu</strong>
+      <button type="button" class="btn btn-ghost btn-sm" data-close-menu>Close</button>
+    </div>
+    <nav class="drawer-nav" aria-label="Mobile">
+      <a href="./" data-nav="home">Home</a>
+      <div class="drawer-acc">
+        <button type="button" class="drawer-acc-btn" aria-expanded="false" aria-controls="drawer-shop">Shop</button>
+        <div id="drawer-shop" class="drawer-acc-panel" hidden></div>
+      </div>
+      <div class="drawer-acc" id="drawer-seasonal-wrap" hidden>
+        <button type="button" class="drawer-acc-btn" aria-expanded="false" aria-controls="drawer-seasonal">Seasonal</button>
+        <div id="drawer-seasonal" class="drawer-acc-panel" hidden></div>
+      </div>
+      <a href="./#about" data-nav="about">About</a>
+      <a href="mailto:support@yourpracticalsolutions.com">Contact</a>
+    </nav>
+  </div>
