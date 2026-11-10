@@ -1,6 +1,6 @@
 // Desktop-only interactive floor plan controller. Loaded on demand by site.js.
-import { initHouse } from "./house-plan.js";
-import { productCard, emptyState } from "./site.js?v=10";
+import { initHouse } from "./house-plan.js?v=11";
+import { productCard, emptyState } from "./site.js?v=11";
 
 // Each spot lists the exact products it shows (site handles from data/coming-soon.json; published
 // Shopify products keep the same site handle). Future products can also opt in with a Shopify tag

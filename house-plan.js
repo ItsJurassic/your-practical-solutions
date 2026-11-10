@@ -413,8 +413,6 @@ export async function initHouse(container, options = {}) {
   }
   cam = homeCam(); apply();
 
-  const toWorld = (px, py) => { const rc = svg.getBoundingClientRect(); const { w, h } = size(); return { x: cam.cx + (px - rc.left - w / 2) / cam.k, y: cam.cy + (py - rc.top - h / 2) / cam.k }; };
-
   // hover / highlight
   let hovered = null;
   function bboxOf(g) {
@@ -428,7 +426,7 @@ export async function initHouse(container, options = {}) {
     if (hovered === g) return;
     hovered = g;
     const box = svg.querySelector("#hl");
-    if (!g) { box.setAttribute("visibility", "hidden"); container.style.cursor = "grab"; options.onHover?.(null); return; }
+    if (!g) { box.setAttribute("visibility", "hidden"); container.style.cursor = ""; options.onHover?.(null); return; }
     const b = bboxOf(g);
     if (b) { box.setAttribute("x", b.x - 8); box.setAttribute("y", b.y - 8); box.setAttribute("width", b.width + 16); box.setAttribute("height", b.height + 16); box.setAttribute("visibility", "visible"); }
     container.style.cursor = "pointer";
@@ -436,64 +434,20 @@ export async function initHouse(container, options = {}) {
   }
   const hsAt = (x, y) => { const el = document.elementFromPoint(x, y); return el && el.closest ? el.closest(".hs") : null; };
 
-  // pointer: pan, pinch, tap
-  const pts = new Map();
-  let drag = null, pinch = null;
-  svg.addEventListener("pointerdown", (e) => {
-    svg.setPointerCapture?.(e.pointerId);
-    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (pts.size === 1) drag = { x: e.clientX, y: e.clientY, cx: cam.cx, cy: cam.cy, moved: false, target: hsAt(e.clientX, e.clientY) };
-    if (pts.size === 2) {
-      const [a, b] = [...pts.values()];
-      pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), k: cam.k, mid: toWorld((a.x + b.x) / 2, (a.y + b.y) / 2) };
-      drag = null;
-    }
-  });
+  // Fixed camera: no pan, no wheel/pinch zoom. Page scroll stays with the browser.
+  // Clicks/taps on hotspots still open the side panel; RV still switches views.
   svg.addEventListener("pointermove", (e) => {
-    if (!pts.has(e.pointerId)) { if (e.pointerType === "mouse") setHover(hsAt(e.clientX, e.clientY)); return; }
-    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (pinch && pts.size === 2) {
-      const [a, b] = [...pts.values()];
-      const d = Math.hypot(a.x - b.x, a.y - b.y);
-      cam.k = pinch.k * d / pinch.d;
-      const rc = svg.getBoundingClientRect(); const { w, h } = size();
-      const mx = (a.x + b.x) / 2 - rc.left - w / 2, my = (a.y + b.y) / 2 - rc.top - h / 2;
-      cam.cx = pinch.mid.x - mx / cam.k; cam.cy = pinch.mid.y - my / cam.k;
-      clampCam(); apply(); return;
-    }
-    if (drag) {
-      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-      if (Math.hypot(dx, dy) > 6) drag.moved = true;
-      if (drag.moved) { cam.cx = drag.cx - dx / cam.k; cam.cy = drag.cy - dy / cam.k; clampCam(); apply(); setHover(null); container.style.cursor = "grabbing"; }
-    }
+    if (e.pointerType === "mouse") setHover(hsAt(e.clientX, e.clientY));
   });
-  const end = (e) => {
-    pts.delete(e.pointerId);
-    if (pts.size < 2) pinch = null;
-    if (drag && !drag.moved && pts.size === 0) {
-      const g = hsAt(e.clientX, e.clientY) || drag.target;
-      setHover(g);
-      if (g) {
-        const id = g.dataset.id;
-        if (id === "rv" && view === "house") setView("rv");
-        else options.onSelect?.({ id, label: g.dataset.label });
-      }
-    }
-    if (pts.size === 0) drag = null;
-  };
-  svg.addEventListener("pointerup", end);
-  svg.addEventListener("pointercancel", end);
   svg.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") setHover(null); });
-  svg.addEventListener("wheel", (e) => {
-    e.preventDefault();
-    const before = toWorld(e.clientX, e.clientY);
-    cam.k *= Math.exp(-e.deltaY * 0.0015);
-    clampCam();
-    const rc = svg.getBoundingClientRect(); const { w, h } = size();
-    cam.cx = before.x - (e.clientX - rc.left - w / 2) / cam.k;
-    cam.cy = before.y - (e.clientY - rc.top - h / 2) / cam.k;
-    clampCam(); apply();
-  }, { passive: false });
+  svg.addEventListener("click", (e) => {
+    const g = hsAt(e.clientX, e.clientY) || (e.target && e.target.closest ? e.target.closest(".hs") : null);
+    if (!g) return;
+    setHover(g);
+    const id = g.dataset.id;
+    if (id === "rv" && view === "house") setView("rv");
+    else options.onSelect?.({ id, label: g.dataset.label });
+  });
 
   function find(id) { return svg.querySelector(`.hs[data-id="${id}"]`); }
   async function setView(next) {
