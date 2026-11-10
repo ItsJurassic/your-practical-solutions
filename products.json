@@ -11,52 +11,207 @@
   "products": [],
   "collections": [
     {
-      "handle": "storage-organization",
-      "title": "Storage & Organization",
-      "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/storage-organization"
-    },
-    {
       "handle": "pet-supplies",
-      "title": "Pet Supplies",
+      "title": "Pets & Animals",
       "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/pet-supplies"
+      "url": "https://shop.yourpracticalsolutions.com/collections/pet-supplies",
+      "kind": "permanent",
+      "show_window": null
     },
     {
-      "handle": "garage-tools",
-      "title": "Garage & Tools",
+      "handle": "living-room",
+      "title": "Living Room",
       "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/garage-tools"
+      "url": "https://shop.yourpracticalsolutions.com/collections/living-room",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "kitchen",
+      "title": "Kitchen",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/kitchen",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "mens-clothing",
+      "title": "Men's Clothing",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/mens-clothing",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "womens-clothing",
+      "title": "Women's Clothing",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/womens-clothing",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "winter-essentials",
+      "title": "Winter Essentials",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/winter-essentials",
+      "kind": "permanent",
+      "show_window": null
     },
     {
       "handle": "car-rv",
       "title": "Car & RV",
       "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/car-rv"
+      "url": "https://shop.yourpracticalsolutions.com/collections/car-rv",
+      "kind": "permanent",
+      "show_window": null
     },
     {
-      "handle": "tech-accessories",
-      "title": "Tech Accessories",
+      "handle": "garage-tools",
+      "title": "Garage & Tools",
       "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/tech-accessories"
+      "url": "https://shop.yourpracticalsolutions.com/collections/garage-tools",
+      "kind": "permanent",
+      "show_window": null
     },
     {
       "handle": "home-decor",
       "title": "Home & Decor",
       "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/home-decor"
+      "url": "https://shop.yourpracticalsolutions.com/collections/home-decor",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "storage-organization",
+      "title": "Storage & Organization",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/storage-organization",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "tech-accessories",
+      "title": "Tech Accessories",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/tech-accessories",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "gardening",
+      "title": "Gardening",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/gardening",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "bathroom",
+      "title": "Bathroom",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/bathroom",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "outdoor-camping",
+      "title": "Outdoor & Camping",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/outdoor-camping",
+      "kind": "permanent",
+      "show_window": null
+    },
+    {
+      "handle": "christmas",
+      "title": "Christmas",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/christmas",
+      "kind": "seasonal",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "11-01",
+        "end_month_day": "12-26",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Nov 1\u2013Dec 26"
+      }
+    },
+    {
+      "handle": "halloween",
+      "title": "Halloween",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/halloween",
+      "kind": "seasonal",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "09-15",
+        "end_month_day": "10-31",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Sep 15\u2013Oct 31"
+      }
+    },
+    {
+      "handle": "valentines-day",
+      "title": "Valentine's Day",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/valentines-day",
+      "kind": "seasonal",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "01-15",
+        "end_month_day": "02-15",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Jan 15\u2013Feb 15"
+      }
+    },
+    {
+      "handle": "new-years",
+      "title": "New Year's",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/new-years",
+      "kind": "seasonal",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "12-26",
+        "end_month_day": "01-02",
+        "inclusive": true,
+        "wraps_year": true,
+        "label": "Dec 26\u2013Jan 2"
+      }
+    },
+    {
+      "handle": "4th-of-july",
+      "title": "4th of July",
+      "count": 0,
+      "url": "https://shop.yourpracticalsolutions.com/collections/4th-of-july",
+      "kind": "seasonal",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "06-10",
+        "end_month_day": "07-05",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Jun 10\u2013Jul 5"
+      }
     },
     {
       "handle": "new-arrivals",
       "title": "New Arrivals",
       "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/new-arrivals"
+      "url": "https://shop.yourpracticalsolutions.com/collections/new-arrivals",
+      "kind": "merchandising",
+      "show_window": null
     },
     {
       "handle": "best-sellers",
       "title": "Best Sellers",
       "count": 0,
-      "url": "https://shop.yourpracticalsolutions.com/collections/best-sellers"
+      "url": "https://shop.yourpracticalsolutions.com/collections/best-sellers",
+      "kind": "merchandising",
+      "show_window": null
     }
   ]
 }

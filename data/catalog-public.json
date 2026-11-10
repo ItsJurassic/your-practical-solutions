@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-10T23:37:20+00:00",
+  "generated_at": "2026-11-10T23:39:58+00:00",
   "live": false,
   "note": "Public catalog for the marketing site. Buy Now is on only when live is true. Internal cost and supplier fields are omitted on purpose.",
   "products": [
@@ -7,10 +7,13 @@
       "rank": 1,
       "handle": "interior-windshield-cleaner",
       "title": "Extendable Interior Windshield Cleaner",
-      "category": "Car & Garage",
+      "category": "Car & RV",
       "collections": [
         "car-rv",
-        "new-arrivals"
+        "winter-essentials",
+        "christmas",
+        "new-arrivals",
+        "best-sellers"
       ],
       "price": "12.99",
       "blurb": "Reach the bottom corners of your windshield without contorting yourself.",
@@ -37,6 +40,8 @@
       ],
       "variant_id": "47787492802649",
       "sku": "YPS-T10-01",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/interior-windshield-cleaner/"
     },
@@ -44,9 +49,11 @@
       "rank": 2,
       "handle": "led-magnetic-pickup-tool",
       "title": "Telescoping Magnetic Pickup Tool with LED Light",
-      "category": "Car & Garage",
+      "category": "Garage & Tools",
       "collections": [
         "garage-tools",
+        "car-rv",
+        "tech-accessories",
         "new-arrivals"
       ],
       "price": "14.99",
@@ -72,6 +79,8 @@
       ],
       "variant_id": "47787496636505",
       "sku": "YPS-T10-02",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/led-magnetic-pickup-tool/"
     },
@@ -81,8 +90,11 @@
       "title": "Extendable Snow Brush with Ice Scraper",
       "category": "Winter",
       "collections": [
+        "winter-essentials",
         "car-rv",
-        "new-arrivals"
+        "christmas",
+        "new-arrivals",
+        "best-sellers"
       ],
       "price": "27.99",
       "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice and squeegee the glass.",
@@ -109,6 +121,8 @@
       ],
       "variant_id": "47787497816153",
       "sku": "YPS-T10-03",
+      "ships_fast": true,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/extendable-snow-brush-ice-scraper/"
     },
@@ -118,8 +132,11 @@
       "title": "Magnetic Windshield Snow & Ice Cover",
       "category": "Winter",
       "collections": [
+        "winter-essentials",
         "car-rv",
-        "new-arrivals"
+        "christmas",
+        "new-arrivals",
+        "best-sellers"
       ],
       "price": "21.99",
       "blurb": "Skip the morning scrape. Lift the cover and drive.",
@@ -147,6 +164,8 @@
       ],
       "variant_id": "47787498635353",
       "sku": "YPS-T10-04",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/windshield-snow-cover/"
     },
@@ -154,10 +173,11 @@
       "rank": 5,
       "handle": "silicone-lick-mat",
       "title": "Silicone Lick Mat & Slow Feeder for Dogs and Cats",
-      "category": "Pets & Outdoors",
+      "category": "Pets & Animals",
       "collections": [
         "pet-supplies",
-        "new-arrivals"
+        "new-arrivals",
+        "best-sellers"
       ],
       "price": "18.99",
       "blurb": "Calms anxious pets and slows down fast eaters.",
@@ -182,6 +202,8 @@
       ],
       "variant_id": "47787499978841",
       "sku": "YPS-T10-05",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/silicone-lick-mat/"
     },
@@ -189,8 +211,9 @@
       "rank": 6,
       "handle": "collapsible-camping-basin",
       "title": "Collapsible Camping Wash Basin (9 L)",
-      "category": "Pets & Outdoors",
+      "category": "Outdoor & Camping",
       "collections": [
+        "outdoor-camping",
         "car-rv",
         "new-arrivals"
       ],
@@ -218,6 +241,8 @@
       ],
       "variant_id": "47787501125721",
       "sku": "YPS-T10-06",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/collapsible-camping-basin/"
     },
@@ -225,10 +250,12 @@
       "rank": 7,
       "handle": "rug-corner-grippers",
       "title": "Anti-Curl Rug Corner Grippers (16-Piece Set)",
-      "category": "Home",
+      "category": "Living Room",
       "collections": [
+        "living-room",
         "home-decor",
-        "new-arrivals"
+        "new-arrivals",
+        "best-sellers"
       ],
       "price": "16.99",
       "blurb": "Flatten curled rug corners and stop slipping for good.",
@@ -253,6 +280,8 @@
       ],
       "variant_id": "47787501355097",
       "sku": "YPS-T10-07",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/rug-corner-grippers/"
     },
@@ -260,9 +289,11 @@
       "rank": 8,
       "handle": "magnetic-cob-work-light",
       "title": "Rechargeable Magnetic COB Work Light",
-      "category": "Car & Garage",
+      "category": "Garage & Tools",
       "collections": [
         "garage-tools",
+        "car-rv",
+        "tech-accessories",
         "new-arrivals"
       ],
       "price": "19.99",
@@ -290,6 +321,8 @@
       ],
       "variant_id": "47787501715545",
       "sku": "YPS-T10-08",
+      "ships_fast": true,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/magnetic-cob-work-light/"
     },
@@ -297,9 +330,11 @@
       "rank": 9,
       "handle": "window-track-gap-brush",
       "title": "Window Track & Gap Cleaning Brush (3-Pack)",
-      "category": "Home",
+      "category": "Home & Decor",
       "collections": [
         "home-decor",
+        "bathroom",
+        "kitchen",
         "new-arrivals"
       ],
       "price": "11.99",
@@ -325,6 +360,8 @@
       ],
       "variant_id": "47787507449945",
       "sku": "YPS-T10-09",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/window-track-gap-brush/"
     },
@@ -334,7 +371,10 @@
       "title": "Insulated Outdoor Faucet Covers (2-Pack)",
       "category": "Winter",
       "collections": [
-        "home-decor",
+        "winter-essentials",
+        "gardening",
+        "outdoor-camping",
+        "christmas",
         "new-arrivals"
       ],
       "price": "14.99",
@@ -360,6 +400,8 @@
       ],
       "variant_id": "47787507581017",
       "sku": "YPS-T10-10",
+      "ships_fast": false,
+      "listed_at": "2026-11-10",
       "live": false,
       "page_url": "products/outdoor-faucet-covers-2-pack/"
     }

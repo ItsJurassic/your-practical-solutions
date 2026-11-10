@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{HEAD}}
+  <title>{{TITLE}} | Your Practical Solutions</title>
+  <meta name="description" content="{{DESC}}" />
+  <link rel="canonical" href="https://yourpracticalsolutions.com/{{SLUG}}" />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Your Practical Solutions" />
+  <meta property="og:title" content="{{TITLE}} | Your Practical Solutions" />
+  <meta property="og:description" content="{{DESC}}" />
+  <meta property="og:url" content="https://yourpracticalsolutions.com/{{SLUG}}" />
+  <meta property="og:image" content="https://yourpracticalsolutions.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+</head>
+<body data-page="category" data-category="{{HANDLE}}" class="has-bottom-nav">
+{{HEADER}}
+  <main id="main">
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="crumbs"><a href="./">Home</a> / <a href="shop.html">Shop</a> / {{TITLE}}</div>
+        <h1>{{TITLE}}</h1>
+        <p class="muted" style="margin:0">{{BLURB}}</p>
+      </div>
+    </section>
+    <div class="wrap" style="padding: 8px 0 80px">
+      <div class="products" id="category-grid"></div>
+      <p style="margin-top:28px"><a class="btn btn-ghost" href="shop.html?c={{HANDLE}}">Browse in the shop</a></p>
+    </div>
+  </main>
+{{FOOTER}}
+{{BOTTOMNAV}}
+  <script type="module" src="site.js?v=16"></script>
+</body>
+</html>

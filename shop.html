@@ -151,16 +151,30 @@
       </div>
     </section>
     <div class="wrap shop-layout">
-      <aside class="filters" aria-label="Filters">
+      <div class="filter-backdrop" id="filter-backdrop" hidden></div>
+      <aside class="filters" id="shop-filters" aria-label="Filters">
+        <div class="filters-head">
+          <h4>Filters</h4>
+          <button type="button" class="btn btn-ghost btn-sm" id="filter-close">Close</button>
+        </div>
         <div><h4>Categories</h4><div class="filter-list" id="filter-list"></div></div>
+        <div>
+          <h4>Price</h4>
+          <div class="price-range">
+            <label>Min <input id="price-min" type="number" min="0" step="1" inputmode="decimal" placeholder="0" aria-label="Minimum price" /></label>
+            <label>Max <input id="price-max" type="number" min="0" step="1" inputmode="decimal" placeholder="Any" aria-label="Maximum price" /></label>
+          </div>
+        </div>
+        <label class="check-row"><input type="checkbox" id="ship-fast" /> Ships in 3–5 days</label>
         <div class="panel" style="margin:0"><b style="color:var(--ink)">Need help choosing?</b><p class="muted" style="font-size:.9rem;margin:6px 0 10px">Email the owners and we'll point you to the right product.</p><a class="btn btn-ghost btn-sm" href="mailto:support@yourpracticalsolutions.com">Email us</a></div>
       </aside>
       <div>
         <div class="chips" id="chips" role="toolbar" aria-label="Categories"></div>
         <div class="toolbar">
+          <button class="btn btn-ghost btn-sm" id="filter-open" type="button" aria-expanded="false" aria-controls="shop-filters">Filters</button>
           <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="shop-q" type="search" placeholder="Search products" aria-label="Search products" style="margin:0" /></label>
           <span class="result-count" id="result-count"></span>
-          <label class="sort"><span class="sr" hidden>Sort</span><select id="shop-sort" aria-label="Sort products" style="margin:0"><option value="featured">Featured</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="az">Name: A–Z</option></select></label>
+          <label class="sort"><span class="sr" hidden>Sort</span><select id="shop-sort" aria-label="Sort products" style="margin:0"><option value="featured">Featured</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="newest">Newest</option><option value="az">Name: A–Z</option></select></label>
         </div>
         <div class="products" id="shop-grid"></div>
       </div>
@@ -192,6 +206,6 @@
     <a href="./#categories" data-nav="cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Categories</a>
     <a href="mailto:support@yourpracticalsolutions.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/></svg>Help</a>
   </nav>
-  <script type="module" src="site.js?v=14"></script>
+  <script type="module" src="site.js?v=16"></script>
 </body>
 </html>

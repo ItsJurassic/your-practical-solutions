@@ -5,10 +5,13 @@
    "rank": 1,
    "handle": "interior-windshield-cleaner",
    "title": "Extendable Interior Windshield Cleaner",
-   "category": "Car & Garage",
+   "category": "Car & RV",
    "collections": [
     "car-rv",
-    "new-arrivals"
+    "winter-essentials",
+    "christmas",
+    "new-arrivals",
+    "best-sellers"
    ],
    "price": "12.99",
    "blurb": "Reach the bottom corners of your windshield without contorting yourself.",
@@ -34,15 +37,19 @@
     "1 extendable windshield cleaner",
     "7 washable microfiber pads (1 on the head plus 6 spares)"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 2,
    "handle": "led-magnetic-pickup-tool",
    "title": "Telescoping Magnetic Pickup Tool with LED Light",
-   "category": "Car & Garage",
+   "category": "Garage & Tools",
    "collections": [
     "garage-tools",
+    "car-rv",
+    "tech-accessories",
     "new-arrivals"
    ],
    "price": "14.99",
@@ -67,7 +74,9 @@
    "includes": [
     "1 telescoping magnetic pickup tool with LED light"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 3,
@@ -75,8 +84,11 @@
    "title": "Extendable Snow Brush with Ice Scraper",
    "category": "Winter",
    "collections": [
+    "winter-essentials",
     "car-rv",
-    "new-arrivals"
+    "christmas",
+    "new-arrivals",
+    "best-sellers"
    ],
    "price": "27.99",
    "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice and squeegee the glass.",
@@ -102,7 +114,9 @@
    "includes": [
     "1 extendable 3-in-1 snow brush (pivoting brush head, squeegee, and ice scraper)"
    ],
-   "shipping": "Ships from a U.S. warehouse in about 3–5 business days."
+   "shipping": "Ships from a U.S. warehouse in about 3–5 business days.",
+   "ships_fast": true,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 4,
@@ -110,8 +124,11 @@
    "title": "Magnetic Windshield Snow & Ice Cover",
    "category": "Winter",
    "collections": [
+    "winter-essentials",
     "car-rv",
-    "new-arrivals"
+    "christmas",
+    "new-arrivals",
+    "best-sellers"
    ],
    "price": "21.99",
    "blurb": "Skip the morning scrape. Lift the cover and drive.",
@@ -138,16 +155,19 @@
     "1 magnetic windshield snow and ice cover",
     "Side-mirror covers"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 5,
    "handle": "silicone-lick-mat",
    "title": "Silicone Lick Mat & Slow Feeder for Dogs and Cats",
-   "category": "Pets & Outdoors",
+   "category": "Pets & Animals",
    "collections": [
     "pet-supplies",
-    "new-arrivals"
+    "new-arrivals",
+    "best-sellers"
    ],
    "price": "18.99",
    "blurb": "Calms anxious pets and slows down fast eaters.",
@@ -171,14 +191,17 @@
    "includes": [
     "1 silicone lick mat and slow feeder"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 6,
    "handle": "collapsible-camping-basin",
    "title": "Collapsible Camping Wash Basin (9 L)",
-   "category": "Pets & Outdoors",
+   "category": "Outdoor & Camping",
    "collections": [
+    "outdoor-camping",
     "car-rv",
     "new-arrivals"
    ],
@@ -205,16 +228,20 @@
    "includes": [
     "1 collapsible 9 L wash basin"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 7,
    "handle": "rug-corner-grippers",
    "title": "Anti-Curl Rug Corner Grippers (16-Piece Set)",
-   "category": "Home",
+   "category": "Living Room",
    "collections": [
+    "living-room",
     "home-decor",
-    "new-arrivals"
+    "new-arrivals",
+    "best-sellers"
    ],
    "price": "16.99",
    "blurb": "Flatten curled rug corners and stop slipping for good.",
@@ -238,15 +265,19 @@
    "includes": [
     "16 triangle rug corner grippers"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 8,
    "handle": "magnetic-cob-work-light",
    "title": "Rechargeable Magnetic COB Work Light",
-   "category": "Car & Garage",
+   "category": "Garage & Tools",
    "collections": [
     "garage-tools",
+    "car-rv",
+    "tech-accessories",
     "new-arrivals"
    ],
    "price": "19.99",
@@ -273,15 +304,19 @@
    "includes": [
     "1 rechargeable magnetic COB work light"
    ],
-   "shipping": "Ships from a U.S. warehouse in about 3–5 business days."
+   "shipping": "Ships from a U.S. warehouse in about 3–5 business days.",
+   "ships_fast": true,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 9,
    "handle": "window-track-gap-brush",
    "title": "Window Track & Gap Cleaning Brush (3-Pack)",
-   "category": "Home",
+   "category": "Home & Decor",
    "collections": [
     "home-decor",
+    "bathroom",
+    "kitchen",
     "new-arrivals"
    ],
    "price": "11.99",
@@ -306,7 +341,9 @@
    "includes": [
     "3 window-track and gap cleaning brushes"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   },
   {
    "rank": 10,
@@ -314,7 +351,10 @@
    "title": "Insulated Outdoor Faucet Covers (2-Pack)",
    "category": "Winter",
    "collections": [
-    "home-decor",
+    "winter-essentials",
+    "gardening",
+    "outdoor-camping",
+    "christmas",
     "new-arrivals"
    ],
    "price": "14.99",
@@ -339,7 +379,9 @@
    "includes": [
     "2 insulated outdoor faucet covers"
    ],
-   "shipping": "Ships from China in about 5–12 business days."
+   "shipping": "Ships from China in about 5–12 business days.",
+   "ships_fast": false,
+   "listed_at": "2026-11-10"
   }
  ],
  "live": false

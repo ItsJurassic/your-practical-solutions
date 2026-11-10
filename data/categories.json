@@ -1,0 +1,295 @@
+{
+  "timezone": "America/Chicago",
+  "note": "Category catalog for the marketing site. Seasonal visibility is computed in the browser from show_window month-day ranges in America/Chicago. Existing shop.html?c=<handle> URLs are unchanged. Display title for pet-supplies is Pets & Animals.",
+  "categories": [
+    {
+      "name": "Pets & Animals",
+      "handle": "pet-supplies",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Beds, bowls, grooming and more",
+      "tile": "#fdf1e7",
+      "ink": "#b45f1b",
+      "show_window": null,
+      "path": "/shop.html?c=pet-supplies",
+      "page": "categories/pet-supplies/"
+    },
+    {
+      "name": "Living Room",
+      "handle": "living-room",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Sofas, rugs and living-space finds",
+      "tile": "#f4efe8",
+      "ink": "#6d4c32",
+      "show_window": null,
+      "path": "/shop.html?c=living-room",
+      "page": "categories/living-room/"
+    },
+    {
+      "name": "Kitchen",
+      "handle": "kitchen",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Everyday kitchen helpers",
+      "tile": "#fff4e8",
+      "ink": "#b15b12",
+      "show_window": null,
+      "path": "/shop.html?c=kitchen",
+      "page": "categories/kitchen/"
+    },
+    {
+      "name": "Men's Clothing",
+      "handle": "mens-clothing",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Clothes and accessories for him",
+      "tile": "#eef1f6",
+      "ink": "#3b4a6b",
+      "show_window": null,
+      "path": "/shop.html?c=mens-clothing",
+      "page": "categories/mens-clothing/"
+    },
+    {
+      "name": "Women's Clothing",
+      "handle": "womens-clothing",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Clothes and accessories for her",
+      "tile": "#f9eef3",
+      "ink": "#8a3d5c",
+      "show_window": null,
+      "path": "/shop.html?c=womens-clothing",
+      "page": "categories/womens-clothing/"
+    },
+    {
+      "name": "Winter Essentials",
+      "handle": "winter-essentials",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Cold-weather gear for home and car",
+      "tile": "#eaf3fb",
+      "ink": "#2a5f86",
+      "show_window": null,
+      "path": "/shop.html?c=winter-essentials",
+      "page": "categories/winter-essentials/"
+    },
+    {
+      "name": "Car & RV",
+      "handle": "car-rv",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Road-trip and camper essentials",
+      "tile": "#f1eefa",
+      "ink": "#5b43a6",
+      "show_window": null,
+      "path": "/shop.html?c=car-rv",
+      "page": "categories/car-rv/"
+    },
+    {
+      "name": "Garage & Tools",
+      "handle": "garage-tools",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Tools, racks and workbench gear",
+      "tile": "#eef1ee",
+      "ink": "#3f5a4a",
+      "show_window": null,
+      "path": "/shop.html?c=garage-tools",
+      "page": "categories/garage-tools/"
+    },
+    {
+      "name": "Home & Decor",
+      "handle": "home-decor",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Rugs, curtains and home comforts",
+      "tile": "#fbf0f0",
+      "ink": "#a6434b",
+      "show_window": null,
+      "path": "/shop.html?c=home-decor",
+      "page": "categories/home-decor/"
+    },
+    {
+      "name": "Storage & Organization",
+      "handle": "storage-organization",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Bins, shelves and closet kits",
+      "tile": "#eef3f8",
+      "ink": "#2b5c8a",
+      "show_window": null,
+      "path": "/shop.html?c=storage-organization",
+      "page": "categories/storage-organization/"
+    },
+    {
+      "name": "Tech Accessories",
+      "handle": "tech-accessories",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Chargers, cables, lights and mounts",
+      "tile": "#ecf6f6",
+      "ink": "#16736f",
+      "show_window": null,
+      "path": "/shop.html?c=tech-accessories",
+      "page": "categories/tech-accessories/"
+    },
+    {
+      "name": "Gardening",
+      "handle": "gardening",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Yard, garden and outdoor faucet care",
+      "tile": "#eef6ea",
+      "ink": "#3c6b2f",
+      "show_window": null,
+      "path": "/shop.html?c=gardening",
+      "page": "categories/gardening/"
+    },
+    {
+      "name": "Bathroom",
+      "handle": "bathroom",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Bathroom cleaning and comfort",
+      "tile": "#eef6f6",
+      "ink": "#2a6b6e",
+      "show_window": null,
+      "path": "/shop.html?c=bathroom",
+      "page": "categories/bathroom/"
+    },
+    {
+      "name": "Outdoor & Camping",
+      "handle": "outdoor-camping",
+      "kind": "permanent",
+      "website_nav": true,
+      "blurb": "Camp, yard and time outside",
+      "tile": "#f3f1e6",
+      "ink": "#5a5a28",
+      "show_window": null,
+      "path": "/shop.html?c=outdoor-camping",
+      "page": "categories/outdoor-camping/"
+    },
+    {
+      "name": "Christmas",
+      "handle": "christmas",
+      "kind": "seasonal",
+      "website_nav": "seasonal",
+      "blurb": "Seasonal gifts and winter helpers",
+      "tile": "#f8ecee",
+      "ink": "#8b1e2d",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "11-01",
+        "end_month_day": "12-26",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Nov 1–Dec 26"
+      },
+      "path": "/shop.html?c=christmas",
+      "page": "categories/christmas/"
+    },
+    {
+      "name": "Halloween",
+      "handle": "halloween",
+      "kind": "seasonal",
+      "website_nav": "seasonal",
+      "blurb": "Spooky-season finds",
+      "tile": "#f8efe4",
+      "ink": "#c46310",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "09-15",
+        "end_month_day": "10-31",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Sep 15–Oct 31"
+      },
+      "path": "/shop.html?c=halloween",
+      "page": "categories/halloween/"
+    },
+    {
+      "name": "Valentine's Day",
+      "handle": "valentines-day",
+      "kind": "seasonal",
+      "website_nav": "seasonal",
+      "blurb": "Gifts and treats for Valentine’s Day",
+      "tile": "#fdeef2",
+      "ink": "#c43b5c",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "01-15",
+        "end_month_day": "02-15",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Jan 15–Feb 15"
+      },
+      "path": "/shop.html?c=valentines-day",
+      "page": "categories/valentines-day/"
+    },
+    {
+      "name": "New Year's",
+      "handle": "new-years",
+      "kind": "seasonal",
+      "website_nav": "seasonal",
+      "blurb": "Celebrate the year ahead",
+      "tile": "#eef2ff",
+      "ink": "#111827",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "12-26",
+        "end_month_day": "01-02",
+        "inclusive": true,
+        "wraps_year": true,
+        "label": "Dec 26–Jan 2"
+      },
+      "path": "/shop.html?c=new-years",
+      "page": "categories/new-years/"
+    },
+    {
+      "name": "4th of July",
+      "handle": "4th-of-july",
+      "kind": "seasonal",
+      "website_nav": "seasonal",
+      "blurb": "Red, white and summer gatherings",
+      "tile": "#e8eefc",
+      "ink": "#1d3b8b",
+      "show_window": {
+        "recurring": true,
+        "start_month_day": "06-10",
+        "end_month_day": "07-05",
+        "inclusive": true,
+        "wraps_year": false,
+        "label": "Jun 10–Jul 5"
+      },
+      "path": "/shop.html?c=4th-of-july",
+      "page": "categories/4th-of-july/"
+    }
+  ],
+  "merchandising": [
+    {
+      "name": "New Arrivals",
+      "handle": "new-arrivals",
+      "kind": "merchandising",
+      "website_nav": true,
+      "blurb": "Just landed in the store",
+      "tile": "#fff7e3",
+      "ink": "#a3700b",
+      "show_window": null,
+      "path": "/shop.html?c=new-arrivals",
+      "page": "categories/new-arrivals/"
+    },
+    {
+      "name": "Best Sellers",
+      "handle": "best-sellers",
+      "kind": "merchandising",
+      "website_nav": true,
+      "blurb": "What customers love most",
+      "tile": "#eaf2ee",
+      "ink": "#1f4a3d",
+      "show_window": null,
+      "path": "/shop.html?c=best-sellers",
+      "page": "categories/best-sellers/"
+    }
+  ]
+}

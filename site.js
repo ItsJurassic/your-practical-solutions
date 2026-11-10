@@ -1,4 +1,5 @@
 import { CONFIG, shopUrl, collectionUrl } from "./config.js";
+import { loadCategoryData, visibleEntries, findCategory, isCategoryVisible } from "./categories.js";
 
 const BASE = window.__SITE_BASE__ || "./";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -13,6 +14,20 @@ export const ICONS = {
   "home-decor": svg('<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-5h4v5"/>'),
   "new-arrivals": svg('<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/>'),
   "best-sellers": svg('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>'),
+  "living-room": svg('<path d="M4 13h16v7H4z"/><path d="M6 13V9h12v4M8 20v2M16 20v2"/>'),
+  "kitchen": svg('<path d="M5 3v8a3 3 0 0 0 6 0V3M8 3v18"/><path d="M16 3v18M15 8h4v5a2 2 0 0 1-4 0z"/>'),
+  "mens-clothing": svg('<path d="M9 4 12 6l3-2 3 3-3 2v11H9V9L6 7z"/>'),
+  "womens-clothing": svg('<path d="M12 3v4M9 7h6l3 14H6L9 7z"/>'),
+  "winter-essentials": svg('<path d="M12 2v20M4 12h16M6.5 6.5 17.5 17.5M17.5 6.5 6.5 17.5"/>'),
+  "gardening": svg('<path d="M12 21V11M8 21h8"/><path d="M12 11c-4-1-6-5-4-8 4 1 6 5 4 8zM12 11c4-1 6-5 4-8-4 1-6 5-4 8z"/>'),
+  "bathroom": svg('<path d="M5 12h14v2a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5z"/><path d="M7 12V6a2 2 0 0 1 2-2h0"/>'),
+  "outdoor-camping": svg('<path d="M3 20h18M12 4l9 16H3z"/><path d="M12 4v16"/>'),
+  "christmas": svg('<path d="M12 2 7 9h3L6 14h3L5 20h14l-4-6h3l-4-5h3z"/>'),
+  "halloween": svg('<path d="M12 4c4 0 7 4 7 8s-3 8-7 8-7-4-7-8 3-8 7-8z"/><path d="M9 13c.5 1 1.5 1.5 3 1.5s2.5-.5 3-1.5M9 10h.01M15 10h.01"/>'),
+  "valentines-day": svg('<path d="M12 19S4 13 4 8.5A4 4 0 0 1 12 7a4 4 0 0 1 8 1.5C20 13 12 19 12 19z"/>'),
+  "new-years": svg('<path d="M12 2v6M12 16v6M4 12h6M14 12h6M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"/>'),
+  "4th-of-july": svg('<path d="M12 3 14 8l5 .7-3.8 3.6.9 5.2L12 15.2 7.9 17.5l.9-5.2L5 8.7 10 8z"/>'),
+
   truck: svg('<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>'),
   lock: svg('<rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>'),
   chat: svg('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/>'),
@@ -37,6 +52,17 @@ const TILE = {
 
 const LIVE_URL = "https://avcqqazytvvcfraowgsm.supabase.co/functions/v1/yps-products";
 const EMPTY = { products: [], collections: [], product_count: 0 };
+
+function uniqueHandles(...lists) {
+  const out = [];
+  const seen = new Set();
+  for (const list of lists) {
+    for (const h of list || []) {
+      if (h && !seen.has(h)) { seen.add(h); out.push(h); }
+    }
+  }
+  return out;
+}
 
 async function fetchJson(url, ms) {
   const ctl = new AbortController();
@@ -91,7 +117,7 @@ export function loadCatalog() {
           blurb: local?.blurb || p.blurb || "",
           product_type: p.product_type || local?.category || "",
           tags: p.tags?.length ? p.tags : (local?.tags || []),
-          collections: p.collections?.length ? p.collections : (local?.collections || []),
+          collections: uniqueHandles(local?.collections, p.collections),
         };
       });
       const have = new Set(products.map((p) => p.handle));
@@ -144,21 +170,25 @@ export function productCard(p) {
   </a>`;
 }
 
-export function emptyState(title = "New products are on the way", text = "We're stocking the shelves right now. Browse the full store for the latest arrivals — every item here links straight to our secure Shopify checkout.") {
+export function emptyState(title = "New products coming soon", text = "We're stocking this collection now. Check back shortly, or browse the rest of the shop.", { href = "shop.html", label = "Browse all products", external = false } = {}) {
   return `<div class="empty-state">
     <div class="ico">${ICONS.bag}</div>
     <h3>${esc(title)}</h3>
     <p>${esc(text)}</p>
-    <a class="btn btn-primary" href="${shopUrl()}" rel="noopener">Shop on our store ${ICONS.arrow.replace("<svg", '<svg width="18" height="18"')}</a>
+    <a class="btn btn-primary" href="${esc(href)}"${external ? ' rel="noopener"' : ""}>${esc(label)} ${ICONS.arrow.replace("<svg", '<svg width="18" height="18"')}</a>
   </div>`;
 }
 
 export function categoryTile(c, { inShop = false } = {}) {
-  const [bg, ink, sub] = TILE[c.handle] || ["#f3f5f1", "#1f4a3d", "Shop the collection"];
-  const href = inShop ? `shop.html?c=${encodeURIComponent(c.handle)}` : `shop.html?c=${encodeURIComponent(c.handle)}`;
+  const fallback = TILE[c.handle] || ["#f3f5f1", "#1f4a3d", "Shop the collection"];
+  const bg = c.tile || fallback[0];
+  const ink = c.ink || fallback[1];
+  const sub = c.blurb || fallback[2];
+  const title = c.name || c.title || c.handle;
+  const href = `shop.html?c=${encodeURIComponent(c.handle)}`;
   return `<a class="cat" href="${href}" style="--tile:${bg};--tile-ink:${ink}">
     <span class="cat-ico">${ICONS[c.handle] || ICONS.grid}</span>
-    <span><strong>${esc(c.title)}</strong><small>${esc(sub)}</small></span>
+    <span><strong>${esc(title)}</strong><small>${esc(sub)}</small></span>
     <span class="arrow">${ICONS.arrow.replace("<svg", '<svg width="18" height="18"')}</span>
   </a>`;
 }
@@ -174,10 +204,10 @@ function wireShopLinks() {
 
 // ---------- home ----------
 async function initHome() {
-  const cat = await loadCatalog();
-  const cols = cat.collections?.length ? cat.collections : Object.keys(TILE).map((h) => ({ handle: h, title: h }));
+  const [cat, catData] = await Promise.all([loadCatalog(), loadCategoryData(BASE)]);
+  const cols = visibleEntries(catData);
   const catsEl = document.getElementById("home-cats");
-  if (catsEl) catsEl.innerHTML = cols.slice(0, 8).map((c) => categoryTile(c)).join("");
+  if (catsEl) catsEl.innerHTML = cols.map((c) => categoryTile(c)).join("");
   const grid = document.getElementById("home-products");
   if (grid) grid.innerHTML = cat.products.length ? cat.products.slice(0, 8).map(productCard).join("") : emptyState();
   const count = document.getElementById("stat-products");
@@ -198,10 +228,21 @@ async function initHome() {
 
 // ---------- shop ----------
 async function initShop() {
-  const cat = await loadCatalog();
+  const [cat, catData] = await Promise.all([loadCatalog(), loadCategoryData(BASE)]);
   const params = new URLSearchParams(location.search);
-  const state = { c: params.get("c") || "all", q: params.get("q") || "", sort: "featured" };
-  const cols = cat.collections || [];
+  const state = {
+    c: params.get("c") || "all",
+    q: params.get("q") || "",
+    sort: params.get("sort") || "featured",
+    min: params.get("min") || "",
+    max: params.get("max") || "",
+    ship: params.get("ship") || "",
+  };
+  const visible = visibleEntries(catData);
+  const requested = state.c !== "all" ? findCategory(catData, state.c) : null;
+  // Direct links to an out-of-season category still work; it stays out of the regular filter list.
+  const cols = visible.slice();
+  if (requested && !cols.some((c) => c.handle === requested.handle)) cols.push(requested);
   const list = document.getElementById("filter-list");
   const chips = document.getElementById("chips");
   const grid = document.getElementById("shop-grid");
@@ -209,41 +250,109 @@ async function initShop() {
   const titleEl = document.getElementById("shop-title");
   const q = document.getElementById("shop-q");
   const sort = document.getElementById("shop-sort");
-  q.value = state.q;
+  const minEl = document.getElementById("price-min");
+  const maxEl = document.getElementById("price-max");
+  const shipEl = document.getElementById("ship-fast");
+  if (q) q.value = state.q;
+  if (sort) sort.value = ["featured", "price-asc", "price-desc", "newest", "az"].includes(state.sort) ? state.sort : "featured";
+  if (minEl) minEl.value = state.min;
+  if (maxEl) maxEl.value = state.max;
+  if (shipEl) shipEl.checked = state.ship === "fast";
 
-  const all = [{ handle: "all", title: "All products", count: cat.products.length }, ...cols];
-  const countFor = (h) => (h === "all" ? cat.products.length : cat.products.filter((p) => p.collections.includes(h)).length);
-  list.innerHTML = all.map((c) => `<button type="button" data-c="${c.handle}"><b style="font-weight:inherit">${esc(c.title)}</b><span>${countFor(c.handle)}</span></button>`).join("");
-  chips.innerHTML = all.map((c) => `<button class="chip" type="button" data-c="${c.handle}">${esc(c.handle === "all" ? "All" : c.title)}</button>`).join("");
+  const all = [{ handle: "all", name: "All products" }, ...cols];
+  const countFor = (h) => (h === "all" ? cat.products.length : cat.products.filter((p) => (p.collections || []).includes(h)).length);
+  const labelOf = (c) => c.name || c.title || (c.handle === "all" ? "All products" : c.handle);
+  if (list) list.innerHTML = all.map((c) => `<button type="button" data-c="${c.handle}"><b style="font-weight:inherit">${esc(labelOf(c))}</b><span>${countFor(c.handle)}</span></button>`).join("");
+  if (chips) chips.innerHTML = all.map((c) => `<button class="chip" type="button" data-c="${c.handle}">${esc(c.handle === "all" ? "All" : labelOf(c))}</button>`).join("");
+
+  const inCategory = (p, handle) => handle === "all" || (p.collections || []).includes(handle);
+  const shipsFast = (p) => !!(p.ships_fast || /3\s*[–-]\s*5/.test(p.shipping || p.blurb || ""));
 
   const render = () => {
     document.querySelectorAll("[data-c]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.c === state.c)));
     const col = all.find((c) => c.handle === state.c) || all[0];
-    titleEl.textContent = col.title;
-    let items = cat.products.filter((p) => state.c === "all" || p.collections.includes(state.c));
+    if (titleEl) titleEl.textContent = labelOf(col);
+    let items = cat.products.filter((p) => inCategory(p, state.c));
+    const inCatCount = items.length;
     const needle = state.q.trim().toLowerCase();
     if (needle) items = items.filter((p) => `${p.title} ${p.product_type} ${(p.tags || []).join(" ")}`.toLowerCase().includes(needle));
+    const min = state.min === "" ? null : Number(state.min);
+    const max = state.max === "" ? null : Number(state.max);
+    if (min != null && !Number.isNaN(min)) items = items.filter((p) => Number(p.price) >= min);
+    if (max != null && !Number.isNaN(max)) items = items.filter((p) => Number(p.price) <= max);
+    if (state.ship === "fast") items = items.filter(shipsFast);
     if (state.sort === "price-asc") items.sort((a, b) => a.price - b.price);
-    if (state.sort === "price-desc") items.sort((a, b) => b.price - a.price);
-    if (state.sort === "az") items.sort((a, b) => a.title.localeCompare(b.title));
-    countEl.textContent = `${items.length} product${items.length === 1 ? "" : "s"}`;
+    else if (state.sort === "price-desc") items.sort((a, b) => b.price - a.price);
+    else if (state.sort === "az") items.sort((a, b) => a.title.localeCompare(b.title));
+    else if (state.sort === "newest") items.sort((a, b) => (b.listed_at || "").localeCompare(a.listed_at || "") || (b.rank ?? 0) - (a.rank ?? 0));
+    else items.sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
+    if (countEl) countEl.textContent = `${items.length} product${items.length === 1 ? "" : "s"}`;
     if (items.length) grid.innerHTML = items.map(productCard).join("");
     else if (!cat.products.length) grid.innerHTML = emptyState();
-    else grid.innerHTML = emptyState("No matches here yet", "Try another category or search term — or browse everything in our store.");
+    else if (state.c !== "all" && inCatCount === 0 && !needle && state.ship !== "fast" && min == null && max == null) {
+      grid.innerHTML = emptyState("New products coming soon", "We're stocking this collection now. Check back shortly, or browse the rest of the shop.");
+    } else {
+      grid.innerHTML = emptyState("No matches here yet", "Try another category, a wider price range, or a different search term.");
+    }
     const url = new URL(location.href);
+    const setOrDel = (k, v) => (v ? url.searchParams.set(k, v) : url.searchParams.delete(k));
     state.c === "all" ? url.searchParams.delete("c") : url.searchParams.set("c", state.c);
-    state.q ? url.searchParams.set("q", state.q) : url.searchParams.delete("q");
+    setOrDel("q", state.q.trim());
+    state.sort && state.sort !== "featured" ? url.searchParams.set("sort", state.sort) : url.searchParams.delete("sort");
+    setOrDel("min", state.min);
+    setOrDel("max", state.max);
+    state.ship === "fast" ? url.searchParams.set("ship", "fast") : url.searchParams.delete("ship");
     history.replaceState(null, "", url);
   };
+
+  const drawer = document.getElementById("shop-filters");
+  const backdrop = document.getElementById("filter-backdrop");
+  const openBtn = document.getElementById("filter-open");
+  const closeBtn = document.getElementById("filter-close");
+  const setOpen = (on) => {
+    drawer?.classList.toggle("is-open", on);
+    backdrop?.classList.toggle("is-open", on);
+    if (backdrop) backdrop.hidden = !on;
+    if (openBtn) openBtn.setAttribute("aria-expanded", String(on));
+    if (on) closeBtn?.focus();
+  };
+  openBtn?.addEventListener("click", () => setOpen(true));
+  closeBtn?.addEventListener("click", () => setOpen(false));
+  backdrop?.addEventListener("click", () => setOpen(false));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
+
   document.addEventListener("click", (e) => {
     const b = e.target.closest("button[data-c]");
     if (!b) return;
     state.c = b.dataset.c; render();
   });
-  q.addEventListener("input", () => { state.q = q.value; render(); });
-  sort.addEventListener("change", () => { state.sort = sort.value; render(); });
+  q?.addEventListener("input", () => { state.q = q.value; render(); });
+  sort?.addEventListener("change", () => { state.sort = sort.value; render(); });
+  const onPrice = () => { state.min = minEl?.value || ""; state.max = maxEl?.value || ""; render(); };
+  minEl?.addEventListener("input", onPrice);
+  maxEl?.addEventListener("input", onPrice);
+  shipEl?.addEventListener("change", () => { state.ship = shipEl.checked ? "fast" : ""; render(); });
   render();
 }
+
+async function initCategory() {
+  const handle = document.body.dataset.category;
+  const grid = document.getElementById("category-grid");
+  if (!handle || !grid) return;
+  const [cat, catData] = await Promise.all([loadCatalog(), loadCategoryData(BASE)]);
+  const items = cat.products.filter((p) => (p.collections || []).includes(handle));
+  if (items.length) grid.innerHTML = items.map(productCard).join("");
+  else grid.innerHTML = emptyState("New products coming soon", "We're stocking this collection now. Check back shortly, or browse the rest of the shop.");
+  const info = findCategory(catData, handle);
+  if (info && info.kind === "seasonal" && !isCategoryVisible(info)) {
+    const note = document.createElement("p");
+    note.className = "muted";
+    note.style.margin = "0 0 16px";
+    note.textContent = "This seasonal collection is listed here year-round, but it is hidden from the main menu outside its dates.";
+    grid.before(note);
+  }
+}
+
 
 function initProduct() {
   const main = document.getElementById("pdp-main");
@@ -267,5 +376,6 @@ wireShopLinks();
 const page = document.body.dataset.page;
 if (page === "home") initHome();
 if (page === "shop") initShop();
+if (page === "category") initCategory();
 if (page === "product") initProduct();
 export { CONFIG, collectionUrl };

@@ -25,6 +25,7 @@ PUBLIC_FIELDS = (
     "rank", "handle", "title", "category", "collections", "price", "blurb",
     "features", "tags", "photos", "shopify_id", "shopify_handle", "shopify_status",
     "shipping", "shipping_note", "includes", "variant_id", "sku", "live",
+    "ships_fast", "listed_at",
 )
 
 def is_live(product):
@@ -245,6 +246,41 @@ public = {
 }
 (ROOT / "data" / "catalog-public.json").write_text(json.dumps(public, indent=2) + "\n")
 
+
+# ---------- category landing pages (sitemap lists seasonal even when hidden) ----------
+cat_doc = {}
+cat_path = ROOT / "data" / "categories.json"
+if cat_path.exists():
+    cat_doc = json.loads(cat_path.read_text())
+cat_entries = list(cat_doc.get("categories") or []) + list(cat_doc.get("merchandising") or [])
+category_t = (ROOT / "templates" / "category.html").read_text()
+cat_root = ROOT / "categories"
+if cat_root.exists():
+    for child in cat_root.iterdir():
+        if child.is_dir() and (child / "index.html").exists():
+            shutil.rmtree(child)
+cat_root.mkdir(exist_ok=True)
+built_cats = []
+for c in cat_entries:
+    handle = c["handle"]
+    title = c["name"]
+    blurb = c.get("blurb") or "Shop the collection."
+    desc = html.escape(f"{title} at Your Practical Solutions. {blurb}")
+    slug = f"categories/{handle}/"
+    page = apply_shell(
+        category_t,
+        TITLE=html.escape(title),
+        DESC=desc,
+        HANDLE=html.escape(handle),
+        BLURB=html.escape(blurb),
+        SLUG=slug,
+    )
+    page = page.replace('data-nav="shop"', 'data-nav="shop" aria-current="page"')
+    out = cat_root / handle
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "index.html").write_text(page)
+    built_cats.append(c)
+
 today = datetime.date.today().isoformat()
 legal_lastmod = {"shipping": "2026-11-10", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-10"}
 legal_urls = "".join(f"  <url><loc>{SITE}/{s}.html</loc><lastmod>{legal_lastmod[s]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>\n" for s, _ in LEGAL)
@@ -252,11 +288,15 @@ product_urls = "".join(
     f"  <url><loc>{SITE}/{product_href(p['handle'])}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>\n"
     for p in built
 )
+category_urls = "".join(
+    f"  <url><loc>{SITE}/categories/{c['handle']}/</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>\n"
+    for c in built_cats
+)
 (ROOT / "sitemap.xml").write_text(f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{SITE}/</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>{SITE}/shop.html</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-{product_urls}{legal_urls}</urlset>
+{product_urls}{category_urls}{legal_urls}</urlset>
 """)
 print("built index.html, shop.html, " + ", ".join(f"{s}.html" for s, _ in LEGAL)
-      + f", {len(built)} product pages, data/catalog-public.json, sitemap.xml")
+      + f", {len(built)} product pages, {len(built_cats)} category pages, data/catalog-public.json, sitemap.xml")
