@@ -133,7 +133,7 @@
     "pet-supplies",
     "new-arrivals"
    ],
-   "price": "13.99",
+   "price": "15.99",
    "cost": 1.72,
    "ship_est": 3.0,
    "blurb": "Calms anxious pets and slows down fast eaters.",
@@ -194,7 +194,7 @@
     "home-decor",
     "new-arrivals"
    ],
-   "price": "8.99",
+   "price": "12.99",
    "cost": 0.68,
    "ship_est": 2.5,
    "blurb": "Flatten curled rug corners and stop slipping for good.",
@@ -256,7 +256,7 @@
     "home-decor",
     "new-arrivals"
    ],
-   "price": "7.99",
+   "price": "11.99",
    "cost": 0.3,
    "ship_est": 2.5,
    "blurb": "Gets the gunk out of window tracks, tile grout and sliding-door rails.",
@@ -307,5 +307,6 @@
    "shopify_handle": "insulated-outdoor-faucet-covers-2-pack",
    "shopify_status": "DRAFT"
   }
- ]
+ ],
+ "pricing_rule": "Every item must clear >=35% margin (profit / (price + shipping charged)) in the worst USPS zone of each shipping region. See PRICING.md. Items 1,2,3,4,6,8,10 are under review: the 35% price is far above market under bulk-buy + USPS reship, so they need dropship-direct sourcing before publishing."
 }
