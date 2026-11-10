@@ -11,7 +11,7 @@ org = {
     "@graph": [
         {"@type": "OnlineStore", "@id": f"{SITE}/#org", "name": "Your Practical Solutions", "url": f"{SITE}/",
          "logo": "https://yourpracticalsolutions.com/apple-touch-icon.png",
-         "email": "contact@yourpracticalsolutions.com",
+         "email": "support@yourpracticalsolutions.com",
          "description": "Practical goods for home, garage, car and RV.",
          "sameAs": [cat["store"]["url"]]},
         {"@type": "WebSite", "@id": f"{SITE}/#website", "url": f"{SITE}/", "name": "Your Practical Solutions",
