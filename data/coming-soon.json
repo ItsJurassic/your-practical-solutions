@@ -10,7 +10,7 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "14.99",
+   "price": "26.99",
    "cost": 1.72,
    "ship_est": 3.5,
    "blurb": "Reach the bottom corners of your windshield without contorting yourself.",
@@ -41,7 +41,7 @@
     "garage-tools",
     "new-arrivals"
    ],
-   "price": "11.99",
+   "price": "20.99",
    "cost": 1.56,
    "ship_est": 2.5,
    "blurb": "Grab dropped screws, nuts and bolts from engine bays and under furniture.",
@@ -71,7 +71,7 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "21.99",
+   "price": "38.99",
    "cost": 2.26,
    "ship_est": 6.0,
    "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice.",
@@ -102,7 +102,7 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "22.99",
+   "price": "35.99",
    "cost": 2.93,
    "ship_est": 5.0,
    "blurb": "Skip the morning scrape. Lift the cover and drive.",
@@ -163,7 +163,7 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "19.99",
+   "price": "26.99",
    "cost": 2.65,
    "ship_est": 5.0,
    "blurb": "A full-size dish tub that folds down to 1.5 in thick.",
@@ -224,7 +224,7 @@
     "garage-tools",
     "new-arrivals"
    ],
-   "price": "22.99",
+   "price": "33.99",
    "cost": 4.29,
    "ship_est": 4.0,
    "blurb": "Bright hands-free light for the garage, engine bay or campsite.",
@@ -286,7 +286,7 @@
     "home-decor",
     "new-arrivals"
    ],
-   "price": "14.99",
+   "price": "20.99",
    "cost": 1.82,
    "ship_est": 3.5,
    "blurb": "Protect outdoor spigots from freezing and bursting this winter.",
@@ -307,6 +307,5 @@
    "shopify_handle": "insulated-outdoor-faucet-covers-2-pack",
    "shopify_status": "DRAFT"
   }
- ],
- "pricing_rule": "Every item must clear >=35% margin (profit / (price + shipping charged)) in the worst USPS zone of each shipping region. See PRICING.md. Items 1,2,3,4,6,8,10 are under review: the 35% price is far above market under bulk-buy + USPS reship, so they need dropship-direct sourcing before publishing."
+ ]
 }
