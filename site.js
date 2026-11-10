@@ -67,7 +67,7 @@ export function loadCatalog() {
     if (locals.length || (cat.products || []).some((p) => p.coming_soon)) {
       const bySh = new Map(locals.map((p) => [p.shopify_handle, p]));
       const asset = window.__ASSET_BASE__ || BASE;
-      const localImage = (p) => `${asset}images/products/${p.handle}-1.jpg`;
+      const localImage = (p) => `${asset}images/products/${p.handle}-1.jpg?v=20261110`;
       const pageUrl = (p) => p.page_url || `products/${p.handle}/`;
       const products = (cat.products || []).map((p) => {
         const local = bySh.get(p.handle);

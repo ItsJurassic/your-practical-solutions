@@ -94,7 +94,7 @@ def card_html(p, coming_soon=True):
     handle = p["handle"]
     href = product_href(handle)
     title = html.escape(p["title"])
-    img = f"images/products/{handle}-1.jpg"
+    img = f"images/products/{handle}-1.jpg?v=20261110"
     badge = '<span class="soon-badge">Coming soon</span>' if coming_soon else ""
     pill = '<span class="soon-pill">Coming soon</span>' if coming_soon else ""
     blurb = f'<p class="blurb">{html.escape(p.get("blurb") or "")}</p>' if p.get("blurb") else ""
@@ -112,10 +112,10 @@ def gallery_html(p):
     handle = p["handle"]
     n = int(p.get("photos") or 1)
     title = html.escape(p["title"])
-    first = f"images/products/{handle}-1.jpg"
+    first = f"images/products/{handle}-1.jpg?v=20261110"
     thumbs = []
     for i in range(1, n + 1):
-        src = f"images/products/{handle}-{i}.jpg"
+        src = f"images/products/{handle}-{i}.jpg?v=20261110"
         active = " is-active" if i == 1 else ""
         thumbs.append(
             f'<button type="button" class="pdp-thumb{active}" data-src="{html.escape(src)}" '

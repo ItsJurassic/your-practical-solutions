@@ -45,7 +45,7 @@ Products are draft (and the Shopify store is password-protected) until Joe and J
 2. After products are **published (ACTIVE)** in Shopify and the store password is removed, set `"live": true` (globally, or on individual products), then run `python3 scripts/build-pages.py` and push to `main`.
 3. When `live` is true, the button becomes **Buy Now** and goes to a Shopify cart permalink (`https://shop.yourpracticalsolutions.com/cart/<variantId>:1`). Until then it reads **Coming soon – notify me** and opens a mailto to support@yourpracticalsolutions.com.
 
-`data/coming-soon.json` also contains internal `cost`, `ship_est`, and supplier `source` fields. Those must never be shown on public pages. The site reads the generated, sanitized `data/catalog-public.json` instead. The source file is still in the repo (and currently deployed with the rest of the site), so those fields are still reachable if someone opens the JSON directly.
+Supplier cost and source fields are kept in a private off-repo copy, not in the public `data/coming-soon.json`. The browser reads the generated, sanitized `data/catalog-public.json`.
 
 ## Deploy
 

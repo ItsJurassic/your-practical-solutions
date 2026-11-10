@@ -1,5 +1,5 @@
 {
- "note": "Top 10 launch products. They are DRAFT in Shopify (the gap brush is currently ARCHIVED), so the live catalog hides them; the site shows them from this file. Photos live in images/products/<handle>-N.jpg. Matching uses shopify_handle. BUY BUTTONS: the top-level `live` flag is false, so every product page shows “Coming soon – notify me” instead of Buy Now. Products inherit that flag unless they set their own `live` value. After Joe and Joey approve, the Shopify products are published (ACTIVE), and the store password is removed: set `live` to true here (or on individual products), run `python3 scripts/build-pages.py`, and push to main. Do not flip `live` before then — Buy Now uses a Shopify cart permalink that will not work on draft/password-protected products. This file also has internal `cost`, `ship_est`, and supplier `source` fields. Never render those on public pages. The browser catalog is the generated, sanitized file data/catalog-public.json (no cost or supplier fields).",
+ "note": "Top 10 launch products. They are DRAFT in Shopify, so the live catalog hides them; the site shows them from this file. Photos live in images/products/<handle>-N.jpg. Matching uses shopify_handle. BUY BUTTONS: the top-level `live` flag is false, so every product page shows “Coming soon – notify me” instead of Buy Now. Products inherit that flag unless they set their own `live` value. After Joe and Joey approve, the Shopify products are published (ACTIVE), and the store password is removed: set `live` to true here (or on individual products), run `python3 scripts/build-pages.py`, and push to main. Do not flip `live` before then — Buy Now uses a Shopify cart permalink that will not work on draft/password-protected products. Supplier cost and source fields are stored privately off the public site (not in this file). The browser catalog is data/catalog-public.json.",
  "products": [
   {
    "rank": 1,
@@ -11,8 +11,6 @@
     "new-arrivals"
    ],
    "price": "12.99",
-   "cost": 1.72,
-   "ship_est": 3.5,
    "blurb": "Reach the bottom corners of your windshield without contorting yourself.",
    "features": [
     "Telescoping aluminum pole with a 180° pivoting head reaches every corner of the glass",
@@ -27,7 +25,6 @@
     "Top 10"
    ],
    "photos": 4,
-   "source": "https://www.alibaba.com/product-detail/Windshield-Cleaner-Tool-Extendable-Handle-Car_1601618934503.html",
    "shopify_id": "gid://shopify/Product/9694814994521",
    "shopify_handle": "extendable-interior-windshield-cleaner",
    "shopify_status": "DRAFT",
@@ -49,8 +46,6 @@
     "new-arrivals"
    ],
    "price": "14.99",
-   "cost": 1.56,
-   "ship_est": 2.5,
    "blurb": "Grab dropped screws, nuts and bolts from engine bays and under furniture.",
    "features": [
     "Built-in LED lights up dark engine bays and under-seat spots",
@@ -64,7 +59,6 @@
     "Top 10"
    ],
    "photos": 4,
-   "source": "https://www.alibaba.com/product-detail/Telescoping-Magnet-Pick-up-Gadget-Tool_60685354873.html",
    "shopify_id": "gid://shopify/Product/9694815879257",
    "shopify_handle": "telescoping-magnetic-pickup-tool-with-led-light",
    "shopify_status": "DRAFT",
@@ -85,8 +79,6 @@
     "new-arrivals"
    ],
    "price": "27.99",
-   "cost": 15.92,
-   "ship_est": 0,
    "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice and squeegee the glass.",
    "features": [
     "3-in-1 tool: 180° pivoting brush head, squeegee, and ice scraper",
@@ -100,8 +92,7 @@
     "Snow",
     "Top 10"
    ],
-   "photos": 4,
-   "source": "https://www.alibaba.com/product-detail/3-in-1-Car-Ice-Scraper_1601076332793.html",
+   "photos": 5,
    "shopify_id": "gid://shopify/Product/9694816075865",
    "shopify_handle": "extendable-snow-brush-with-ice-scraper",
    "shopify_status": "DRAFT",
@@ -123,8 +114,6 @@
     "new-arrivals"
    ],
    "price": "21.99",
-   "cost": 2.93,
-   "ship_est": 5.0,
    "blurb": "Skip the morning scrape. Lift the cover and drive.",
    "features": [
     "4-layer cover (aluminum foil, cotton fabric, cotton, and nonwoven) blocks snow, ice, frost, and sun from the windshield",
@@ -140,7 +129,6 @@
     "Top 10"
    ],
    "photos": 4,
-   "source": "https://www.alibaba.com/product-detail/Heavy-Duty-Car-Snow-Cover-Thickened_1601851087873.html",
    "shopify_id": "gid://shopify/Product/9694816403545",
    "shopify_handle": "magnetic-windshield-snow-ice-cover",
    "shopify_status": "DRAFT",
@@ -162,8 +150,6 @@
     "new-arrivals"
    ],
    "price": "18.99",
-   "cost": 1.72,
-   "ship_est": 3.0,
    "blurb": "Calms anxious pets and slows down fast eaters.",
    "features": [
     "4 textured zones for spreads, wet food, and kibble — about 7.9 x 5.9 in",
@@ -177,7 +163,6 @@
     "Top 10"
    ],
    "photos": 4,
-   "source": "https://www.alibaba.com/product-detail/High-Quality-Silicone-Lick-Mat-with_1601395953504.html",
    "shopify_id": "gid://shopify/Product/9694816763993",
    "shopify_handle": "silicone-lick-mat-slow-feeder-for-dogs-and-cats",
    "shopify_status": "DRAFT",
@@ -198,8 +183,6 @@
     "new-arrivals"
    ],
    "price": "19.99",
-   "cost": 2.65,
-   "ship_est": 5.0,
    "blurb": "A full-size 9 L wash basin that folds down for camp, the RV, or a small kitchen.",
    "features": [
     "About 9 L (2.4 gal) for dishes, produce, laundry, or ice and drinks — at camp, in an RV, or at home",
@@ -214,7 +197,6 @@
     "Top 10"
    ],
    "photos": 4,
-   "source": "https://www.alibaba.com/product-detail/Collapsible-9L-Dish-Tub-Portable-Foldable_1601392082228.html",
    "shopify_id": "gid://shopify/Product/9694816927833",
    "shopify_handle": "collapsible-camping-wash-basin-9-l",
    "shopify_status": "DRAFT",
@@ -235,8 +217,6 @@
     "new-arrivals"
    ],
    "price": "16.99",
-   "cost": 0.68,
-   "ship_est": 2.5,
    "blurb": "Flatten curled rug corners and stop slipping for good.",
    "features": [
     "Triangle grippers hold rug corners flat on hard floors",
@@ -250,7 +230,6 @@
     "Top 10"
    ],
    "photos": 3,
-   "source": "https://www.alibaba.com/product-detail/Best-4-in-1-Anti-Curling-1600067263826.html",
    "shopify_id": "gid://shopify/Product/9694817157209",
    "shopify_handle": "anti-curl-rug-corner-grippers-16-piece-set",
    "shopify_status": "DRAFT",
@@ -271,8 +250,6 @@
     "new-arrivals"
    ],
    "price": "19.99",
-   "cost": 4.29,
-   "ship_est": 4.0,
    "blurb": "Bright hands-free light for the garage, engine bay or campsite.",
    "features": [
     "Wide COB LED panel with 3 lighting modes",
@@ -288,7 +265,6 @@
    ],
    "photos": 4,
    "shipping_note": "Built-in lithium battery: some carriers and destinations restrict shipping.",
-   "source": "https://www.alibaba.com/product-detail/2026-New-COB-Work-Light-Rechargeable_1601763632077.html",
    "shopify_id": "gid://shopify/Product/9694817517657",
    "shopify_handle": "rechargeable-magnetic-cob-work-light",
    "shopify_status": "DRAFT",
@@ -309,8 +285,6 @@
     "new-arrivals"
    ],
    "price": "11.99",
-   "cost": 0.3,
-   "ship_est": 2.5,
    "blurb": "Gets the gunk out of window tracks, tile grout and sliding-door rails.",
    "features": [
     "Stiff, slim bristles fit narrow tracks and crevices",
@@ -324,7 +298,6 @@
     "Top 10"
    ],
    "photos": 3,
-   "source": "https://www.alibaba.com/product-detail/Lijie-Dead-Corners-Multifunctional-Brushes-Bathroom-1601427920769.html",
    "shopify_id": "gid://shopify/Product/9694817779801",
    "shopify_handle": "window-track-gap-cleaning-brush-3-pack",
    "shopify_status": "ARCHIVED",
@@ -345,8 +318,6 @@
     "new-arrivals"
    ],
    "price": "14.99",
-   "cost": 1.82,
-   "ship_est": 3.5,
    "blurb": "Protect outdoor spigots from freezing and bursting this winter.",
    "features": [
     "420D waterproof Oxford shell with thick cotton insulation",
@@ -360,7 +331,6 @@
     "Top 10"
    ],
    "photos": 4,
-   "source": "https://www.alibaba.com/product-detail/High-Quality-420D-Oxford-Water-Faucet_1601004496792.html",
    "shopify_id": "gid://shopify/Product/9694817943641",
    "shopify_handle": "insulated-outdoor-faucet-covers-2-pack",
    "shopify_status": "DRAFT",
