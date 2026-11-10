@@ -1,6 +1,6 @@
 // Desktop-only interactive floor plan controller. Loaded on demand by site.js.
-import { initHouse } from "./house-plan.js?v=11";
-import { productCard, emptyState } from "./site.js?v=11";
+import { initHouse } from "./house-plan.js?v=12";
+import { productCard, emptyState } from "./site.js?v=12";
 
 // Each spot lists the exact products it shows (site handles from data/coming-soon.json; published
 // Shopify products keep the same site handle). Future products can also opt in with a Shopify tag
@@ -8,7 +8,7 @@ import { productCard, emptyState } from "./site.js?v=11";
 const P = {
   cleaner: "interior-windshield-cleaner", pickup: "led-magnetic-pickup-tool", snowBrush: "extendable-snow-brush-ice-scraper",
   snowCover: "windshield-snow-cover", lickMat: "silicone-lick-mat", basin: "collapsible-camping-basin",
-  rugGrip: "rug-corner-grippers", workLight: "magnetic-cob-work-light", gapBrush: "window-track-gap-brush", faucet: "outdoor-faucet-covers-2-pack",
+  rugGrip: "rug-corner-grippers", workLight: "magnetic-cob-work-light", faucet: "outdoor-faucet-covers-2-pack",
 };
 export const HOTSPOT_META = {
   bed: { label: "Bed", products: [], blurb: "Bedding, frames, and bedroom comfort." },
@@ -16,12 +16,12 @@ export const HOTSPOT_META = {
   "dresser-his": { label: "His dresser", products: [], blurb: "Men's clothing and dresser essentials." },
   "dresser-hers": { label: "Her dresser", products: [], blurb: "Women's clothing and dresser essentials." },
   nightstand: { label: "Bedside table", products: [], blurb: "Bedside storage and lamps." },
-  sofa: { label: "Living room sofa", products: [P.rugGrip, P.gapBrush], blurb: "Living-room comfort and easy upkeep." },
+  sofa: { label: "Living room sofa", products: [P.rugGrip], blurb: "Living-room comfort." },
   rug: { label: "Living room rug", products: [P.rugGrip], blurb: "Keep area rugs flat and in place." },
-  curtains: { label: "Curtains & windows", products: [P.gapBrush], blurb: "Window treatments and window-track care." },
+  curtains: { label: "Curtains & windows", products: [], blurb: "Window treatments." },
   media: { label: "Media console", products: [], blurb: "Speakers, chargers, and media accessories." },
-  "kitchen-sink": { label: "Kitchen sink", products: [P.gapBrush, P.basin], blurb: "Sink care, scrub brushes, and dish washing." },
-  kitchen: { label: "Kitchen", products: [P.gapBrush, P.basin, P.lickMat], blurb: "Kitchen cleaning, housewares, and pet feeding." },
+  "kitchen-sink": { label: "Kitchen sink", products: [P.basin], blurb: "Dish washing." },
+  kitchen: { label: "Kitchen", products: [P.basin, P.lickMat], blurb: "Housewares and pet feeding." },
   "garage-storage": { label: "Garage storage", products: [P.snowBrush, P.cleaner, P.workLight, P.pickup], blurb: "Car-care and winter gear for the garage." },
   "garage-workstation": { label: "Garage workstation", products: [P.pickup, P.workLight], blurb: "Tools and garage work gear." },
   yard: { label: "Yard & outdoor faucets", products: [P.faucet], blurb: "Outdoor upkeep and winter faucet protection." },

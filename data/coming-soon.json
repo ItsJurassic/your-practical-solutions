@@ -1,5 +1,5 @@
 {
- "note": "Top 10 launch products. They are DRAFT in Shopify, so the live catalog hides them; the site shows them as Coming soon from this file. When a product is published (ACTIVE) the live catalog includes its handle and the site drops the Coming-soon card automatically. Matching uses shopify_handle. Photos live in images/products/<handle>-N.jpg and are the same files uploaded to Shopify.",
+ "note": "Draft products still unpublished in Shopify. The live catalog hides them; the site shows them as Coming soon from this file. When a product is published (ACTIVE) the live catalog includes its Shopify handle and the site drops the Coming-soon card. Matching uses shopify_handle. Photos live in images/products/<handle>-N.jpg and are the same files uploaded to Shopify. Archived products are omitted.",
  "products": [
   {
    "rank": 1,
@@ -10,15 +10,13 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "12.99",
+   "price": "16.99",
    "cost": 1.72,
    "ship_est": 3.5,
-   "blurb": "Reach the bottom corners of your windshield without contorting yourself.",
+   "blurb": "Reach the inside of your windshield and windows without contorting yourself.",
    "features": [
-    "Telescoping aluminum pole with a 180\u00b0 pivoting head reaches every corner of the glass",
-    "Washable, reusable microfiber pads lift haze, film and fog with no streaks",
-    "Comfortable foam grip; extra washable pads included",
-    "Works on cars, trucks, SUVs, RVs and home windows"
+    "Telescopic handle helps you clean the inside of windshields and windows",
+    "7 washable microfiber pads included \u2014 1 on the head plus 6 spares"
    ],
    "tags": [
     "Car & Garage",
@@ -46,10 +44,10 @@
    "ship_est": 2.5,
    "blurb": "Grab dropped screws, nuts and bolts from engine bays and under furniture.",
    "features": [
-    "Extends from about 7.5 in to 31.5 in to reach tight, deep spots",
-    "Strong magnet head holds up to 8 lb of hardware",
     "Built-in LED lights up dark engine bays and under-seat spots",
-    "Soft anti-slip handle with pocket clip"
+    "Strong magnet head holds up to 8 lb of hardware",
+    "Telescopes from about 7.5 in to about 31.3 in (19 cm to 79.5 cm)",
+    "Metal construction with a contoured grip"
    ],
    "tags": [
     "Car & Garage",
@@ -71,7 +69,7 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "27.99",
+   "price": "31.99",
    "cost": 15.92,
    "ship_est": 0,
    "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice and squeegee the glass.",
@@ -103,15 +101,16 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "21.99",
+   "price": "28.99",
    "cost": 2.93,
    "ship_est": 5.0,
    "blurb": "Skip the morning scrape. Lift the cover and drive.",
    "features": [
-    "Thick Oxford fabric blocks snow, ice and frost from the windshield",
-    "6 magnets plus elastic hooks hold it in place in wind",
-    "Mirror covers included; about 102 x 45 in fits most cars and SUVs",
-    "Doubles as a summer sunshade; folds into a storage pouch"
+    "4-layer cover (aluminum foil, cotton fabric, cotton, and nonwoven) blocks snow, ice, frost, and sun from the windshield",
+    "5 magnets help hold the cover in place in wind",
+    "About 62 x 46 in (61.8 x 46.4 in) cover body; fits most car and SUV windshields",
+    "Side-mirror covers with reflective stripes are included",
+    "Doubles as a summer sunshade"
    ],
    "tags": [
     "Winter",
@@ -134,15 +133,15 @@
     "pet-supplies",
     "new-arrivals"
    ],
-   "price": "18.99",
+   "price": "24.99",
    "cost": 1.72,
    "ship_est": 3.0,
    "blurb": "Calms anxious pets and slows down fast eaters.",
    "features": [
-    "Built-in water bowl, slow-feed zones and textured licking areas",
-    "Strong suction cups keep it on the floor, tub or wall",
-    "Food-grade silicone, dishwasher-safe and freezer-safe",
-    "Great for baths, grooming, nail trims and storms"
+    "4 textured zones for spreads, wet food, and kibble \u2014 about 7.9 x 5.9 in",
+    "Strong suction cups keep it on the floor, tub, or wall",
+    "Food-grade silicone; dishwasher-safe or rinse with warm water",
+    "Great for baths, grooming, nail trims, and storms"
    ],
    "tags": [
     "Pets & Outdoors",
@@ -164,15 +163,14 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "19.99",
+   "price": "23.99",
    "cost": 2.65,
    "ship_est": 5.0,
-   "blurb": "A full-size dish tub that folds down to 1.5 in thick.",
+   "blurb": "A 9 L (2.4 gal) wash basin for camp, RV, or home, with a drain plug so you can empty it without lifting.",
    "features": [
-    "About 9 L capacity for dishes, produce, laundry or ice and drinks",
-    "Collapses flat to roughly 1.5 in for RVs, campers and small kitchens",
-    "Sturdy PP rim with soft TPR walls and carry handles",
-    "Food-safe and easy to rinse clean"
+    "About 12 x 12 x 7.9 in when open; folds down to about 2.8 in for storage",
+    "Drain plug in the bottom for easy emptying",
+    "Side handles for carrying"
    ],
    "tags": [
     "Pets & Outdoors",
@@ -195,14 +193,13 @@
     "home-decor",
     "new-arrivals"
    ],
-   "price": "16.99",
+   "price": "19.99",
    "cost": 0.68,
    "ship_est": 2.5,
    "blurb": "Flatten curled rug corners and stop slipping for good.",
    "features": [
     "Triangle grippers hold rug corners flat on hard floors",
     "Reusable, washable sticky grip pad; no residue on floors",
-    "Thin (about 0.09 in) so they hide under the rug",
     "Set of 16, enough for multiple rugs or extra corners"
    ],
    "tags": [
@@ -213,7 +210,7 @@
    "photos": 3,
    "source": "https://www.alibaba.com/product-detail/Best-4-in-1-Anti-Curling-1600067263826.html",
    "shopify_id": "gid://shopify/Product/9694817157209",
-   "shopify_handle": "anti-curl-rug-corner-grippers-4-pack",
+   "shopify_handle": "anti-curl-rug-corner-grippers-16-piece-set",
    "shopify_status": "DRAFT"
   },
   {
@@ -225,7 +222,7 @@
     "garage-tools",
     "new-arrivals"
    ],
-   "price": "19.99",
+   "price": "24.99",
    "cost": 4.29,
    "ship_est": 4.0,
    "blurb": "Bright hands-free light for the garage, engine bay or campsite.",
@@ -250,36 +247,6 @@
   },
   {
    "rank": 9,
-   "handle": "window-track-gap-brush",
-   "title": "Window Track & Gap Cleaning Brush (3-Pack)",
-   "category": "Home",
-   "collections": [
-    "home-decor",
-    "new-arrivals"
-   ],
-   "price": "11.99",
-   "cost": 0.3,
-   "ship_est": 2.5,
-   "blurb": "Gets the gunk out of window tracks, tile grout and sliding-door rails.",
-   "features": [
-    "Stiff, slim bristles fit narrow tracks and crevices",
-    "Angled head reaches corners standard brushes miss",
-    "Hanging loop handle for easy storage",
-    "3 brushes for kitchen, bathroom and windows"
-   ],
-   "tags": [
-    "Home",
-    "Cleaning",
-    "Top 10"
-   ],
-   "photos": 3,
-   "source": "https://www.alibaba.com/product-detail/Lijie-Dead-Corners-Multifunctional-Brushes-Bathroom-1601427920769.html",
-   "shopify_id": "gid://shopify/Product/9694817779801",
-   "shopify_handle": "window-track-gap-cleaning-brush-3-pack",
-   "shopify_status": "DRAFT"
-  },
-  {
-   "rank": 10,
    "handle": "outdoor-faucet-covers-2-pack",
    "title": "Insulated Outdoor Faucet Covers (2-Pack)",
    "category": "Winter",
@@ -287,15 +254,13 @@
     "home-decor",
     "new-arrivals"
    ],
-   "price": "14.99",
+   "price": "19.99",
    "cost": 1.82,
    "ship_est": 3.5,
    "blurb": "Protect outdoor spigots from freezing and bursting this winter.",
    "features": [
-    "420D waterproof Oxford shell with thick cotton insulation",
-    "Drawstring and hook-and-loop strap seal it tight to the wall",
-    "About 7.1 x 10.6 in, fits most standard outdoor faucets",
-    "Reusable winter after winter; set of 2"
+    "Insulated outdoor faucet covers for garden hose bibs and standard outdoor faucets",
+    "Reusable; set of 2"
    ],
    "tags": [
     "Winter",
