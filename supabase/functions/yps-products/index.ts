@@ -152,12 +152,22 @@ Deno.serve(async (req) => {
   const sf = Deno.env.get("SHOPIFY_STOREFRONT_TOKEN");
   const admin = Deno.env.get("SHOPIFY_ADMIN_TOKEN");
   try {
-    const live = sf ? await fromGraphql("storefront", sf) : admin ? await fromGraphql("admin", admin) : await fromPublicJson();
+    // Active products stay on the storefront response when that token works.
+    // A password-page or 401 from storefront falls through to Admin, which can also see drafts.
+    let live;
+    if (sf) {
+      try { live = await fromGraphql("storefront", sf); }
+      catch (sfErr) { if (!admin) throw sfErr; live = await fromGraphql("admin", admin); }
+    } else if (admin) live = await fromGraphql("admin", admin);
+    else live = await fromPublicJson();
     // Append drafts after collection counts are computed from active products only.
     if (admin) {
       try {
         const have = new Set(live.products.map((p) => p.handle));
-        for (const d of await adminDrafts(admin)) if (!have.has(d.handle)) live.products.push(d);
+        const drafts = await adminDrafts(admin);
+        let added = 0;
+        for (const d of drafts) if (!have.has(d.handle)) { live.products.push(d); added++; }
+        if (added) live.source = `${live.source} + drafts`;
       } catch (draftErr) {
         if (!sf) throw draftErr; // storefront catalog still stands if the draft query fails
       }
@@ -174,8 +184,11 @@ Deno.serve(async (req) => {
     const err = e as Error & { code?: string };
     const { data: cached } = await db.from("yps_products_cache").select("fetched_at, payload").eq("id", 1).maybeSingle();
     const body = {
-      ok: false, reason: err.code || "error", message: err.message,
       ...(cached ? { ...cached.payload, ok: false, stale: true, cached_at: cached.fetched_at } : { product_count: 0, products: [], collections: [] }),
+      ok: false, reason: err.code || "error", message: err.message,
+      catalog_source: sf ? "storefront" : admin ? "admin" : "public products.json",
+      admin_token: admin ? "set" : "missing",
+      storefront_token: sf ? "set" : "missing",
     };
     mem = { at: Date.now() - TTL_MS + 60_000, body }; // retry the live source after ~1 minute
     return json(body, 200, 60);
