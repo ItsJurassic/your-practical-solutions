@@ -71,15 +71,15 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "38.99",
-   "cost": 2.26,
-   "ship_est": 6.0,
-   "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice.",
+   "price": "27.99",
+   "cost": 15.92,
+   "ship_est": 0,
+   "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice and squeegee the glass.",
    "features": [
-    "Extends from about 29 in to 42 in to reach roofs of SUVs and trucks",
-    "Brush head rotates 360\u00b0 and locks for pushing or pulling snow",
-    "Sharp chisel-edge ice scraper with crusher teeth on the other end",
-    "Foam grips stay comfortable in freezing weather"
+    "3-in-1 tool: 180\u00b0 pivoting brush head, squeegee, and ice scraper",
+    "Extends from 34.3 in to 42.1 in with an aluminum handle to reach SUV and truck roofs",
+    "Soft foam grip stays comfortable in freezing weather",
+    "Soft bristles and a wide brush head clear snow without scratching paint"
    ],
    "tags": [
     "Winter",
@@ -91,7 +91,8 @@
    "source": "https://www.alibaba.com/product-detail/3-in-1-Car-Ice-Scraper_1601076332793.html",
    "shopify_id": "gid://shopify/Product/9694816075865",
    "shopify_handle": "extendable-snow-brush-with-ice-scraper",
-   "shopify_status": "DRAFT"
+   "shopify_status": "DRAFT",
+   "shipping_note": "Ships from a U.S. warehouse in about 2\u20135 business days."
   },
   {
    "rank": 4,
