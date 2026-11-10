@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-10T23:29:39+00:00",
+  "generated_at": "2026-11-10T23:31:22+00:00",
   "live": false,
   "note": "Public catalog for the marketing site. Buy Now is on only when live is true. Internal cost and supplier fields are omitted on purpose.",
   "products": [
@@ -318,7 +318,7 @@
       "photos": 3,
       "shopify_id": "gid://shopify/Product/9694817779801",
       "shopify_handle": "window-track-gap-cleaning-brush-3-pack",
-      "shopify_status": "ARCHIVED",
+      "shopify_status": "DRAFT",
       "shipping": "Ships from China in about 5\u201312 business days.",
       "includes": [
         "3 window-track and gap cleaning brushes"
