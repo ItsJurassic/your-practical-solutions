@@ -96,7 +96,7 @@ h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -.01em; 
 .products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
 .product { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: inherit; transition: box-shadow .18s, transform .18s; }
 .product:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-.product .ph { aspect-ratio: 1/1; background: var(--soft); overflow: hidden; }
+.product .ph { flex: none; aspect-ratio: 1/1; background: var(--soft); overflow: hidden; }
 .product .ph img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
 .product:hover .ph img { transform: scale(1.04); }
 .product .pb { padding: 14px 16px 16px; display: grid; gap: 6px; }
@@ -110,6 +110,19 @@ h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -.01em; 
 .product-soon .blurb { margin: 0; font-size: .86rem; color: var(--muted); line-height: 1.45; }
 .product-soon .pb { grid-template-rows: auto auto 1fr auto auto; flex: 1; }
 .product-soon .soon-btn { justify-self: start; margin-top: 4px; background: var(--soft); color: var(--muted); border: 1px dashed #c9d0c7; pointer-events: none; }
+.product-soon .ph img { object-fit: contain; background: #fff; }
+.product-soon .soon-pill { display: none; }
+/* map side panel: compact horizontal cards with a full square thumbnail */
+.sheet-body .product { flex-direction: row; align-items: stretch; min-height: 132px; }
+.sheet-body .product .ph { width: 132px; height: 132px; aspect-ratio: 1/1; border-right: 1px solid var(--line); background: #fff; }
+.sheet-body .product .ph img { object-fit: contain; }
+.sheet-body .product:hover .ph img { transform: none; }
+.sheet-body .product .pb { flex: 1; min-width: 0; padding: 12px 14px; gap: 4px; align-content: start; grid-template-rows: none; }
+.sheet-body .product h3 { font-size: .93rem; }
+.sheet-body .product-soon .soon-badge { display: none; }
+.sheet-body .product-soon .soon-pill { display: inline-block; justify-self: start; background: var(--brand); color: #fff; font-size: .68rem; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; border-radius: 999px; }
+.sheet-body .product-soon .blurb { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: .82rem; }
+.sheet-body .product-soon .soon-btn { display: none; }
 
 .empty-state { grid-column: 1 / -1; text-align: center; padding: 56px 24px; border: 1px dashed #d5dad3; border-radius: var(--radius-lg); background: linear-gradient(180deg, #fff, var(--soft)); }
 .empty-state .ico { margin: 0 auto 16px; width: 56px; height: 56px; border-radius: 16px; }

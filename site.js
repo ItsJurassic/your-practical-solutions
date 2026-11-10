@@ -62,9 +62,11 @@ export function loadCatalog() {
     // Once a product is published, the live catalog lists its handle and its Coming-soon card is dropped.
     const soon = await fetchJson(`${BASE}data/coming-soon.json`, 8000);
     if (soon?.products?.length) {
-      const have = new Set((cat.products || []).map((p) => p.handle));
+      const bySh = new Map(soon.products.map((p) => [p.shopify_handle, p.handle]));
+      cat = { ...cat, products: (cat.products || []).map((p) => (bySh.has(p.handle) ? { ...p, site_handle: bySh.get(p.handle) } : p)) };
+      const have = new Set(cat.products.map((p) => p.handle));
       const extra = soon.products.filter((p) => !have.has(p.shopify_handle || p.handle)).map((p) => ({
-        title: p.title, handle: p.handle, url: null, coming_soon: true, rank: p.rank,
+        title: p.title, handle: p.handle, site_handle: p.handle, url: null, coming_soon: true, rank: p.rank,
         image: `${window.__ASSET_BASE__ || BASE}images/products/${p.handle}-1.jpg`, image_alt: p.title,
         price: p.price, price_max: p.price, currency: "USD", blurb: p.blurb || "",
         product_type: p.category || "", tags: p.tags || [], collections: p.collections || [],
@@ -88,7 +90,7 @@ export function productCard(p) {
   if (p.coming_soon) {
     return `<div class="product product-soon" aria-label="${esc(p.title)} — coming soon">
     <div class="ph"><span class="soon-badge">Coming soon</span><img src="${esc(p.image)}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="1000" height="1000"></div>
-    <div class="pb"><span class="ptype">${esc(p.product_type)}</span><h3>${esc(p.title)}</h3>${p.blurb ? `<p class="blurb">${esc(p.blurb)}</p>` : ""}<span class="price">${money(p.price, p.currency)}</span><span class="btn btn-sm soon-btn" aria-disabled="true">Coming soon</span></div>
+    <div class="pb"><span class="soon-pill">Coming soon</span><span class="ptype">${esc(p.product_type)}</span><h3>${esc(p.title)}</h3>${p.blurb ? `<p class="blurb">${esc(p.blurb)}</p>` : ""}<span class="price">${money(p.price, p.currency)}</span><span class="btn btn-sm soon-btn" aria-disabled="true">Coming soon</span></div>
   </div>`;
   }
   const price = p.price_max && Number(p.price_max) > Number(p.price) ? `From ${money(p.price, p.currency)}` : money(p.price, p.currency);
@@ -143,7 +145,7 @@ async function initHome() {
   const maybeLoad = () => {
     if (loaded || !mq.matches) return;
     loaded = true;
-    import("./app.js").then((m) => m.startHouse(cat)).catch((e) => console.warn("house failed", e));
+    import("./app.js?v=10").then((m) => m.startHouse(cat)).catch((e) => console.warn("house failed", e));
   };
   maybeLoad();
   mq.addEventListener?.("change", maybeLoad);
