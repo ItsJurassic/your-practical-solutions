@@ -1,0 +1,367 @@
+{
+  "generated_at": "2026-11-10T23:18:17+00:00",
+  "live": false,
+  "note": "Public catalog for the marketing site. Buy Now is on only when live is true. Internal cost and supplier fields are omitted on purpose.",
+  "products": [
+    {
+      "rank": 1,
+      "handle": "interior-windshield-cleaner",
+      "title": "Extendable Interior Windshield Cleaner",
+      "category": "Car & Garage",
+      "collections": [
+        "car-rv",
+        "new-arrivals"
+      ],
+      "price": "12.99",
+      "blurb": "Reach the bottom corners of your windshield without contorting yourself.",
+      "features": [
+        "Telescoping aluminum pole with a 180\u00b0 pivoting head reaches every corner of the glass",
+        "7 washable, reusable microfiber pads included \u2014 1 on the head plus 6 spares",
+        "Comfortable foam grip",
+        "Works on cars, trucks, SUVs, RVs and home windows"
+      ],
+      "tags": [
+        "Car & Garage",
+        "Winter",
+        "Car Cleaning",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694814994521",
+      "shopify_handle": "extendable-interior-windshield-cleaner",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "1 extendable windshield cleaner",
+        "7 washable microfiber pads (1 on the head plus 6 spares)"
+      ],
+      "variant_id": "47787492802649",
+      "sku": "YPS-T10-01",
+      "live": false,
+      "page_url": "products/interior-windshield-cleaner/"
+    },
+    {
+      "rank": 2,
+      "handle": "led-magnetic-pickup-tool",
+      "title": "Telescoping Magnetic Pickup Tool with LED Light",
+      "category": "Car & Garage",
+      "collections": [
+        "garage-tools",
+        "new-arrivals"
+      ],
+      "price": "14.99",
+      "blurb": "Grab dropped screws, nuts and bolts from engine bays and under furniture.",
+      "features": [
+        "Built-in LED lights up dark engine bays and under-seat spots",
+        "Strong magnet head holds up to 8 lb of hardware",
+        "Telescopes from about 7.5 in to about 31.3 in",
+        "Soft anti-slip handle with pocket clip"
+      ],
+      "tags": [
+        "Car & Garage",
+        "Tools",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694815879257",
+      "shopify_handle": "telescoping-magnetic-pickup-tool-with-led-light",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "1 telescoping magnetic pickup tool with LED light"
+      ],
+      "variant_id": "47787496636505",
+      "sku": "YPS-T10-02",
+      "live": false,
+      "page_url": "products/led-magnetic-pickup-tool/"
+    },
+    {
+      "rank": 3,
+      "handle": "extendable-snow-brush-ice-scraper",
+      "title": "Extendable Snow Brush with Ice Scraper",
+      "category": "Winter",
+      "collections": [
+        "car-rv",
+        "new-arrivals"
+      ],
+      "price": "27.99",
+      "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice and squeegee the glass.",
+      "features": [
+        "3-in-1 tool: 180\u00b0 pivoting brush head, squeegee, and ice scraper",
+        "Extends from 34.3 in to 42.1 in with an aluminum handle to reach SUV and truck roofs",
+        "Soft foam grip stays comfortable in freezing weather",
+        "Soft bristles and a wide brush head clear snow without scratching paint"
+      ],
+      "tags": [
+        "Winter",
+        "Car & Garage",
+        "Snow",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694816075865",
+      "shopify_handle": "extendable-snow-brush-with-ice-scraper",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from a U.S. warehouse in about 3\u20135 business days.",
+      "shipping_note": "Ships from a U.S. warehouse in about 3\u20135 business days.",
+      "includes": [
+        "1 extendable 3-in-1 snow brush (pivoting brush head, squeegee, and ice scraper)"
+      ],
+      "variant_id": "47787497816153",
+      "sku": "YPS-T10-03",
+      "live": false,
+      "page_url": "products/extendable-snow-brush-ice-scraper/"
+    },
+    {
+      "rank": 4,
+      "handle": "windshield-snow-cover",
+      "title": "Magnetic Windshield Snow & Ice Cover",
+      "category": "Winter",
+      "collections": [
+        "car-rv",
+        "new-arrivals"
+      ],
+      "price": "21.99",
+      "blurb": "Skip the morning scrape. Lift the cover and drive.",
+      "features": [
+        "4-layer cover (aluminum foil, cotton fabric, cotton, and nonwoven) blocks snow, ice, frost, and sun from the windshield",
+        "5 magnets help hold the cover in place in wind",
+        "About 62 x 46 in cover body; fits most car and SUV windshields",
+        "Side-mirror covers with reflective stripes are included",
+        "Doubles as a summer sunshade"
+      ],
+      "tags": [
+        "Winter",
+        "Car & Garage",
+        "Snow",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694816403545",
+      "shopify_handle": "magnetic-windshield-snow-ice-cover",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "1 magnetic windshield snow and ice cover",
+        "Side-mirror covers"
+      ],
+      "variant_id": "47787498635353",
+      "sku": "YPS-T10-04",
+      "live": false,
+      "page_url": "products/windshield-snow-cover/"
+    },
+    {
+      "rank": 5,
+      "handle": "silicone-lick-mat",
+      "title": "Silicone Lick Mat & Slow Feeder for Dogs and Cats",
+      "category": "Pets & Outdoors",
+      "collections": [
+        "pet-supplies",
+        "new-arrivals"
+      ],
+      "price": "18.99",
+      "blurb": "Calms anxious pets and slows down fast eaters.",
+      "features": [
+        "4 textured zones for spreads, wet food, and kibble \u2014 about 7.9 x 5.9 in",
+        "Strong suction cups keep it on the floor, tub, or wall",
+        "Food-grade silicone; dishwasher-safe or rinse with warm water",
+        "Great for baths, grooming, nail trims, and storms"
+      ],
+      "tags": [
+        "Pets & Outdoors",
+        "Pets",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694816763993",
+      "shopify_handle": "silicone-lick-mat-slow-feeder-for-dogs-and-cats",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "1 silicone lick mat and slow feeder"
+      ],
+      "variant_id": "47787499978841",
+      "sku": "YPS-T10-05",
+      "live": false,
+      "page_url": "products/silicone-lick-mat/"
+    },
+    {
+      "rank": 6,
+      "handle": "collapsible-camping-basin",
+      "title": "Collapsible Camping Wash Basin (9 L)",
+      "category": "Pets & Outdoors",
+      "collections": [
+        "car-rv",
+        "new-arrivals"
+      ],
+      "price": "19.99",
+      "blurb": "A full-size 9 L wash basin that folds down for camp, the RV, or a small kitchen.",
+      "features": [
+        "About 9 L (2.4 gal) for dishes, produce, laundry, or ice and drinks \u2014 at camp, in an RV, or at home",
+        "About 12 x 12 x 7.9 in when open; folds down to about 2.8 in for storage",
+        "Drain plug in the bottom for easy emptying",
+        "Side handles for carrying"
+      ],
+      "tags": [
+        "Pets & Outdoors",
+        "Camping",
+        "RV",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694816927833",
+      "shopify_handle": "collapsible-camping-wash-basin-9-l",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "1 collapsible 9 L wash basin"
+      ],
+      "variant_id": "47787501125721",
+      "sku": "YPS-T10-06",
+      "live": false,
+      "page_url": "products/collapsible-camping-basin/"
+    },
+    {
+      "rank": 7,
+      "handle": "rug-corner-grippers",
+      "title": "Anti-Curl Rug Corner Grippers (16-Piece Set)",
+      "category": "Home",
+      "collections": [
+        "home-decor",
+        "new-arrivals"
+      ],
+      "price": "16.99",
+      "blurb": "Flatten curled rug corners and stop slipping for good.",
+      "features": [
+        "Triangle grippers hold rug corners flat on hard floors",
+        "Reusable, washable sticky grip pad; no residue on floors",
+        "Thin (about 0.09 in) so they hide under the rug",
+        "Set of 16, enough for multiple rugs or extra corners"
+      ],
+      "tags": [
+        "Home",
+        "Rugs",
+        "Top 10"
+      ],
+      "photos": 3,
+      "shopify_id": "gid://shopify/Product/9694817157209",
+      "shopify_handle": "anti-curl-rug-corner-grippers-16-piece-set",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "16 triangle rug corner grippers"
+      ],
+      "variant_id": "47787501355097",
+      "sku": "YPS-T10-07",
+      "live": false,
+      "page_url": "products/rug-corner-grippers/"
+    },
+    {
+      "rank": 8,
+      "handle": "magnetic-cob-work-light",
+      "title": "Rechargeable Magnetic COB Work Light",
+      "category": "Car & Garage",
+      "collections": [
+        "garage-tools",
+        "new-arrivals"
+      ],
+      "price": "19.99",
+      "blurb": "Bright hands-free light for the garage, engine bay or campsite.",
+      "features": [
+        "Wide COB LED panel with 3 lighting modes",
+        "Magnetic base sticks to car bodies, toolboxes and steel shelves",
+        "Fold-out stand and hook for hanging or standing",
+        "Rechargeable built-in battery; water-resistant housing"
+      ],
+      "tags": [
+        "Car & Garage",
+        "Tools",
+        "Lighting",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694817517657",
+      "shopify_handle": "rechargeable-magnetic-cob-work-light",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from a U.S. warehouse in about 3\u20135 business days.",
+      "shipping_note": "Built-in lithium battery: some carriers and destinations restrict shipping.",
+      "includes": [
+        "1 rechargeable magnetic COB work light"
+      ],
+      "variant_id": "47787501715545",
+      "sku": "YPS-T10-08",
+      "live": false,
+      "page_url": "products/magnetic-cob-work-light/"
+    },
+    {
+      "rank": 9,
+      "handle": "window-track-gap-brush",
+      "title": "Window Track & Gap Cleaning Brush (3-Pack)",
+      "category": "Home",
+      "collections": [
+        "home-decor",
+        "new-arrivals"
+      ],
+      "price": "11.99",
+      "blurb": "Gets the gunk out of window tracks, tile grout and sliding-door rails.",
+      "features": [
+        "Stiff, slim bristles fit narrow tracks and crevices",
+        "Angled head reaches corners standard brushes miss",
+        "Hanging loop handle for easy storage",
+        "3 brushes for kitchen, bathroom and windows"
+      ],
+      "tags": [
+        "Home",
+        "Cleaning",
+        "Top 10"
+      ],
+      "photos": 3,
+      "shopify_id": "gid://shopify/Product/9694817779801",
+      "shopify_handle": "window-track-gap-cleaning-brush-3-pack",
+      "shopify_status": "ARCHIVED",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "3 window-track and gap cleaning brushes"
+      ],
+      "variant_id": "47787507449945",
+      "sku": "YPS-T10-09",
+      "live": false,
+      "page_url": "products/window-track-gap-brush/"
+    },
+    {
+      "rank": 10,
+      "handle": "outdoor-faucet-covers-2-pack",
+      "title": "Insulated Outdoor Faucet Covers (2-Pack)",
+      "category": "Winter",
+      "collections": [
+        "home-decor",
+        "new-arrivals"
+      ],
+      "price": "14.99",
+      "blurb": "Protect outdoor spigots from freezing and bursting this winter.",
+      "features": [
+        "420D waterproof Oxford shell with thick cotton insulation",
+        "Drawstring and hook-and-loop strap seal it tight to the wall",
+        "About 7.1 x 10.6 in, fits most standard outdoor faucets",
+        "Reusable winter after winter; set of 2"
+      ],
+      "tags": [
+        "Winter",
+        "Home",
+        "Top 10"
+      ],
+      "photos": 4,
+      "shopify_id": "gid://shopify/Product/9694817943641",
+      "shopify_handle": "insulated-outdoor-faucet-covers-2-pack",
+      "shopify_status": "DRAFT",
+      "shipping": "Ships from China in about 5\u201312 business days.",
+      "includes": [
+        "2 insulated outdoor faucet covers"
+      ],
+      "variant_id": "47787507581017",
+      "sku": "YPS-T10-10",
+      "live": false,
+      "page_url": "products/outdoor-faucet-covers-2-pack/"
+    }
+  ]
+}

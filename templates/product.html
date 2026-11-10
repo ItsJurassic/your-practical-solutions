@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{HEAD}}
+  <title>{{TITLE}} | Your Practical Solutions</title>
+  <meta name="description" content="{{DESC}}" />
+  <link rel="canonical" href="https://yourpracticalsolutions.com/products/{{HANDLE}}/" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:type" content="product" />
+  <meta property="og:site_name" content="Your Practical Solutions" />
+  <meta property="og:title" content="{{TITLE}} | Your Practical Solutions" />
+  <meta property="og:description" content="{{DESC}}" />
+  <meta property="og:url" content="https://yourpracticalsolutions.com/products/{{HANDLE}}/" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="product:price:amount" content="{{PRICE}}" />
+  <meta property="product:price:currency" content="USD" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{TITLE}}" />
+  <meta name="twitter:description" content="{{DESC}}" />
+  <meta name="twitter:image" content="{{OG_IMAGE}}" />
+  <script type="application/ld+json">
+{{JSONLD_PRODUCT}}
+  </script>
+</head>
+<body data-page="product" class="has-bottom-nav">
+{{HEADER}}
+  <main id="main">
+    <div class="wrap pdp">
+      <div class="crumbs"><a href="./">Home</a> / <a href="shop.html">Shop</a> / {{TITLE}}</div>
+      <div class="pdp-grid">
+        <div class="pdp-gallery">
+{{GALLERY}}
+        </div>
+        <div class="pdp-info">
+          <span class="ptype">{{CATEGORY}}</span>
+          <h1>{{TITLE}}</h1>
+          <p class="pdp-price">{{PRICE_FMT}}</p>
+          <p class="pdp-ship-flag">Free US shipping — included in the price</p>
+          <p class="pdp-blurb">{{BLURB}}</p>
+{{BUY}}
+          <section class="pdp-section">
+            <h2>About this product</h2>
+            <p>{{BLURB}}</p>
+            <ul class="pdp-features">
+{{FEATURES}}
+            </ul>
+          </section>
+          <section class="pdp-section">
+            <h2>What's included</h2>
+            <ul class="pdp-features">
+{{INCLUDES}}
+            </ul>
+          </section>
+          <section class="pdp-section">
+            <h2>Shipping</h2>
+            <p>{{SHIPPING}}</p>
+{{SHIP_NOTE}}
+            <p>Free US shipping is built into the price you see. See our <a href="shipping.html">shipping policy</a> for details.</p>
+          </section>
+          <section class="pdp-section">
+            <h2>Returns</h2>
+            <p>You can return unused items in original condition within 30 days of delivery. Read the full <a href="returns.html">return &amp; refund policy</a>, or email <a href="mailto:support@yourpracticalsolutions.com">support@yourpracticalsolutions.com</a>.</p>
+          </section>
+        </div>
+      </div>
+      <section class="pdp-related" aria-label="More products">
+        <div class="section-head">
+          <div>
+            <h2>You might also like</h2>
+            <p>More practical picks from the shop.</p>
+          </div>
+          <a class="btn btn-ghost btn-sm" href="shop.html">Shop all</a>
+        </div>
+        <div class="products">
+{{RELATED}}
+        </div>
+      </section>
+    </div>
+  </main>
+{{FOOTER}}
+{{BOTTOMNAV}}
+  <script type="module" src="site.js?v=14"></script>
+</body>
+</html>

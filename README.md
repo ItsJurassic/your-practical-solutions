@@ -6,7 +6,8 @@ Live: https://itsjurassic.github.io/your-practical-solutions/ (custom domain pla
 | Page | What it is |
 |---|---|
 | `/` (`index.html`) | Home. Desktop (≥900px) loads the interactive floor plan (`app.js` + `house-plan.js`); mobile never downloads it and gets a compact shop layout with a bottom nav. |
-| `/shop.html` | Every Shopify product from `products.json`, with category filters, search and sort. Each card links to the live Shopify product page. |
+| `/shop.html` | Every product, with category filters, search and sort. Each card opens its product page on this site. |
+| `/products/<handle>/` | Product listing: photo gallery, price, description, what's included, shipping time, returns, and a Buy Now button. |
 | `/shipping.html`, `/returns.html`, `/privacy.html`, `/terms.html` | Policy pages (templates — have them reviewed). Built from `content/legal/*.html` + `templates/legal.html`. |
 | `/admin/` | Team area: realtime **Team chat** (Supabase) and the **KPIs** dashboard (owner only). See `SHOPPIE_CHAT.md`. |
 
@@ -18,9 +19,9 @@ That edge function (`supabase/functions/yps-products`) reads the live store — 
 `https://xvdkyq-xg.myshopify.com/products.json` — caches it 5 min in memory and keeps the last good copy in
 `public.yps_products_cache`. Active products are unchanged. When the Admin token is set, DRAFT products are
 added with `coming_soon: true` and their live title, handle, price, and image. ARCHIVED products are omitted.
-`data/coming-soon.json` is only the fallback for local photos, blurbs, collections, and rank. If the live
+The browser reads the generated `data/catalog-public.json` (no cost or supplier fields) for local photos, blurbs, collections, rank, and product-page URLs. If the live
 source fails (e.g. the store password page → `ok:false, reason:"store_password"`), the site uses the baked
-`products.json` and that JSON fallback. `?refresh` forces a re-fetch.
+`products.json` and that public catalog. `?refresh` forces a re-fetch.
 
 ### Rebuild the baked snapshot (e.g. daily)
 
@@ -32,9 +33,19 @@ Manual equivalent:
 
 1. Refresh `data/shopify-snapshot.json` with the Admin GraphQL query documented in `scripts/build-products.py`.
 2. `python3 scripts/build-products.py`  → `products.json`
-3. `python3 scripts/build-pages.py`     → `index.html`, `shop.html` (from `templates/` + `partials/`), `sitemap.xml`
+3. `python3 scripts/build-pages.py`     → `index.html`, `shop.html`, `products/<handle>/index.html`, `data/catalog-public.json`, `sitemap.xml`
 
-Edit `templates/*.html` and `partials/*.html`, not the generated `index.html` / `shop.html`.
+Edit `templates/*.html`, `partials/*.html`, and `data/coming-soon.json`, not the generated HTML.
+
+### Turning on Buy Now
+
+Products are draft (and the Shopify store is password-protected) until Joe and Joey approve, so Buy Now stays off.
+
+1. In `data/coming-soon.json`, the top-level `"live"` flag is `false`. Every product inherits that unless it sets its own `"live"` value.
+2. After products are **published (ACTIVE)** in Shopify and the store password is removed, set `"live": true` (globally, or on individual products), then run `python3 scripts/build-pages.py` and push to `main`.
+3. When `live` is true, the button becomes **Buy Now** and goes to a Shopify cart permalink (`https://shop.yourpracticalsolutions.com/cart/<variantId>:1`). Until then it reads **Coming soon – notify me** and opens a mailto to support@yourpracticalsolutions.com.
+
+`data/coming-soon.json` also contains internal `cost`, `ship_est`, and supplier `source` fields. Those must never be shown on public pages. The site reads the generated, sanitized `data/catalog-public.json` instead. The source file is still in the repo (and currently deployed with the rest of the site), so those fields are still reachable if someone opens the JSON directly.
 
 ## Deploy
 

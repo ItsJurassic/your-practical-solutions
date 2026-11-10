@@ -58,36 +58,46 @@ export function loadCatalog() {
     else if (live?.stale && live.products?.length) { cat = live; source = "stale-cache"; }
     else { cat = baked || live || EMPTY; source = baked ? "baked" : "none"; }
     if (!cat.collections?.length && baked?.collections?.length) cat = { ...cat, collections: baked.collections };
-    // DRAFT products come from yps-products with coming_soon, live title, handle, price, and image.
-    // data/coming-soon.json is only the fallback for photos, blurb, collections, and rank.
-    // An ACTIVE product with the same handle drops the Coming soon card.
-    const soon = await fetchJson(`${BASE}data/coming-soon.json`, 8000);
+    // DRAFT products can also come from yps-products with coming_soon.
+    // Sanitized public catalog (no supplier cost/source) supplies local pages, approved prices,
+    // blurbs, collections, and rank. coming-soon.json is build input only.
+    // An ACTIVE product with the same handle drops the Coming soon card once live is flipped.
+    const soon = await fetchJson(`${BASE}data/catalog-public.json`, 8000);
     const locals = soon?.products || [];
     if (locals.length || (cat.products || []).some((p) => p.coming_soon)) {
       const bySh = new Map(locals.map((p) => [p.shopify_handle, p]));
       const asset = window.__ASSET_BASE__ || BASE;
       const localImage = (p) => `${asset}images/products/${p.handle}-1.jpg`;
+      const pageUrl = (p) => p.page_url || `products/${p.handle}/`;
       const products = (cat.products || []).map((p) => {
         const local = bySh.get(p.handle);
-        if (p.coming_soon) {
-          return {
-            ...p, url: null, coming_soon: true,
-            title: p.title, price: p.price, price_max: p.price_max ?? p.price,
-            image: p.image || (local ? localImage(local) : ""),
-            image_alt: p.image_alt || p.title,
-            site_handle: local?.handle || p.handle,
-            rank: local?.rank ?? p.rank,
-            blurb: p.blurb || local?.blurb || "",
-            product_type: p.product_type || local?.category || "",
-            tags: p.tags?.length ? p.tags : (local?.tags || []),
-            collections: p.collections?.length ? p.collections : (local?.collections || []),
-          };
-        }
-        return local ? { ...p, site_handle: local.handle } : p;
+        if (!local && !p.coming_soon) return p;
+        const live = !!(local && local.live);
+        const coming = !live && (p.coming_soon || !!local);
+        // Until Buy Now is on, prefer the approved site price over a stale Shopify draft price.
+        const price = (!live && local?.price != null) ? local.price : (p.price ?? local?.price);
+        return {
+          ...p,
+          url: local ? pageUrl(local) : (coming ? null : p.url),
+          coming_soon: coming,
+          live,
+          title: p.title || local?.title,
+          price,
+          price_max: (!live && local?.price != null) ? local.price : (p.price_max ?? price),
+          image: (local ? localImage(local) : "") || p.image || "",
+          image_alt: p.image_alt || p.title || local?.title,
+          site_handle: local?.handle || p.handle,
+          rank: local?.rank ?? p.rank,
+          blurb: local?.blurb || p.blurb || "",
+          product_type: p.product_type || local?.category || "",
+          tags: p.tags?.length ? p.tags : (local?.tags || []),
+          collections: p.collections?.length ? p.collections : (local?.collections || []),
+        };
       });
       const have = new Set(products.map((p) => p.handle));
       const fallback = locals.filter((p) => !have.has(p.shopify_handle || p.handle)).map((p) => ({
-        title: p.title, handle: p.handle, site_handle: p.handle, url: null, coming_soon: true, rank: p.rank,
+        title: p.title, handle: p.handle, site_handle: p.handle,
+        url: pageUrl(p), coming_soon: !p.live, live: !!p.live, rank: p.rank,
         image: localImage(p), image_alt: p.title,
         price: p.price, price_max: p.price, currency: "USD", blurb: p.blurb || "",
         product_type: p.category || "", tags: p.tags || [], collections: p.collections || [],
@@ -110,17 +120,27 @@ export function money(amount, currency = "USD") {
 
 const sized = (u, w) => (u ? u + (u.includes("?") ? "&" : "?") + "width=" + w : "");
 
+export function siteProductUrl(p) {
+  const h = p.site_handle || (p.url && String(p.url).startsWith("products/") ? null : p.handle);
+  if (p.url && !/^https?:/i.test(p.url)) return p.url;
+  if (p.site_handle || p.coming_soon || p.page_url) return p.page_url || `products/${p.site_handle || p.handle}/`;
+  if (h && !p.url) return `products/${h}/`;
+  return p.url || `products/${p.handle}/`;
+}
+
 export function productCard(p) {
-  if (p.coming_soon) {
-    return `<div class="product product-soon" aria-label="${esc(p.title)} — coming soon">
-    <div class="ph"><span class="soon-badge">Coming soon</span><img src="${esc(p.image)}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="1000" height="1000"></div>
-    <div class="pb"><span class="soon-pill">Coming soon</span><span class="ptype">${esc(p.product_type)}</span><h3>${esc(p.title)}</h3>${p.blurb ? `<p class="blurb">${esc(p.blurb)}</p>` : ""}<span class="price">${money(p.price, p.currency)}</span><span class="btn btn-sm soon-btn" aria-disabled="true">Coming soon</span></div>
-  </div>`;
-  }
+  const href = siteProductUrl(p);
+  const external = /^https?:/i.test(href);
+  const soon = !!p.coming_soon && !p.live;
   const price = p.price_max && Number(p.price_max) > Number(p.price) ? `From ${money(p.price, p.currency)}` : money(p.price, p.currency);
-  return `<a class="product" href="${esc(p.url)}" rel="noopener">
-    <div class="ph">${p.image ? `<img src="${esc(sized(p.image, 600))}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="600" height="600">` : ""}</div>
-    <div class="pb"><h3>${esc(p.title)}</h3><span class="price">${price}</span><span class="cta">View product →</span></div>
+  const imgSrc = p.image ? (p.image.startsWith("http") ? sized(p.image, 600) : p.image) : "";
+  const badge = soon ? `<span class="soon-badge">Coming soon</span>` : "";
+  const pill = soon ? `<span class="soon-pill">Coming soon</span>` : "";
+  const ptype = p.product_type ? `<span class="ptype">${esc(p.product_type)}</span>` : "";
+  const blurb = p.blurb ? `<p class="blurb">${esc(p.blurb)}</p>` : "";
+  return `<a class="product${soon ? " product-soon" : ""}" href="${esc(href)}"${external ? ' rel="noopener"' : ""}>
+    <div class="ph">${badge}${imgSrc ? `<img src="${esc(imgSrc)}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="1000" height="1000">` : ""}</div>
+    <div class="pb">${pill}${ptype}<h3>${esc(p.title)}</h3>${blurb}<span class="price">${price}</span><span class="cta">View product →</span></div>
   </a>`;
 }
 
@@ -169,7 +189,7 @@ async function initHome() {
   const maybeLoad = () => {
     if (loaded || !mq.matches) return;
     loaded = true;
-    import("./app.js?v=13").then((m) => m.startHouse(cat)).catch((e) => console.warn("house failed", e));
+    import("./app.js?v=14").then((m) => m.startHouse(cat)).catch((e) => console.warn("house failed", e));
   };
   maybeLoad();
   mq.addEventListener?.("change", maybeLoad);
@@ -225,8 +245,27 @@ async function initShop() {
   render();
 }
 
+function initProduct() {
+  const main = document.getElementById("pdp-main");
+  const thumbs = document.querySelectorAll(".pdp-thumb");
+  if (!main || !thumbs.length) return;
+  thumbs.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const src = btn.getAttribute("data-src");
+      if (!src) return;
+      main.src = src;
+      thumbs.forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+    });
+  });
+}
+
 wireShopLinks();
 const page = document.body.dataset.page;
 if (page === "home") initHome();
 if (page === "shop") initShop();
+if (page === "product") initProduct();
 export { CONFIG, collectionUrl };
