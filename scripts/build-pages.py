@@ -40,8 +40,9 @@ for slug, _ in LEGAL:
     body = re.sub(r"<!-- (title|desc): .*? -->\n?", "", src)
     toc = "".join(f'<li><a href="{slug}.html#{i}">{t}</a></li>' for i, t in re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', body))
     others = "".join(f'<a href="{s2}.html">{html.escape(t2)}</a>' for s2, t2 in LEGAL if s2 != slug)
+    lastmod = {"shipping": "2026-11-10", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-10"}[slug]
     ld = {"@context": "https://schema.org", "@type": "WebPage", "name": html.unescape(title), "url": f"{SITE}/{slug}.html",
-          "dateModified": "2026-11-09", "isPartOf": {"@id": f"{SITE}/#website"}, "publisher": {"@id": f"{SITE}/#org"}}
+          "dateModified": lastmod, "isPartOf": {"@id": f"{SITE}/#website"}, "publisher": {"@id": f"{SITE}/#org"}}
     t = (legal_t.replace("{{HEAD}}", P("head-common.html")).replace("{{HEADER}}", P("header.html"))
          .replace("{{FOOTER}}", P("footer.html")).replace("{{BOTTOMNAV}}", P("bottom-nav.html"))
          .replace("{{TITLE}}", title).replace("{{DESC}}", desc).replace("{{SLUG}}", f"{slug}.html")
@@ -49,7 +50,8 @@ for slug, _ in LEGAL:
          .replace("{{JSONLD_PAGE}}", json.dumps(ld, indent=2)))
     (ROOT / f"{slug}.html").write_text(t)
 today = datetime.date.today().isoformat()
-legal_urls = "".join(f"  <url><loc>{SITE}/{s}.html</loc><lastmod>2026-11-09</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>\n" for s, _ in LEGAL)
+legal_lastmod = {"shipping": "2026-11-10", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-10"}
+legal_urls = "".join(f"  <url><loc>{SITE}/{s}.html</loc><lastmod>{legal_lastmod[s]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>\n" for s, _ in LEGAL)
 (ROOT / "sitemap.xml").write_text(f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{SITE}/</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>

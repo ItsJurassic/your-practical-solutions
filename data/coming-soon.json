@@ -10,12 +10,12 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "26.99",
+   "price": "12.99",
    "cost": 1.72,
    "ship_est": 3.5,
    "blurb": "Reach the bottom corners of your windshield without contorting yourself.",
    "features": [
-    "Telescoping aluminum pole with a 180° pivoting head reaches every corner of the glass",
+    "Telescoping aluminum pole with a 180\u00b0 pivoting head reaches every corner of the glass",
     "Washable, reusable microfiber pads lift haze, film and fog with no streaks",
     "Comfortable foam grip; extra washable pads included",
     "Works on cars, trucks, SUVs, RVs and home windows"
@@ -41,7 +41,7 @@
     "garage-tools",
     "new-arrivals"
    ],
-   "price": "20.99",
+   "price": "14.99",
    "cost": 1.56,
    "ship_est": 2.5,
    "blurb": "Grab dropped screws, nuts and bolts from engine bays and under furniture.",
@@ -77,7 +77,7 @@
    "blurb": "Clear the whole roof and windshield in one pass, then chip off the ice.",
    "features": [
     "Extends from about 29 in to 42 in to reach roofs of SUVs and trucks",
-    "Brush head rotates 360° and locks for pushing or pulling snow",
+    "Brush head rotates 360\u00b0 and locks for pushing or pulling snow",
     "Sharp chisel-edge ice scraper with crusher teeth on the other end",
     "Foam grips stay comfortable in freezing weather"
    ],
@@ -102,7 +102,7 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "35.99",
+   "price": "21.99",
    "cost": 2.93,
    "ship_est": 5.0,
    "blurb": "Skip the morning scrape. Lift the cover and drive.",
@@ -133,7 +133,7 @@
     "pet-supplies",
     "new-arrivals"
    ],
-   "price": "15.99",
+   "price": "18.99",
    "cost": 1.72,
    "ship_est": 3.0,
    "blurb": "Calms anxious pets and slows down fast eaters.",
@@ -163,7 +163,7 @@
     "car-rv",
     "new-arrivals"
    ],
-   "price": "26.99",
+   "price": "19.99",
    "cost": 2.65,
    "ship_est": 5.0,
    "blurb": "A full-size dish tub that folds down to 1.5 in thick.",
@@ -188,13 +188,13 @@
   {
    "rank": 7,
    "handle": "rug-corner-grippers",
-   "title": "Anti-Curl Rug Corner Grippers (4-Pack)",
+   "title": "Anti-Curl Rug Corner Grippers (16-Piece Set)",
    "category": "Home",
    "collections": [
     "home-decor",
     "new-arrivals"
    ],
-   "price": "12.99",
+   "price": "16.99",
    "cost": 0.68,
    "ship_est": 2.5,
    "blurb": "Flatten curled rug corners and stop slipping for good.",
@@ -202,7 +202,7 @@
     "Triangle grippers hold rug corners flat on hard floors",
     "Reusable, washable sticky grip pad; no residue on floors",
     "Thin (about 0.09 in) so they hide under the rug",
-    "Set of 4, one for each corner"
+    "Set of 16, enough for multiple rugs or extra corners"
    ],
    "tags": [
     "Home",
@@ -224,7 +224,7 @@
     "garage-tools",
     "new-arrivals"
    ],
-   "price": "33.99",
+   "price": "19.99",
    "cost": 4.29,
    "ship_est": 4.0,
    "blurb": "Bright hands-free light for the garage, engine bay or campsite.",
