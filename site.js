@@ -58,6 +58,19 @@ export function loadCatalog() {
     else if (live?.stale && live.products?.length) { cat = live; source = "stale-cache"; }
     else { cat = baked || live || EMPTY; source = baked ? "baked" : "none"; }
     if (!cat.collections?.length && baked?.collections?.length) cat = { ...cat, collections: baked.collections };
+    // Products still in DRAFT on Shopify (data/coming-soon.json) show as "Coming soon" cards until they go live.
+    // Once a product is published, the live catalog lists its handle and its Coming-soon card is dropped.
+    const soon = await fetchJson(`${BASE}data/coming-soon.json`, 8000);
+    if (soon?.products?.length) {
+      const have = new Set((cat.products || []).map((p) => p.handle));
+      const extra = soon.products.filter((p) => !have.has(p.shopify_handle || p.handle)).map((p) => ({
+        title: p.title, handle: p.handle, url: null, coming_soon: true, rank: p.rank,
+        image: `${window.__ASSET_BASE__ || BASE}images/products/${p.handle}-1.jpg`, image_alt: p.title,
+        price: p.price, price_max: p.price, currency: "USD", blurb: p.blurb || "",
+        product_type: p.category || "", tags: p.tags || [], collections: p.collections || [],
+      }));
+      cat = { ...cat, products: [...(cat.products || []), ...extra] };
+    }
     window.__CATALOG_SOURCE__ = { source, liveOk: !!live?.ok, liveReason: live?.reason || null, count: cat.products?.length || 0 };
     return { ...EMPTY, ...cat };
   })();
@@ -72,6 +85,12 @@ export function money(amount, currency = "USD") {
 const sized = (u, w) => (u ? u + (u.includes("?") ? "&" : "?") + "width=" + w : "");
 
 export function productCard(p) {
+  if (p.coming_soon) {
+    return `<div class="product product-soon" aria-label="${esc(p.title)} — coming soon">
+    <div class="ph"><span class="soon-badge">Coming soon</span><img src="${esc(p.image)}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="1000" height="1000"></div>
+    <div class="pb"><span class="ptype">${esc(p.product_type)}</span><h3>${esc(p.title)}</h3>${p.blurb ? `<p class="blurb">${esc(p.blurb)}</p>` : ""}<span class="price">${money(p.price, p.currency)}</span><span class="btn btn-sm soon-btn" aria-disabled="true">Coming soon</span></div>
+  </div>`;
+  }
   const price = p.price_max && Number(p.price_max) > Number(p.price) ? `From ${money(p.price, p.currency)}` : money(p.price, p.currency);
   return `<a class="product" href="${esc(p.url)}" rel="noopener">
     <div class="ph">${p.image ? `<img src="${esc(sized(p.image, 600))}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="600" height="600">` : ""}</div>
