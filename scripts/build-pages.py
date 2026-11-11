@@ -97,7 +97,8 @@ def card_html(p, coming_soon=True):
     handle = p["handle"]
     href = product_href(handle)
     title = html.escape(p["title"])
-    img = f"images/products/{handle}-1.jpg?v=20261110"
+    imgs = product_images(p)
+    img = imgs[0] if imgs else f"images/products/{handle}-1.jpg?v=20261110"
     badge = '<span class="soon-badge">Coming soon</span>' if coming_soon else ""
     pill = '<span class="soon-pill">Coming soon</span>' if coming_soon else ""
     blurb = f'<p class="blurb">{html.escape(p.get("blurb") or "")}</p>' if p.get("blurb") else ""
@@ -111,23 +112,37 @@ def card_html(p, coming_soon=True):
         f'<span class="price">{money(p["price"])}</span><span class="cta">{cta}</span></div></a>'
     )
 
+def product_images(p):
+    """Local Top 10 photos or Shopify CDN images from the baked catalog."""
+    if p.get("images"):
+        return [u for u in p["images"] if u]
+    if p.get("image") and str(p["image"]).startswith(("http://", "https://")):
+        return [p["image"]]
+    n = int(p.get("photos") or 0)
+    if n:
+        handle = p.get("site_handle") or p["handle"]
+        return [f"images/products/{handle}-{i}.jpg?v=20261110" for i in range(1, n + 1)]
+    return []
+
 def gallery_html(p):
-    handle = p["handle"]
-    n = int(p.get("photos") or 1)
+    images = product_images(p)
     title = html.escape(p["title"])
-    first = f"images/products/{handle}-1.jpg?v=20261110"
+    if not images:
+        return '<div class="pdp-main-shot pdp-main-missing"><p>Photo coming soon</p></div>'
+    first = images[0]
     thumbs = []
-    for i in range(1, n + 1):
-        src = f"images/products/{handle}-{i}.jpg?v=20261110"
+    n = len(images)
+    for i, src in enumerate(images, 1):
         active = " is-active" if i == 1 else ""
         thumbs.append(
             f'<button type="button" class="pdp-thumb{active}" data-src="{html.escape(src)}" '
             f'aria-label="Photo {i} of {n}" aria-pressed="{"true" if i == 1 else "false"}">'
             f'<img src="{html.escape(src)}" alt="" width="160" height="160"></button>'
         )
+    thumbs_html = f'<div class="pdp-thumbs" role="group" aria-label="Product photos">{"".join(thumbs)}</div>' if n > 1 else ""
     return (
         f'<div class="pdp-main-shot"><img id="pdp-main" src="{html.escape(first)}" alt="{title}" width="1000" height="1000"></div>'
-        f'<div class="pdp-thumbs" role="group" aria-label="Product photos">{"".join(thumbs)}</div>'
+        f'{thumbs_html}'
     )
 
 def buy_html(p, live):
@@ -222,6 +237,107 @@ for p in soon_products:
     out = products_root / handle
     out.mkdir(parents=True, exist_ok=True)
     (out / "index.html").write_text(t)
+    built.append(p)
+
+# Published catalog pages from products.json. Top 10 handles are already built above.
+# Checkout on these pages stays Coming soon while coming-soon.json live is false.
+built_handles = {p["handle"] for p in built}
+baked_extras = []
+for raw in (cat.get("products") or []):
+    if raw["handle"] in built_handles:
+        continue
+    desc = (raw.get("description") or "").strip()
+    blurb = ""
+    if desc:
+        blurb = desc.split("\n")[0].strip()
+        if len(blurb) > 400:
+            blurb = blurb[:397].rsplit(" ", 1)[0] + "..."
+    if not blurb:
+        kind = (raw.get("product_type") or "everyday").lower()
+        blurb = f"A practical {kind} product from Your Practical Solutions."
+    baked_extras.append({
+        "handle": raw["handle"],
+        "title": raw["title"],
+        "price": raw["price"],
+        "blurb": blurb,
+        "category": raw.get("product_type") or "",
+        "features": [],
+        "includes": [],
+        "shipping": "Ships in about 5–12 business days.",
+        "image": raw.get("image"),
+        "images": raw.get("images") or ([raw["image"]] if raw.get("image") else []),
+        "sku": raw.get("sku") or "",
+        "shopify_handle": raw["handle"],
+        "photos": 0,
+        "live": False,
+    })
+
+related_pool = list(soon_products) + baked_extras
+for p in baked_extras:
+    live = is_live(p)
+    handle = p["handle"]
+    title = p["title"]
+    desc = (p.get("blurb") or title) + f" {money(p['price'])}. Reduced US shipping (half our cost)."
+    imgs = product_images(p)
+    og = imgs[0] if imgs else f"{SITE}/images/og-default.png"
+    if og and not str(og).startswith("http"):
+        og = f"{SITE}/{og.split('?')[0]}"
+    features = "".join(f"              <li>{html.escape(f)}</li>\n" for f in (p.get("features") or []))
+    includes = "".join(f"              <li>{html.escape(i)}</li>\n" for i in (p.get("includes") or []))
+    ship_note = ""
+    extra_note = p.get("shipping_note") or ""
+    shipping = p.get("shipping") or "Ships in about 5–12 business days."
+    if extra_note and extra_note != shipping:
+        ship_note = f"            <p>{html.escape(extra_note)}</p>\n"
+    same = [o for o in related_pool if o["handle"] != handle and (o.get("category") or o.get("product_type")) == (p.get("category") or p.get("product_type"))]
+    others = [o for o in related_pool if o["handle"] != handle and o not in same]
+    related = (same + others)[:4]
+    related_html = "\n        ".join(card_html(o, coming_soon=not is_live(o)) for o in related)
+    images = imgs or []
+    abs_images = [(i if str(i).startswith("http") else f"{SITE}/{str(i).split('?')[0]}") for i in images]
+    availability = "https://schema.org/InStock" if live else "https://schema.org/PreOrder"
+    offer_url = f"{SITE}/{product_href(handle)}"
+    ld = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": title,
+        "image": abs_images,
+        "description": p.get("blurb") or title,
+        "sku": p.get("sku") or "",
+        "brand": {"@type": "Brand", "name": "Your Practical Solutions"},
+        "offers": {
+            "@type": "Offer",
+            "url": offer_url,
+            "priceCurrency": "USD",
+            "price": str(p["price"]),
+            "availability": availability,
+            "seller": {"@id": f"{SITE}/#org"},
+        },
+        "isPartOf": {"@id": f"{SITE}/#website"},
+    }
+    page = apply_shell(
+        product_t,
+        TITLE=html.escape(title),
+        DESC=html.escape(desc),
+        HANDLE=handle,
+        OG_IMAGE=og,
+        PRICE=str(p["price"]),
+        PRICE_FMT=money(p["price"]),
+        CATEGORY=html.escape(p.get("category") or ""),
+        BLURB=html.escape(p.get("blurb") or ""),
+        GALLERY=gallery_html(p),
+        BUY=buy_html(p, live),
+        FEATURES=features.rstrip(),
+        INCLUDES=includes.rstrip(),
+        SHIPPING=html.escape(shipping),
+        SHIP_NOTE=ship_note,
+        RELATED=related_html,
+        JSONLD_PRODUCT=json.dumps(ld, indent=2),
+    )
+    page = page.replace('data-nav="shop"', 'data-nav="shop" aria-current="page"')
+    out = products_root / handle
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "index.html").write_text(page)
     built.append(p)
 
 # Sanitized catalog for the browser — no cost, ship_est, or supplier source.

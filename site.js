@@ -64,6 +64,37 @@ function uniqueHandles(...lists) {
   return out;
 }
 
+// Maps Shopify product_type / coming-soon category labels onto website collection handles.
+const TYPE_TO_COLLECTION = {
+  "Pet Supplies": "pet-supplies",
+  "Pets & Animals": "pet-supplies",
+  "Kitchen": "kitchen",
+  "Women's Clothing": "womens-clothing",
+  "Christmas": "christmas",
+  "Living Room": "living-room",
+  "Men's Clothing": "mens-clothing",
+  "Storage & Organization": "storage-organization",
+  "Tech Accessories": "tech-accessories",
+  "Bathroom": "bathroom",
+  "Outdoor & Camping": "outdoor-camping",
+  "Car & RV": "car-rv",
+  "Winter Essentials": "winter-essentials",
+  "Winter": "winter-essentials",
+  "Gardening": "gardening",
+  "Home Decor": "home-decor",
+  "Home & Decor": "home-decor",
+  "Garage & Tools": "garage-tools",
+};
+
+export function categoryHandlesFor(p) {
+  const fromType = TYPE_TO_COLLECTION[p?.product_type] || TYPE_TO_COLLECTION[p?.category] || null;
+  return uniqueHandles(p?.collections, fromType ? [fromType] : []);
+}
+
+export function inCategory(p, handle) {
+  return handle === "all" || categoryHandlesFor(p).includes(handle);
+}
+
 async function fetchJson(url, ms) {
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), ms);
@@ -101,8 +132,9 @@ export function loadCatalog() {
       const products = (cat.products || []).map((p) => {
         const local = bySh.get(p.handle);
         if (!local && !p.coming_soon) {
-          if (checkoutOpen) return p;
-          return { ...p, coming_soon: true, live: false, url: null };
+          const page = `products/${p.handle}/`;
+          if (checkoutOpen) return { ...p, page_url: p.page_url || page };
+          return { ...p, coming_soon: true, live: false, url: page, page_url: page };
         }
         const live = !!(local && local.live);
         const coming = !live && (p.coming_soon || !!local);
@@ -271,12 +303,12 @@ async function initShop() {
   if (shipEl) shipEl.checked = state.ship === "fast";
 
   const all = [{ handle: "all", name: "All products" }, ...cols];
-  const countFor = (h) => (h === "all" ? cat.products.length : cat.products.filter((p) => (p.collections || []).includes(h)).length);
+  const countFor = (h) => (h === "all" ? cat.products.length : cat.products.filter((p) => inCategory(p, h)).length);
   const labelOf = (c) => c.name || c.title || (c.handle === "all" ? "All products" : c.handle);
   if (list) list.innerHTML = all.map((c) => `<button type="button" data-c="${c.handle}"><b style="font-weight:inherit">${esc(labelOf(c))}</b><span>${countFor(c.handle)}</span></button>`).join("");
   if (chips) chips.innerHTML = all.map((c) => `<button class="chip" type="button" data-c="${c.handle}">${esc(c.handle === "all" ? "All" : labelOf(c))}</button>`).join("");
 
-  const inCategory = (p, handle) => handle === "all" || (p.collections || []).includes(handle);
+  // inCategory is the shared helper above (collections + product_type).
   const shipsFast = (p) => !!(p.ships_fast || /3\s*[–-]\s*5/.test(p.shipping || p.blurb || ""));
 
   const render = () => {
@@ -351,7 +383,7 @@ async function initCategory() {
   const grid = document.getElementById("category-grid");
   if (!handle || !grid) return;
   const [cat, catData] = await Promise.all([loadCatalog(), loadCategoryData(BASE)]);
-  const items = cat.products.filter((p) => (p.collections || []).includes(handle));
+  const items = cat.products.filter((p) => inCategory(p, handle));
   if (items.length) grid.innerHTML = items.map(productCard).join("");
   else grid.innerHTML = emptyState("New products coming soon", "We're stocking this collection now. Check back shortly, or browse the rest of the shop.");
   const info = findCategory(catData, handle);

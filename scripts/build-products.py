@@ -18,6 +18,24 @@ import json, datetime, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SHOP_LINK_BASE = "https://shop.yourpracticalsolutions.com"  # Shopify primary domain
+TYPE_TO_COLLECTION = {
+    "Pet Supplies": "pet-supplies",
+    "Kitchen": "kitchen",
+    "Women's Clothing": "womens-clothing",
+    "Christmas": "christmas",
+    "Living Room": "living-room",
+    "Men's Clothing": "mens-clothing",
+    "Storage & Organization": "storage-organization",
+    "Tech Accessories": "tech-accessories",
+    "Bathroom": "bathroom",
+    "Outdoor & Camping": "outdoor-camping",
+    "Car & RV": "car-rv",
+    "Winter Essentials": "winter-essentials",
+    "Gardening": "gardening",
+    "Home Decor": "home-decor",
+    "Garage & Tools": "garage-tools",
+}
+
 
 snap = json.loads((ROOT / "data/shopify-snapshot.json").read_text())["data"]
 products = []
@@ -26,6 +44,10 @@ for p in snap["products"]["nodes"]:
         continue
     img = ((p.get("featuredMedia") or {}).get("preview") or {}).get("image") or {}
     pr = p.get("priceRangeV2") or {}
+    cols = [c["handle"] for c in (p.get("collections") or {}).get("nodes", [])]
+    primary = TYPE_TO_COLLECTION.get(p.get("productType") or "")
+    if primary and primary not in cols:
+        cols.append(primary)
     products.append({
         "title": p["title"],
         "handle": p["handle"],
@@ -37,7 +59,13 @@ for p in snap["products"]["nodes"]:
         "currency": (pr.get("minVariantPrice") or {}).get("currencyCode", "USD"),
         "product_type": p.get("productType") or "",
         "tags": p.get("tags") or [],
-        "collections": [c["handle"] for c in (p.get("collections") or {}).get("nodes", [])],
+        "collections": cols,
+        "description": (p.get("description") or "").strip(),
+        "images": [
+            (((m.get("preview") or {}).get("image") or {}).get("url") or ((m.get("image") or {}).get("url")))
+            for m in ((p.get("media") or {}).get("nodes") or [])
+            if ((m.get("preview") or {}).get("image") or {}).get("url") or (m.get("image") or {}).get("url")
+        ] or ([img.get("url")] if img.get("url") else []),
     })
 
 collections = [
