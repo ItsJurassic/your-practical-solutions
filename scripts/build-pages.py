@@ -247,19 +247,19 @@ for raw in (cat.get("products") or []):
     if raw["handle"] in built_handles:
         continue
     desc = (raw.get("description") or "").strip()
-    blurb = ""
-    if desc:
-        blurb = desc.split("\n")[0].strip()
-        if len(blurb) > 400:
-            blurb = blurb[:397].rsplit(" ", 1)[0] + "..."
+    blurb = desc
     if not blurb:
         kind = (raw.get("product_type") or "everyday").lower()
         blurb = f"A practical {kind} product from Your Practical Solutions."
+    meta_blurb = blurb.split("\n")[0].strip()
+    if len(meta_blurb) > 300:
+        meta_blurb = meta_blurb[:297].rsplit(" ", 1)[0] + "..."
     baked_extras.append({
         "handle": raw["handle"],
         "title": raw["title"],
         "price": raw["price"],
         "blurb": blurb,
+        "meta_blurb": meta_blurb,
         "category": raw.get("product_type") or "",
         "features": [],
         "includes": [],
@@ -277,7 +277,7 @@ for p in baked_extras:
     live = is_live(p)
     handle = p["handle"]
     title = p["title"]
-    desc = (p.get("blurb") or title) + f" {money(p['price'])}. Reduced US shipping (half our cost)."
+    desc = (p.get("meta_blurb") or p.get("blurb") or title) + f" {money(p['price'])}. Reduced US shipping (half our cost)."
     imgs = product_images(p)
     og = imgs[0] if imgs else f"{SITE}/images/og-default.png"
     if og and not str(og).startswith("http"):
