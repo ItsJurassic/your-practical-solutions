@@ -386,6 +386,13 @@ th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: lef
   .tabs { width: 100%; }
   .tabs button { flex: 1; text-align: center; }
 }
+/* Desktop-only chat resize / pop-out controls. Hidden on mobile so the
+   existing small-screen layout is unchanged. */
+.chat-layout-btn { display: none; }
+.chat-handles { display: none; }
+.chat-head-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.chat-dock { display: contents; }
+
 @media (min-width: 900px) {
   /* Desktop: the sidebar can be taller than the chat. Stick the chat card
      below the header so it stays in view while the page scrolls, with the
@@ -400,7 +407,101 @@ th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: lef
     min-height: 600px;
     align-self: start;
     z-index: 4;
+    width: 100%;
   }
+  .chat-layout { align-items: stretch; }
+  .chat-side { align-self: start; }
+  .chat-dock { display: block; min-width: 0; min-height: 0; }
+  .chat-layout-btn { display: inline-flex; }
+  .chat-head { cursor: grab; touch-action: none; user-select: none; }
+  .chat-head .chat-head-actions,
+  .chat-head .chat-head-actions * { cursor: pointer; touch-action: auto; user-select: auto; }
+  .chat.is-dragging .chat-head { cursor: grabbing; }
+  .chat.is-resized,
+  .chat.is-floating { min-height: 0; }
+  .chat.is-oversized {
+    position: relative;
+    top: auto;
+  }
+  .chat.is-floating {
+    position: fixed;
+    top: auto;
+    align-self: auto;
+    z-index: 80;
+    max-width: none;
+    box-shadow: var(--shadow-lg);
+  }
+  .chat-layout.is-resized:not(.is-stacked):not(.is-floating) {
+    grid-template-columns: var(--chat-w, 1fr) minmax(0, 1fr);
+  }
+  .chat-layout.is-stacked:not(.is-floating) {
+    grid-template-columns: 1fr;
+  }
+  .chat-layout.is-floating .chat-dock {
+    min-height: var(--chat-slot-h, 0px);
+  }
+  .chat-handles {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 6;
+  }
+  .chat-handle {
+    position: absolute;
+    z-index: 6;
+    touch-action: none;
+    user-select: none;
+    pointer-events: auto;
+  }
+  .chat-handle-n { top: 0; left: 12px; right: 12px; height: 8px; cursor: ns-resize; display: none; }
+  .chat-handle-s { bottom: 0; left: 12px; right: 18px; height: 10px; cursor: ns-resize; }
+  .chat-handle-e { right: 0; top: 12px; bottom: 18px; width: 10px; cursor: ew-resize; }
+  .chat-handle-w { left: 0; top: 12px; bottom: 18px; width: 10px; cursor: ew-resize; }
+  .chat-handle-ne { top: 0; right: 0; width: 16px; height: 16px; cursor: nesw-resize; display: none; }
+  .chat-handle-nw { top: 0; left: 0; width: 16px; height: 16px; cursor: nwse-resize; display: none; }
+  .chat-handle-sw { bottom: 0; left: 0; width: 16px; height: 16px; cursor: nesw-resize; display: none; }
+  .chat-handle-se { right: 0; bottom: 0; width: 18px; height: 18px; cursor: nwse-resize; }
+  .chat.is-floating .chat-handle-n,
+  .chat.is-floating .chat-handle-ne,
+  .chat.is-floating .chat-handle-nw,
+  .chat.is-floating .chat-handle-sw { display: block; }
+  .chat-handle-s::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 4px;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    border-radius: 999px;
+    background: #c4cbc3;
+  }
+  .chat-handle-w::before,
+  .chat-handle-e::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 40px;
+    border-radius: 999px;
+    background: #c4cbc3;
+  }
+  .chat-handle-w::before { left: 3px; }
+  .chat-handle-e::before { right: 3px; }
+  .chat-handle-se::before {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 11px;
+    height: 11px;
+    background:
+      linear-gradient(135deg, transparent 55%, #8b948a 55% 70%, transparent 70%),
+      linear-gradient(135deg, transparent 30%, #8b948a 30% 45%, transparent 45%);
+  }
+  .chat-handle:hover::before { filter: brightness(.75); }
 }
 .m-only { display: none !important; }
 @media (max-width: 899px) { .m-only { display: inline-flex !important; } }

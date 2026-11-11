@@ -2,6 +2,7 @@ import { CONFIG } from "../config.js";
 import { supabase } from "./client.js?v=15";
 import { startChat, stopChat } from "./chat.js?v=16";
 import { THEMES, applyTheme, initTheme, setSiteTheme } from "../theme.js?v=2";
+import { initChatLayout, refreshChatLayout } from "./chat-layout.js?v=1";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");
@@ -31,6 +32,7 @@ function showDash(on) {
   if (recoveryView) recoveryView.hidden = !pendingRecovery;
   dashView.hidden = !on || pendingRecovery;
   logout.hidden = !on && !pendingRecovery;
+  if (on) refreshChatLayout();
 }
 
 function showRecovery() {
@@ -433,3 +435,5 @@ consumeEmailLink().finally(() => {
     }
   });
 });
+
+initChatLayout();
