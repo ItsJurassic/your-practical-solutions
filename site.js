@@ -90,14 +90,20 @@ export function loadCatalog() {
     // An ACTIVE product with the same handle drops the Coming soon card once live is flipped.
     const soon = await fetchJson(`${BASE}data/catalog-public.json`, 8000);
     const locals = soon?.products || [];
-    if (locals.length || (cat.products || []).some((p) => p.coming_soon)) {
+    // catalog-public.json top-level `live` is the Buy Now / checkout switch. Leave it false
+    // while the Shopify storefront is password-protected so cards are not sent to /password.
+    const checkoutOpen = soon == null ? true : !!soon.live;
+    if (locals.length || !checkoutOpen || (cat.products || []).some((p) => p.coming_soon)) {
       const bySh = new Map(locals.map((p) => [p.shopify_handle, p]));
       const asset = window.__ASSET_BASE__ || BASE;
       const localImage = (p) => `${asset}images/products/${p.handle}-1.jpg?v=20261110`;
       const pageUrl = (p) => p.page_url || `products/${p.handle}/`;
       const products = (cat.products || []).map((p) => {
         const local = bySh.get(p.handle);
-        if (!local && !p.coming_soon) return p;
+        if (!local && !p.coming_soon) {
+          if (checkoutOpen) return p;
+          return { ...p, coming_soon: true, live: false, url: null };
+        }
         const live = !!(local && local.live);
         const coming = !live && (p.coming_soon || !!local);
         // Until Buy Now is on, prefer the approved site price over a stale Shopify draft price.
@@ -147,16 +153,20 @@ export function money(amount, currency = "USD") {
 const sized = (u, w) => (u ? u + (u.includes("?") ? "&" : "?") + "width=" + w : "");
 
 export function siteProductUrl(p) {
-  const h = p.site_handle || (p.url && String(p.url).startsWith("products/") ? null : p.handle);
+  if (p.page_url) return p.page_url;
   if (p.url && !/^https?:/i.test(p.url)) return p.url;
-  if (p.site_handle || p.coming_soon || p.page_url) return p.page_url || `products/${p.site_handle || p.handle}/`;
-  if (h && !p.url) return `products/${h}/`;
-  return p.url || `products/${p.handle}/`;
+  // Local marketing pages (Top 10) stay clickable even while checkout is closed.
+  if (p.site_handle && (p.coming_soon || !p.live)) return `products/${p.site_handle}/`;
+  // No local page and checkout not open: do not send shoppers to the password wall or a 404.
+  if (p.coming_soon && !p.live) return "";
+  if (p.url) return p.url;
+  const h = p.site_handle || p.handle;
+  return h ? `products/${h}/` : "";
 }
 
 export function productCard(p) {
   const href = siteProductUrl(p);
-  const external = /^https?:/i.test(href);
+  const external = /^https?:/i.test(href || "");
   const soon = !!p.coming_soon && !p.live;
   const price = p.price_max && Number(p.price_max) > Number(p.price) ? `From ${money(p.price, p.currency)}` : money(p.price, p.currency);
   const imgSrc = p.image ? (p.image.startsWith("http") ? sized(p.image, 600) : p.image) : "";
@@ -164,10 +174,11 @@ export function productCard(p) {
   const pill = soon ? `<span class="soon-pill">Coming soon</span>` : "";
   const ptype = p.product_type ? `<span class="ptype">${esc(p.product_type)}</span>` : "";
   const blurb = p.blurb ? `<p class="blurb">${esc(p.blurb)}</p>` : "";
-  return `<a class="product${soon ? " product-soon" : ""}" href="${esc(href)}"${external ? ' rel="noopener"' : ""}>
-    <div class="ph">${badge}${imgSrc ? `<img src="${esc(imgSrc)}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="1000" height="1000">` : ""}</div>
-    <div class="pb">${pill}${ptype}<h3>${esc(p.title)}</h3>${blurb}<span class="price">${price}</span><span class="cta">View product →</span></div>
-  </a>`;
+  const cta = href ? "View product →" : "Coming soon";
+  const inner = `<div class="ph">${badge}${imgSrc ? `<img src="${esc(imgSrc)}" alt="${esc(p.image_alt || p.title)}" loading="lazy" width="1000" height="1000">` : ""}</div>
+    <div class="pb">${pill}${ptype}<h3>${esc(p.title)}</h3>${blurb}<span class="price">${price}</span><span class="cta">${cta}</span></div>`;
+  if (!href) return `<article class="product product-soon">${inner}</article>`;
+  return `<a class="product${soon ? " product-soon" : ""}" href="${esc(href)}"${external ? ' rel="noopener"' : ""}>${inner}</a>`;
 }
 
 export function emptyState(title = "New products coming soon", text = "We're stocking this collection now. Check back shortly, or browse the rest of the shop.", { href = "shop.html", label = "Browse all products", external = false } = {}) {

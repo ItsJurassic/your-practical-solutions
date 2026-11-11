@@ -132,6 +132,8 @@ body.nav-open { overflow: hidden; }
 .product .price { font-weight: 700; color: var(--ink); }
 .product .cta { font-size: .85rem; color: var(--brand); font-weight: 600; }
 .product-soon { cursor: default; }
+article.product-soon:hover { box-shadow: none; transform: none; }
+article.product-soon:hover .ph img { transform: none; }
 .product-soon .ph { position: relative; background: #fff; }
 .product-soon .soon-badge { position: absolute; top: 10px; left: 10px; z-index: 1; background: var(--brand); color: #fff; font-size: .72rem; font-weight: 700; letter-spacing: .02em; padding: 5px 10px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 .product-soon .ptype { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
