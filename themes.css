@@ -7,7 +7,7 @@ html[data-theme="christmas"] .theme-lights { display: flex; }
 html[data-theme="christmas"] .theme-lights span:nth-child(3n) { background: #e63946; color: #e63946; }
 html[data-theme="christmas"] .theme-lights span:nth-child(3n+1) { background: #2a9d5c; color: #2a9d5c; }
 html[data-theme="christmas"] .theme-lights span:nth-child(3n+2) { background: #ffd166; color: #ffd166; }
-html[data-theme="christmas"] .theme-lights span { animation: theme-twinkle 1.6s ease-in-out infinite; animation-delay: calc(var(--i) * .12s); }
+html.yd-play-motion[data-theme="christmas"] .theme-lights span { animation: theme-twinkle 1.6s ease-in-out 1; animation-delay: calc(var(--i) * .12s); }
 
 html[data-theme="christmas"] {
   --brand: #8b1e2d; --brand-700: #6d1522; --brand-50: #f8ecee;
@@ -124,7 +124,7 @@ html[data-theme] main { position: relative; }
 .yd-corner { position: absolute; top: 0; right: 0; width: 0; height: 0; z-index: 2; }
 .yd-web { position: absolute; top: 0; right: 0; width: 96px; height: 96px; color: rgba(255,255,255,.42); }
 .yd-web svg { width: 100%; height: 100%; }
-.yd-spider { position: absolute; top: -40px; right: 12px; width: 22px; height: 160px; color: rgba(255,255,255,.55); animation: yd-dangle 5.5s ease-in-out infinite alternate; }
+.yd-spider { position: absolute; top: -40px; right: 12px; width: 22px; height: 160px; color: rgba(255,255,255,.55); animation: yd-dangle 5.5s ease-in-out 1 alternate forwards; }
 .yd-spider svg { width: 100%; height: 100%; }
 
 /* Product card badges (Christmas bow, Valentine heart) */
@@ -146,10 +146,10 @@ html[data-theme="christmas"] .hero-card::after {
 .yd-sleigh svg { width: 100%; height: auto; }
 .yd-bat { width: 46px; }
 .yd-bat svg { width: 100%; height: auto; }
-.yd-bat1 { top: calc(var(--header-h) + 70px); animation: yd-fly-ltr 17s linear .5s infinite both; }
-.yd-bat2 { top: calc(var(--header-h) + 130px); width: 36px; animation: yd-fly-rtl 23s linear 5s infinite both; }
-.yd-bat3 { top: calc(var(--header-h) + 40px); width: 30px; animation: yd-fly-ltr 29s linear 10s infinite both; }
-.yd-cupid { top: calc(var(--header-h) + 60px); width: 78px; animation: yd-fly-rtl 24s linear 2s infinite both; }
+.yd-bat1 { top: calc(var(--header-h) + 70px); animation: yd-fly-ltr 5.1s linear .5s 1 both; }
+.yd-bat2 { top: calc(var(--header-h) + 130px); width: 36px; animation: yd-fly-rtl 8.3s linear 2s 1 both; }
+.yd-bat3 { top: calc(var(--header-h) + 40px); width: 30px; animation: yd-fly-ltr 8.7s linear 3.5s 1 both; }
+.yd-cupid { top: calc(var(--header-h) + 60px); width: 78px; animation: yd-fly-rtl 8.6s linear 2s 1 both; }
 .yd-cupid svg { width: 100%; height: auto; }
 .yd-bob { animation: yd-bob 1.3s ease-in-out infinite alternate; }
 .yd-bat .yd-wing { transform-origin: 0 0; animation: yd-flap .22s ease-in-out infinite alternate; }
@@ -161,17 +161,17 @@ html[data-theme="christmas"] .hero-card::after {
 .yd-rudolph { animation: yd-twinkle .9s ease-in-out infinite alternate; }
 
 /* Small looping accents */
-.yd-orn { animation: yd-twinkle 2.4s ease-in-out infinite alternate; animation-delay: var(--d, 0s); }
-.yd-star, .yd-starglow { transform-box: fill-box; transform-origin: center; animation: yd-pulse 2.6s ease-in-out infinite alternate; }
-.yd-pkface { fill: #ffd66b; filter: drop-shadow(0 0 3px #ffb02e); animation: yd-flicker 2.2s steps(1) infinite; animation-delay: var(--d, 0s); }
-.yd-pkglow { animation: yd-flickglow 2.2s ease-in-out infinite; animation-delay: var(--d, 0s); }
-.yd-balloon { animation: yd-bob 2.4s ease-in-out infinite alternate; }
-.yd-flag { transform-box: fill-box; transform-origin: 0 50%; animation: yd-wave 2.8s ease-in-out infinite alternate; }
-.yd-tw { transform-box: fill-box; transform-origin: center; animation: yd-pulse 1.8s ease-in-out infinite alternate; }
+.yd-orn { animation: yd-twinkle 2.4s ease-in-out 1 alternate; animation-delay: var(--d, 0s); }
+.yd-star, .yd-starglow { transform-box: fill-box; transform-origin: center; animation: yd-pulse 2.6s ease-in-out 1 alternate; }
+.yd-pkface { fill: #ffd66b; filter: drop-shadow(0 0 3px #ffb02e); animation: yd-flicker 2.2s steps(1) 1; animation-delay: var(--d, 0s); }
+.yd-pkglow { animation: yd-flickglow 2.2s ease-in-out 1; animation-delay: var(--d, 0s); }
+.yd-balloon { animation: yd-bob 2.4s ease-in-out 1 alternate; }
+.yd-flag { transform-box: fill-box; transform-origin: 0 50%; animation: yd-wave 2.8s ease-in-out 1 alternate forwards; }
+.yd-tw { transform-box: fill-box; transform-origin: center; animation: yd-pulse 1.8s ease-in-out 1 alternate; }
 .yd-tw2 { animation-delay: .6s; } .yd-tw3 { animation-delay: 1.2s; }
-.yd-second { animation: yd-spin 60s linear infinite; }
-.yd-bubble { animation: yd-bubble 2.2s ease-in infinite; animation-delay: var(--d, 0s); }
-.yd-clink { animation: yd-twinkle 1.4s ease-in-out infinite alternate; }
+.yd-second { animation: yd-spin 60s linear 1 forwards; }
+.yd-bubble { animation: yd-bubble 2.2s ease-in 1; animation-delay: var(--d, 0s); }
+.yd-clink { animation: yd-twinkle 1.4s ease-in-out 1 alternate; }
 .yd-nytext { font: italic 600 19px Fraunces, Georgia, serif; fill: #f2c84b; }
 .yd-nyyear { font: 700 22px Inter, system-ui, sans-serif; fill: #f8fafc; letter-spacing: .12em; }
 
@@ -183,15 +183,15 @@ html[data-theme="christmas"] .hero-card::after {
 }
 @keyframes yd-fly-ltr {
   0% { transform: translate3d(-80px, 30px, 0); }
-  10% { transform: translate3d(30vw, -20px, 0); }
-  20% { transform: translate3d(60vw, 24px, 0); }
-  30%, 100% { transform: translate3d(calc(100vw + 80px), -10px, 0); }
+  33% { transform: translate3d(30vw, -20px, 0); }
+  67% { transform: translate3d(60vw, 24px, 0); }
+  100% { transform: translate3d(calc(100vw + 80px), -10px, 0); }
 }
 @keyframes yd-fly-rtl {
   0% { transform: translate3d(calc(100vw + 90px), 10px, 0); }
-  12% { transform: translate3d(66vw, -24px, 0); }
-  24% { transform: translate3d(33vw, 18px, 0); }
-  36%, 100% { transform: translate3d(-120px, -12px, 0); }
+  33% { transform: translate3d(66vw, -24px, 0); }
+  67% { transform: translate3d(33vw, 18px, 0); }
+  100% { transform: translate3d(-120px, -12px, 0); }
 }
 @keyframes yd-bob { from { transform: translateY(-3px); } to { transform: translateY(3px); } }
 @keyframes yd-flap { from { transform: scaleY(1); } to { transform: scaleY(.5); } }
@@ -205,6 +205,11 @@ html[data-theme="christmas"] .hero-card::after {
 @keyframes yd-bubble { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: .9; } 100% { transform: translateY(-22px); opacity: 0; } }
 @keyframes yd-dangle { from { transform: translateY(0) rotate(1deg); } to { transform: translateY(46px) rotate(-1deg); } }
 
+
+/* Motion only on a fresh open or reload (html.yd-play-motion). Static art stays. */
+html:not(.yd-play-motion) .theme-lights span,
+html:not(.yd-play-motion) [data-decor],
+html:not(.yd-play-motion) [data-decor] * { animation: none !important; }
 /* Pause while the tab is hidden */
 html.yd-paused [data-decor], html.yd-paused [data-decor] *, html.yd-paused .product::after { animation-play-state: paused !important; }
 

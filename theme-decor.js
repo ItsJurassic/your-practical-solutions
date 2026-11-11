@@ -5,7 +5,8 @@
 const DECOR_ATTR = "data-decor";
 let current = null;
 
-const SLEIGH_SESSION_KEY = "yps-sleigh-played";
+const MOTION_SESSION_KEY = "yps-decor-motion-played";
+const LEGACY_SLEIGH_KEY = "yps-sleigh-played";
 
 function navigationType() {
   try {
@@ -16,12 +17,13 @@ function navigationType() {
   }
 }
 
-/* Fly the sleigh only on a fresh visit (first page of this tab/session, or
-   a different-origin referrer) or an explicit reload — not on in-site clicks. */
-function shouldPlaySleigh() {
+/* Moving decorations (fliers, flickers, canvas particles, etc.) play only on a
+   fresh visit — first page of this tab/session, or a different-origin referrer —
+   or an explicit reload. They do not replay on in-site clicks. */
+function shouldPlayMotion() {
   if (navigationType() === "reload") return true;
   try {
-    return !sessionStorage.getItem(SLEIGH_SESSION_KEY);
+    return !sessionStorage.getItem(MOTION_SESSION_KEY) && !sessionStorage.getItem(LEGACY_SLEIGH_KEY);
   } catch {
     try {
       if (!document.referrer) return true;
@@ -32,9 +34,15 @@ function shouldPlaySleigh() {
   }
 }
 
-function markSleighPlayed() {
-  try { sessionStorage.setItem(SLEIGH_SESSION_KEY, "1"); } catch { /* private mode */ }
+function markMotionPlayed() {
+  try { sessionStorage.setItem(MOTION_SESSION_KEY, "1"); } catch { /* private mode */ }
 }
+
+export const PLAY_MOTION = (() => {
+  const play = shouldPlayMotion();
+  if (play) markMotionPlayed();
+  return play;
+})();
 
 
 const isAdmin = () => /\/admin(\/|$)/.test(location.pathname);
@@ -317,11 +325,7 @@ const SCENES = {
     hero: () => svg("0 0 210 162", `${gifts(4, 98, 0.78)}${tree(76, 0, 1)}`),
     footL: () => svg("0 0 92 64", gifts(2, 2, 1)),
     footR: () => svg("0 0 124 162", tree(2, 0, 1)),
-    fliers: () => {
-      if (!shouldPlaySleigh()) return "";
-      markSleighPlayed();
-      return `<div class="yd-flier yd-sleigh">${sleigh()}</div>`;
-    },
+    fliers: () => `<div class="yd-flier yd-sleigh">${sleigh()}</div>`,
     badge: "bow",
   },
   halloween: {
@@ -373,6 +377,7 @@ function el(html, parent, cls) {
 export function clearDecor() {
   document.querySelectorAll(`[${DECOR_ATTR}]`).forEach((n) => n.remove());
   document.documentElement.style.removeProperty("--yd-badge");
+  document.documentElement.classList.remove("yd-play-motion");
   current = null;
 }
 
@@ -383,9 +388,10 @@ export function renderDecor(theme) {
   const cfg = SCENES[theme];
   if (!cfg) return;
   current = theme;
+  if (PLAY_MOTION) document.documentElement.classList.add("yd-play-motion");
 
   const layer = el(DEFS, document.body, "yd-layer");
-  if (cfg.fliers) layer.insertAdjacentHTML("beforeend", cfg.fliers());
+  if (cfg.fliers && PLAY_MOTION) layer.insertAdjacentHTML("beforeend", cfg.fliers());
 
   const header = document.querySelector(".site-header");
   if (header && cfg.strip) {

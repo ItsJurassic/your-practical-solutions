@@ -1,6 +1,6 @@
 import { CONFIG } from "./config.js";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-import { renderDecor } from "./theme-decor.js?v=2";
+import { renderDecor, PLAY_MOTION } from "./theme-decor.js?v=3";
 
 export const THEME_STORAGE_KEY = "yps-theme";
 export const THEMES = {
@@ -81,7 +81,7 @@ export async function setSiteTheme(client, name) {
 }
 
 /* ---------- lightweight canvas effects (pointer-events: none) ---------- */
-let fx = { raf: 0, canvas: null, ctx: null, theme: "default", particles: [], bursts: [], t: 0, last: 0 };
+let fx = { raf: 0, canvas: null, ctx: null, theme: "default", particles: [], bursts: [], t: 0, last: 0, allowTick: false, burstsLeft: 0 };
 
 function ensureLayer() {
   let layer = document.getElementById("theme-fx");
@@ -190,7 +190,7 @@ function drawHeart(ctx, x, y, s, rot) {
 }
 
 function tick(ts) {
-  if (!fx.ctx || fx.theme === "default" || reducedMotion() || document.hidden) {
+  if (!fx.allowTick || !fx.ctx || fx.theme === "default" || reducedMotion() || document.hidden) {
     fx.raf = 0;
     return;
   }
@@ -206,15 +206,13 @@ function tick(ts) {
       if (p.k === "heart") {
         p.y -= p.s * dt * 0.04;
         p.x += Math.sin((fx.t + p.x) / 700) * p.drift;
-        if (p.y < -20) { p.y = h + 20; p.x = Math.random() * w; }
+        if (p.y < -20) p.dead = true;
         ctx.fillStyle = `rgba(196,59,92,${p.a})`;
         drawHeart(ctx, p.x, p.y, p.r, p.rot);
       } else {
         p.y += p.s * dt * 0.05;
         p.x += p.drift + Math.sin((fx.t / 400) + p.y / 40) * 0.15;
-        if (p.y > h + 8) { p.y = -8; p.x = Math.random() * w; }
-        if (p.x < -8) p.x = w + 8;
-        if (p.x > w + 8) p.x = -8;
+        if (p.y > h + 8) p.dead = true;
         if (p.k === "conf") {
           p.rot += p.spin * dt;
           ctx.save();
@@ -243,11 +241,13 @@ function tick(ts) {
         }
       }
     }
+    fx.particles = fx.particles.filter((p) => !p.dead);
   }
 
   if (fx.theme === "new-years" || fx.theme === "fourth-of-july") {
-    if (fx.t >= fx.nextBurst) {
+    if (fx.burstsLeft > 0 && fx.t >= fx.nextBurst) {
       spawnBurst(40 + Math.random() * (w - 80), 40 + Math.random() * (h * 0.45), fx.palette);
+      fx.burstsLeft -= 1;
       fx.nextBurst = fx.t + 700 + Math.random() * 1100;
     }
     fx.bursts = fx.bursts.filter((b) => {
@@ -269,7 +269,16 @@ function tick(ts) {
     });
   }
 
+  if (fxFinished()) {
+    stopFx();
+    return;
+  }
   fx.raf = requestAnimationFrame(tick);
+}
+
+function fxFinished() {
+  const waiting = (fx.theme === "new-years" || fx.theme === "fourth-of-july") && fx.burstsLeft > 0;
+  return !fx.particles.length && !fx.bursts.length && !waiting;
 }
 
 function stopFx() {
@@ -283,9 +292,11 @@ function startFx(theme) {
   ensureLayer();
   fx.theme = theme;
   sizeCanvas();
-  seed(theme);
   stopFx();
-  if (theme === "default" || reducedMotion()) return;
+  fx.allowTick = Boolean(PLAY_MOTION && theme !== "default" && !reducedMotion());
+  if (!fx.allowTick) return;
+  seed(theme);
+  fx.burstsLeft = (theme === "new-years" || theme === "fourth-of-july") ? 5 : 0;
   fx.last = performance.now();
   fx.raf = requestAnimationFrame(tick);
 }
@@ -296,11 +307,10 @@ function watchResize() {
   sized = true;
   window.addEventListener("resize", () => {
     sizeCanvas();
-    if (fx.theme !== "default") seed(fx.theme);
   }, { passive: true });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stopFx();
-    else if (fx.theme !== "default" && !reducedMotion()) {
+    else if (fx.allowTick && fx.theme !== "default" && !reducedMotion() && !fxFinished()) {
       fx.last = performance.now();
       fx.raf = requestAnimationFrame(tick);
     }
