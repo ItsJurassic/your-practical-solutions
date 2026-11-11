@@ -83,11 +83,13 @@ for slug, _ in LEGAL:
     body = re.sub(r"<!-- (title|desc): .*? -->\n?", "", src)
     toc = "".join(f'<li><a href="{slug}.html#{i}">{t}</a></li>' for i, t in re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', body))
     others = "".join(f'<a href="{s2}.html">{html.escape(t2)}</a>' for s2, t2 in LEGAL if s2 != slug)
-    lastmod = {"shipping": "2026-11-10", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-10"}[slug]
+    lastmod = {"shipping": "2026-11-11", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-11"}[slug]
     ld = {"@context": "https://schema.org", "@type": "WebPage", "name": html.unescape(title), "url": f"{SITE}/{slug}.html",
           "dateModified": lastmod, "isPartOf": {"@id": f"{SITE}/#website"}, "publisher": {"@id": f"{SITE}/#org"}}
+    lastmod_human = {"shipping": "November 11, 2026", "returns": "November 9, 2026", "privacy": "November 9, 2026", "terms": "November 11, 2026"}[slug]
     t = apply_shell(legal_t, TITLE=title, DESC=desc, SLUG=f"{slug}.html", TOC=toc, OTHERS=others,
-                    BODY=body.strip(), JSONLD_PAGE=json.dumps(ld, indent=2))
+                    BODY=body.strip(), JSONLD_PAGE=json.dumps(ld, indent=2),
+                    LASTMOD=lastmod, LASTMOD_HUMAN=lastmod_human)
     (ROOT / f"{slug}.html").write_text(t)
 
 # ---------- product pages ----------
@@ -134,13 +136,13 @@ def buy_html(p, live):
         href = f"{SHOP}/cart/{p['variant_id']}:1"
         return (
             f'<a class="btn btn-primary btn-block pdp-buy" href="{html.escape(href)}" rel="noopener">Buy Now</a>\n'
-            f'          <p class="muted pdp-buy-note">Secure checkout on Shopify. Free US shipping is included in the price.</p>'
+            f'          <p class="muted pdp-buy-note">Secure checkout on Shopify. You pay a reduced shipping rate (half our cost) at checkout.</p>'
         )
     if live:
         href = f"{SHOP}/products/{p.get('shopify_handle') or p['handle']}"
         return (
             f'<a class="btn btn-primary btn-block pdp-buy" href="{html.escape(href)}" rel="noopener">Buy Now</a>\n'
-            f'          <p class="muted pdp-buy-note">Secure checkout on Shopify. Free US shipping is included in the price.</p>'
+            f'          <p class="muted pdp-buy-note">Secure checkout on Shopify. You pay a reduced shipping rate (half our cost) at checkout.</p>'
         )
     subject = quote(f"Notify me when {title} is available")
     body = quote(f"Hi, please email me when {title} is available to purchase.\n")
@@ -165,7 +167,7 @@ for p in soon_products:
     live = is_live(p)
     handle = p["handle"]
     title = p["title"]
-    desc = (p.get("blurb") or title) + f" {money(p['price'])}. Free US shipping."
+    desc = (p.get("blurb") or title) + f" {money(p['price'])}. Reduced US shipping (half our cost)."
     og = f"{SITE}/images/products/{handle}-1.jpg"
     features = "".join(f"              <li>{html.escape(f)}</li>\n" for f in (p.get("features") or []))
     includes = "".join(f"              <li>{html.escape(i)}</li>\n" for i in (p.get("includes") or []))
@@ -194,11 +196,6 @@ for p in soon_products:
             "price": str(p["price"]),
             "availability": availability,
             "seller": {"@id": f"{SITE}/#org"},
-            "shippingDetails": {
-                "@type": "OfferShippingDetails",
-                "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "USD"},
-                "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
-            },
         },
         "isPartOf": {"@id": f"{SITE}/#website"},
     }
@@ -282,7 +279,7 @@ for c in cat_entries:
     built_cats.append(c)
 
 today = datetime.date.today().isoformat()
-legal_lastmod = {"shipping": "2026-11-10", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-10"}
+legal_lastmod = {"shipping": "2026-11-11", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-11"}
 legal_urls = "".join(f"  <url><loc>{SITE}/{s}.html</loc><lastmod>{legal_lastmod[s]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>\n" for s, _ in LEGAL)
 product_urls = "".join(
     f"  <url><loc>{SITE}/{product_href(p['handle'])}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>\n"
