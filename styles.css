@@ -386,6 +386,13 @@ th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: lef
   .tabs { width: 100%; }
   .tabs button { flex: 1; text-align: center; }
 }
+@media (min-width: 900px) {
+  /* Desktop: fill most of the viewport so more messages are visible and the
+     composer stays on screen without scrolling the page. Mobile rules above are unchanged. */
+  .dash { margin-top: 10px; margin-bottom: 10px; }
+  .tabs { margin-bottom: 10px; }
+  .chat { height: calc(100vh - var(--header-h) - 84px); min-height: 520px; }
+}
 .m-only { display: none !important; }
 @media (max-width: 899px) { .m-only { display: inline-flex !important; } }
 .shop-layout > *, .footer-grid > *, .hero-grid > *, .split > * { min-width: 0; }
