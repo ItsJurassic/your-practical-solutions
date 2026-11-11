@@ -1,6 +1,6 @@
 import { CONFIG } from "./config.js";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-import { renderDecor } from "./theme-decor.js?v=1";
+import { renderDecor } from "./theme-decor.js?v=2";
 
 export const THEME_STORAGE_KEY = "yps-theme";
 export const THEMES = {

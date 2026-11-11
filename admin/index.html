@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=16" />
-  <link rel="stylesheet" href="themes.css?v=2" />
+  <link rel="stylesheet" href="themes.css?v=3" />
   <title>Team | Your Practical Solutions</title>
   <meta name="robots" content="noindex,nofollow" />
 </head>
@@ -48,9 +48,9 @@
     <section class="login" id="login-view">
       <h1>Team sign in</h1>
       <p class="lede">Sign in with your team email (owners and admins use the address they were invited with). Prefer the magic link — we never set a password for you.</p>
-      <form id="login-form">
-        <label>Email <input name="email" type="email" required value="josephcaldwell12321@gmail.com" autocomplete="username" /></label>
-        <label>Password <input name="password" type="password" autocomplete="current-password" /></label>
+      <form id="login-form" autocomplete="off">
+        <label>Email <input name="email" type="email" required autocomplete="off" /></label>
+        <label>Password <input name="password" type="password" autocomplete="new-password" /></label>
         <button class="btn btn-primary btn-block" type="submit">Sign in</button>
         <button class="btn btn-ghost btn-block" id="magic" type="button" style="margin-top:8px">Email me a sign-in link</button>
         <button class="btn btn-ghost btn-block" id="reset" type="button" style="margin-top:8px">Forgot password</button>

@@ -142,7 +142,7 @@ html[data-theme="christmas"] .hero-card::after {
 
 /* Fliers */
 .yd-flier { position: absolute; left: 0; will-change: transform; }
-.yd-sleigh { top: calc(var(--header-h) + 54px); width: 300px; animation: yd-fly-sleigh 26s linear 1.5s infinite both; }
+.yd-sleigh { top: calc(var(--header-h) + 54px); width: 300px; animation: yd-fly-sleigh 9.5s linear 1.5s 1 both; }
 .yd-sleigh svg { width: 100%; height: auto; }
 .yd-bat { width: 46px; }
 .yd-bat svg { width: 100%; height: auto; }
@@ -177,9 +177,9 @@ html[data-theme="christmas"] .hero-card::after {
 
 @keyframes yd-fly-sleigh {
   0% { transform: translate3d(-340px, 40px, 0) rotate(-4deg); }
-  12% { transform: translate3d(25vw, 6px, 0) rotate(-3deg); }
-  24% { transform: translate3d(58vw, -10px, 0) rotate(-2deg); }
-  36%, 100% { transform: translate3d(calc(100vw + 40px), -34px, 0) rotate(-5deg); }
+  33% { transform: translate3d(25vw, 6px, 0) rotate(-3deg); }
+  67% { transform: translate3d(58vw, -10px, 0) rotate(-2deg); }
+  100% { transform: translate3d(calc(100vw + 40px), -34px, 0) rotate(-5deg); }
 }
 @keyframes yd-fly-ltr {
   0% { transform: translate3d(-80px, 30px, 0); }

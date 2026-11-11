@@ -5,6 +5,38 @@
 const DECOR_ATTR = "data-decor";
 let current = null;
 
+const SLEIGH_SESSION_KEY = "yps-sleigh-played";
+
+function navigationType() {
+  try {
+    const entry = performance.getEntriesByType("navigation")[0];
+    return entry && entry.type ? entry.type : "";
+  } catch {
+    return "";
+  }
+}
+
+/* Fly the sleigh only on a fresh visit (first page of this tab/session, or
+   a different-origin referrer) or an explicit reload — not on in-site clicks. */
+function shouldPlaySleigh() {
+  if (navigationType() === "reload") return true;
+  try {
+    return !sessionStorage.getItem(SLEIGH_SESSION_KEY);
+  } catch {
+    try {
+      if (!document.referrer) return true;
+      return new URL(document.referrer).origin !== location.origin;
+    } catch {
+      return true;
+    }
+  }
+}
+
+function markSleighPlayed() {
+  try { sessionStorage.setItem(SLEIGH_SESSION_KEY, "1"); } catch { /* private mode */ }
+}
+
+
 const isAdmin = () => /\/admin(\/|$)/.test(location.pathname);
 
 /* ---------- shared gradients (one hidden sprite, never display:none) ---------- */
@@ -285,7 +317,11 @@ const SCENES = {
     hero: () => svg("0 0 210 162", `${gifts(4, 98, 0.78)}${tree(76, 0, 1)}`),
     footL: () => svg("0 0 92 64", gifts(2, 2, 1)),
     footR: () => svg("0 0 124 162", tree(2, 0, 1)),
-    fliers: () => `<div class="yd-flier yd-sleigh">${sleigh()}</div>`,
+    fliers: () => {
+      if (!shouldPlaySleigh()) return "";
+      markSleighPlayed();
+      return `<div class="yd-flier yd-sleigh">${sleigh()}</div>`;
+    },
     badge: "bow",
   },
   halloween: {
