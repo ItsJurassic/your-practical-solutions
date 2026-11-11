@@ -1,7 +1,7 @@
 import { CONFIG } from "../config.js";
 import { supabase } from "./client.js?v=15";
 import { startChat, stopChat } from "./chat.js?v=16";
-import { THEMES, applyTheme, initTheme, setSiteTheme } from "../theme.js?v=1";
+import { THEMES, applyTheme, initTheme, setSiteTheme } from "../theme.js?v=2";
 const loginView = document.getElementById("login-view");
 const dashView = document.getElementById("dash-view");
 const msg = document.getElementById("login-msg");

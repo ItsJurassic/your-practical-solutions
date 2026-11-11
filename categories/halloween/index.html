@@ -16,7 +16,8 @@
     (function () {
       var ok = { default:1, christmas:1, halloween:1, valentines:1, "new-years":1, "fourth-of-july":1 };
       try {
-        var t = localStorage.getItem("yps-theme");
+        var t = new URLSearchParams(location.search).get("previewTheme");
+        if (!t || !ok[t]) t = localStorage.getItem("yps-theme");
         if (t && ok[t]) document.documentElement.setAttribute("data-theme", t);
       } catch (e) {}
     })();
@@ -31,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=17" />
-  <link rel="stylesheet" href="themes.css?v=1" />
+  <link rel="stylesheet" href="themes.css?v=2" />
   <title>Halloween | Your Practical Solutions</title>
   <meta name="description" content="Halloween at Your Practical Solutions. Spooky-season finds" />
   <link rel="canonical" href="https://yourpracticalsolutions.com/categories/halloween/" />
@@ -129,7 +130,7 @@
     </div>
   </footer>
   <div id="theme-fx" class="theme-fx" aria-hidden="true"></div>
-  <script type="module" src="theme.js?v=1"></script>
+  <script type="module" src="theme.js?v=2"></script>
   <nav class="bottom-nav" aria-label="Mobile">
     <a href="./" data-nav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
     <a href="shop.html" data-nav="shop" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12.5H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>Shop</a>

@@ -1,5 +1,6 @@
 import { CONFIG } from "./config.js";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { renderDecor } from "./theme-decor.js?v=1";
 
 export const THEME_STORAGE_KEY = "yps-theme";
 export const THEMES = {
@@ -11,6 +12,16 @@ export const THEMES = {
   "fourth-of-july": { label: "4th of July", swatch: "#1d3b8b" },
 };
 const ALLOWED = new Set(Object.keys(THEMES));
+const IS_ADMIN = /\/admin(\/|$)/.test(location.pathname);
+
+/* ?previewTheme=halloween shows a theme on this page only. It never writes to
+   Supabase or localStorage, and live theme changes are ignored while previewing. */
+export const PREVIEW_THEME = (() => {
+  try {
+    const v = new URLSearchParams(location.search).get("previewTheme");
+    return v && ALLOWED.has(v) ? v : null;
+  } catch { return null; }
+})();
 
 function reducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -23,12 +34,20 @@ export function normalizeTheme(name) {
 export function applyTheme(name) {
   const theme = normalizeTheme(name);
   document.documentElement.setAttribute("data-theme", theme);
-  try { localStorage.setItem(THEME_STORAGE_KEY, theme); } catch { /* private mode */ }
+  if (!PREVIEW_THEME) {
+    try { localStorage.setItem(THEME_STORAGE_KEY, theme); } catch { /* private mode */ }
+  }
   document.querySelectorAll("[data-theme-pick]").forEach((btn) => {
     btn.setAttribute("aria-pressed", String(btn.dataset.themePick === theme));
   });
   startFx(theme);
+  renderDecor(theme);
   return theme;
+}
+
+function applyRemote(value) {
+  if (PREVIEW_THEME && !IS_ADMIN) return;
+  applyTheme(value);
 }
 
 function publicClient() {
@@ -41,14 +60,14 @@ export async function initTheme(client) {
   const sb = client || publicClient();
   try {
     const { data } = await sb.from("site_settings").select("value").eq("key", "theme").maybeSingle();
-    if (data?.value) applyTheme(data.value);
+    if (data?.value) applyRemote(data.value);
   } catch (err) {
     console.warn("theme fetch failed", err);
   }
   sb.channel("site-theme")
     .on("postgres_changes", { event: "*", schema: "public", table: "site_settings", filter: "key=eq.theme" }, (payload) => {
       const value = payload.new?.value;
-      if (value) applyTheme(value);
+      if (value) applyRemote(value);
     })
     .subscribe();
 }
@@ -125,6 +144,7 @@ function seed(theme) {
     fx.palette = theme === "fourth-of-july"
       ? ["#e63946", "#f1faee", "#457b9d", "#1d3557", "#ffd166"]
       : ["#ffd700", "#fff", "#7dd3fc", "#f472b6", "#c4b5fd", "#34d399"];
+    if (theme === "new-years") for (let i = 0; i < Math.round(n * 0.5); i++) fx.particles.push(confetti());
   }
 }
 
@@ -139,6 +159,11 @@ function leaf() {
 }
 function heart() {
   return { k: "heart", x: Math.random() * (fx.w || 800), y: (fx.h || 600) + Math.random() * 80, r: 4 + Math.random() * 6, s: 0.25 + Math.random() * 0.55, drift: (Math.random() - 0.5) * 0.5, a: 0.35 + Math.random() * 0.4, rot: Math.random() * 0.4 };
+}
+
+function confetti() {
+  const colors = ["#ffd700", "#f8fafc", "#f472b6", "#7dd3fc", "#c4b5fd"];
+  return { k: "conf", x: Math.random() * (fx.w || 800), y: Math.random() * (fx.h || 600), r: 2.5 + Math.random() * 2.5, s: 0.25 + Math.random() * 0.45, drift: (Math.random() - 0.5) * 0.5, rot: Math.random() * 6, spin: (Math.random() - 0.5) * 0.008, a: 0.75, color: colors[Math.floor(Math.random() * colors.length)] };
 }
 
 function spawnBurst(x, y, colors) {
@@ -176,7 +201,7 @@ function tick(ts) {
   const w = fx.w, h = fx.h;
   ctx.clearRect(0, 0, w, h);
 
-  if (fx.theme === "christmas" || fx.theme === "halloween" || fx.theme === "valentines") {
+  if (fx.particles.length) {
     for (const p of fx.particles) {
       if (p.k === "heart") {
         p.y -= p.s * dt * 0.04;
@@ -190,7 +215,17 @@ function tick(ts) {
         if (p.y > h + 8) { p.y = -8; p.x = Math.random() * w; }
         if (p.x < -8) p.x = w + 8;
         if (p.x > w + 8) p.x = -8;
-        if (p.k === "leaf") {
+        if (p.k === "conf") {
+          p.rot += p.spin * dt;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.globalAlpha = p.a;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r / 2, -p.r, p.r, p.r * 2 * Math.abs(Math.cos(p.rot * 1.7)) + 0.6);
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        } else if (p.k === "leaf") {
           p.rot += p.spin * dt;
           ctx.save();
           ctx.translate(p.x, p.y);
@@ -244,6 +279,7 @@ function stopFx() {
 }
 
 function startFx(theme) {
+  if (IS_ADMIN) return;
   ensureLayer();
   fx.theme = theme;
   sizeCanvas();
@@ -274,9 +310,13 @@ function watchResize() {
 
 watchResize();
 
-try {
-  const cached = normalizeTheme(localStorage.getItem(THEME_STORAGE_KEY) || "default");
-  if (cached !== "default") applyTheme(cached);
-} catch { /* ignore */ }
+if (PREVIEW_THEME && !IS_ADMIN) {
+  applyTheme(PREVIEW_THEME);
+} else {
+  try {
+    const cached = normalizeTheme(localStorage.getItem(THEME_STORAGE_KEY) || "default");
+    if (cached !== "default") applyTheme(cached);
+  } catch { /* ignore */ }
+}
 
 if (!window.__YPS_THEME_MANUAL__) initTheme();
