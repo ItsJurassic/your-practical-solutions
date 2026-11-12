@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-11T23:39:13+00:00",
+  "generated_at": "2026-11-12T01:02:46+00:00",
   "source": "Shopify Admin API snapshot (data/shopify-snapshot.json)",
   "store": {
     "name": "Your Practical Solutions",
@@ -7,7 +7,7 @@
     "primary_domain": "shop.yourpracticalsolutions.com",
     "myshopify": "xvdkyq-xg.myshopify.com"
   },
-  "product_count": 362,
+  "product_count": 358,
   "products": [
     {
       "title": "Christmas Bow Garland",
@@ -10428,37 +10428,6 @@
       ]
     },
     {
-      "title": "Crossbody Phone Bag",
-      "handle": "crossbody-phone-bag",
-      "url": "https://shop.yourpracticalsolutions.com/products/crossbody-phone-bag",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/crossbody-phone-bag-1.jpg?v=1794437843",
-      "image_alt": "Crossbody Phone Bag",
-      "price": "6.99",
-      "price_max": "6.99",
-      "currency": "USD",
-      "product_type": "Women's Clothing",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "womens-clothing"
-      ],
-      "description": "A practical crossbody phone bag you can reach for often. Everyday style that pairs with casual outfits. Easy to care for and keep in rotation. A comfortable, practical piece for regular wear. What's included: One item, as shown in the photos. About 15.0 \u00d7 18.9 \u00d7 1.6 in; ships at about 8.7 oz (247 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/crossbody-phone-bag-1.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/crossbody-phone-bag-2.jpg?v=1794437842",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/crossbody-phone-bag-3.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/crossbody-phone-bag-4.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/crossbody-phone-bag-5.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/crossbody-phone-bag-6.jpg?v=1794437844"
-      ]
-    },
-    {
       "title": "Under-Bed Storage Bag",
       "handle": "under-bed-storage-bag",
       "url": "https://shop.yourpracticalsolutions.com/products/under-bed-storage-bag",
@@ -10552,37 +10521,6 @@
       ]
     },
     {
-      "title": "Satin Pillowcase",
-      "handle": "satin-pillowcase",
-      "url": "https://shop.yourpracticalsolutions.com/products/satin-pillowcase",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/satin-pillowcase-1.jpg?v=1794437843",
-      "image_alt": "Satin Pillowcase",
-      "price": "4.99",
-      "price_max": "4.99",
-      "currency": "USD",
-      "product_type": "Women's Clothing",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "womens-clothing"
-      ],
-      "description": "A practical satin pillowcase you can reach for often. Everyday style that pairs with casual outfits. Easy to care for and keep in rotation. A comfortable, practical piece for regular wear. What's included: One item, as shown in the photos. About 7.1 \u00d7 9.1 \u00d7 1.6 in; ships at about 8.1 oz (230 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/satin-pillowcase-1.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/satin-pillowcase-2.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/satin-pillowcase-3.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/satin-pillowcase-4.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/satin-pillowcase-5.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/satin-pillowcase-6.jpg?v=1794437843"
-      ]
-    },
-    {
       "title": "Men's Knit Beanie",
       "handle": "men-s-knit-beanie",
       "url": "https://shop.yourpracticalsolutions.com/products/men-s-knit-beanie",
@@ -10611,37 +10549,6 @@
         "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/men-s-knit-beanie-4.jpg?v=1794437843",
         "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/men-s-knit-beanie-5.jpg?v=1794437843",
         "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/men-s-knit-beanie-6.jpg?v=1794437844"
-      ]
-    },
-    {
-      "title": "Claw Hair Clips Set",
-      "handle": "claw-hair-clips-set",
-      "url": "https://shop.yourpracticalsolutions.com/products/claw-hair-clips-set",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/claw-hair-clips-set-1.jpg?v=1794437843",
-      "image_alt": "Claw Hair Clips Set",
-      "price": "2.88",
-      "price_max": "2.88",
-      "currency": "USD",
-      "product_type": "Women's Clothing",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "womens-clothing"
-      ],
-      "description": "This claw hair clips set is an easy add to a daily wardrobe. Everyday style that pairs with casual outfits. Easy to care for and keep in rotation. A comfortable, practical piece for regular wear. What's included: A set (confirm exact contents and pack size before listing). About 4.7 \u00d7 3.9 \u00d7 1.2 in; ships at about 0.4 oz (10 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/claw-hair-clips-set-1.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/claw-hair-clips-set-2.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/claw-hair-clips-set-3.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/claw-hair-clips-set-4.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/claw-hair-clips-set-5.jpg?v=1794437843",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/claw-hair-clips-set-6.jpg?v=1794437843"
       ]
     },
     {
@@ -10676,216 +10583,6 @@
       ]
     },
     {
-      "title": "Tufted Pillow Cover",
-      "handle": "tufted-pillow-cover",
-      "url": "https://shop.yourpracticalsolutions.com/products/tufted-pillow-cover",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/tufted-pillow-cover-1.jpg?v=1794437844",
-      "image_alt": "Tufted Pillow Cover",
-      "price": "8.99",
-      "price_max": "8.99",
-      "currency": "USD",
-      "product_type": "Living Room",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "living-room"
-      ],
-      "description": "This tufted pillow cover is a simple way to make the living room more useful and tidy. A straightforward tool for planting, watering, or keeping greenery tidy. Fits a typical living room without a bulky footprint. Easy to place, use, and put away. A practical piece for daily living, not just display. What's included: One item, as shown in the photos. About 17.7 \u00d7 11.8 \u00d7 1.2 in; ships at about 6.7 oz (190 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/tufted-pillow-cover-1.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/tufted-pillow-cover-2.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/tufted-pillow-cover-3.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/tufted-pillow-cover-4.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/tufted-pillow-cover-5.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/tufted-pillow-cover-6.jpg?v=1794437844"
-      ]
-    },
-    {
-      "title": "Ceramic Vase",
-      "handle": "ceramic-vase",
-      "url": "https://shop.yourpracticalsolutions.com/products/ceramic-vase",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/ceramic-vase-1.jpg?v=1794437844",
-      "image_alt": "Ceramic Vase",
-      "price": "4.99",
-      "price_max": "4.99",
-      "currency": "USD",
-      "product_type": "Home Decor",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "home-decor",
-        "new-arrivals",
-        "best-sellers"
-      ],
-      "description": "A simple ceramic vase for a shelf, table, or wall. A simple decorative piece for a shelf, table, or wall. Lightweight enough to move when you rearrange a room. An easy way to finish a space without a big project. What's included: One item, as shown in the photos. About 5.1 \u00d7 3.1 \u00d7 3.1 in; ships at about 1.0 lb (460 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/ceramic-vase-1.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/ceramic-vase-2.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/ceramic-vase-3.jpg?v=1794437844"
-      ]
-    },
-    {
-      "title": "Shower Squeegee",
-      "handle": "shower-squeegee",
-      "url": "https://shop.yourpracticalsolutions.com/products/shower-squeegee",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shower-squeegee-1.jpg?v=1794437844",
-      "image_alt": "Shower Squeegee",
-      "price": "2.97",
-      "price_max": "2.97",
-      "currency": "USD",
-      "product_type": "Bathroom",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "bathroom"
-      ],
-      "description": "Add a little order to the bath with this shower squeegee. Durable metal construction that stands up to daily use. Built for a damp bathroom and daily routines. Made for a humid bathroom and daily use. Easy to wipe clean. A compact piece that does not take over the counter. What's included: One item, as shown in the photos. About 6.9 \u00d7 3.1 \u00d7 1.2 in; ships at about 1.7 oz (49 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shower-squeegee-1.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shower-squeegee-2.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shower-squeegee-3.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shower-squeegee-4.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shower-squeegee-5.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shower-squeegee-6.jpg?v=1794437844"
-      ]
-    },
-    {
-      "title": "Makeup Bag",
-      "handle": "makeup-bag",
-      "url": "https://shop.yourpracticalsolutions.com/products/makeup-bag",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/makeup-bag-1.jpg?v=1794437844",
-      "image_alt": "Makeup Bag",
-      "price": "3.98",
-      "price_max": "3.98",
-      "currency": "USD",
-      "product_type": "Women's Clothing",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "womens-clothing"
-      ],
-      "description": "A practical makeup bag you can reach for often. Lightweight and easy to pack for travel, camping, or a bag. Keeps everyday items sorted and easy to find. Everyday style that pairs with casual outfits. Easy to care for and keep in rotation. A comfortable, practical piece for regular wear. What's included: One item, as shown in the photos. About 9.8 \u00d7 2.0 \u00d7 5.9 in; ships at about 3.7 oz (105 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/makeup-bag-1.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/makeup-bag-2.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/makeup-bag-3.jpg?v=1794437844",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/makeup-bag-4.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/makeup-bag-5.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/makeup-bag-6.jpg?v=1794437844"
-      ]
-    },
-    {
-      "title": "Couch Cup Holder",
-      "handle": "couch-cup-holder",
-      "url": "https://shop.yourpracticalsolutions.com/products/couch-cup-holder",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/couch-cup-holder-1.jpg?v=1794437845",
-      "image_alt": "Couch Cup Holder",
-      "price": "9.99",
-      "price_max": "9.99",
-      "currency": "USD",
-      "product_type": "Living Room",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "living-room"
-      ],
-      "description": "Add a useful piece to the living room with this couch cup holder. Flexible silicone that's easy to rinse clean and put away. Lightweight and easy to pack for travel, camping, or a bag. Fits everyday cars and helps keep the cabin more useful and tidy. Fits a typical living room without a bulky footprint. Easy to place, use, and put away. What's included: One item, as shown in the photos. About 7.9 \u00d7 7.9 \u00d7 3.9 in; ships at about 1.1 lb (480 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/couch-cup-holder-1.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/couch-cup-holder-2.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/couch-cup-holder-3.jpg?v=1794437845"
-      ]
-    },
-    {
-      "title": "Large Hair Claw Clips Set",
-      "handle": "large-hair-claw-clips-set",
-      "url": "https://shop.yourpracticalsolutions.com/products/large-hair-claw-clips-set",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/large-hair-claw-clips-set-1.jpg?v=1794437845",
-      "image_alt": "Large Hair Claw Clips Set",
-      "price": "2.62",
-      "price_max": "2.62",
-      "currency": "USD",
-      "product_type": "Women's Clothing",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "womens-clothing"
-      ],
-      "description": "This large hair claw clips set is an easy add to a daily wardrobe. Designed with everyday pet care in mind \u2014 practical and easy to clean. Everyday style that pairs with casual outfits. Easy to care for and keep in rotation. A comfortable, practical piece for regular wear. What's included: A set (confirm exact contents and pack size before listing). About 5.9 \u00d7 3.9 \u00d7 1.2 in; ships at about 0.8 oz (23 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/large-hair-claw-clips-set-1.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/large-hair-claw-clips-set-2.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/large-hair-claw-clips-set-3.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/large-hair-claw-clips-set-4.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/large-hair-claw-clips-set-5.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/large-hair-claw-clips-set-6.jpg?v=1794437845"
-      ]
-    },
-    {
-      "title": "Christmas Wreath",
-      "handle": "christmas-wreath",
-      "url": "https://shop.yourpracticalsolutions.com/products/christmas-wreath",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/christmas-wreath-1.jpg?v=1794437845",
-      "image_alt": "Christmas Wreath",
-      "price": "3.97",
-      "price_max": "3.97",
-      "currency": "USD",
-      "product_type": "Christmas",
-      "tags": [
-        "customer-pays-ship-only",
-        "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
-      ],
-      "collections": [
-        "new-arrivals",
-        "best-sellers",
-        "christmas"
-      ],
-      "description": "This christmas wreath adds a simple holiday touch without a lot of fuss. A festive piece you can bring out each holiday season. Reuse it each year; store it flat or in a box after the holidays. Works with a range of trees, tables, and mantel setups. A simple decoration that reads clearly from across the room. What's included: One item, as shown in the photos. About 16.9 \u00d7 11.8 \u00d7 2.4 in; ships at about 9.4 oz (266 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
-      "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/christmas-wreath-1.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/christmas-wreath-2.jpg?v=1794437846",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/christmas-wreath-3.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/christmas-wreath-4.jpg?v=1794437845",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/christmas-wreath-5.jpg?v=1794437845"
-      ]
-    },
-    {
       "title": "Tool Belt Pouch",
       "handle": "tool-belt-pouch",
       "url": "https://shop.yourpracticalsolutions.com/products/tool-belt-pouch",
@@ -10915,34 +10612,171 @@
       ]
     },
     {
-      "title": "Shatterproof Ornament Set",
-      "handle": "shatterproof-ornament-set",
-      "url": "https://shop.yourpracticalsolutions.com/products/shatterproof-ornament-set",
-      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shatterproof-ornament-set-1.jpg?v=1794437859",
-      "image_alt": "Shatterproof Ornament Set",
-      "price": "3.99",
-      "price_max": "3.99",
+      "title": "Artificial Succulent Set (4-Pack)",
+      "handle": "artificial-succulent-set-4-pack",
+      "url": "https://shop.yourpracticalsolutions.com/products/artificial-succulent-set-4-pack",
+      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S0e6349c286cf43ce8648db29f2fd7e57M.webp?v=1794445178",
+      "image_alt": "Artificial Succulent Set (4-Pack)",
+      "price": "5.89",
+      "price_max": "5.89",
+      "currency": "USD",
+      "product_type": "Home Decor",
+      "tags": [
+        "needs-approval",
+        "supplier:AliExpress"
+      ],
+      "collections": [
+        "home-decor",
+        "new-arrivals",
+        "best-sellers"
+      ],
+      "description": "Add a no-water pop of greenery with this 4-pack of mini artificial succulents. Fits a typical desk, shelf, or windowsill without a bulky footprint. Easy to place, use, and put away. A practical piece for daily living, not just display. No watering or sunlight required. What's included: Four mini potted faux succulents, as shown in the photos. Ships at about 7.1 oz (200 g). Ships free to the United States. Typical delivery is about 7\u201315 days.",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S0e6349c286cf43ce8648db29f2fd7e57M.webp?v=1794445178"
+      ]
+    },
+    {
+      "title": "Decorated 12-Inch Christmas Wreath",
+      "handle": "decorated-12-inch-christmas-wreath",
+      "url": "https://shop.yourpracticalsolutions.com/products/decorated-12-inch-christmas-wreath",
+      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/Sda05b4a16822478d86f1edea8b36377fy.webp?v=1794445178",
+      "image_alt": "Decorated 12-Inch Christmas Wreath",
+      "price": "8.99",
+      "price_max": "8.99",
       "currency": "USD",
       "product_type": "Christmas",
       "tags": [
-        "customer-pays-ship-only",
         "needs-approval",
-        "price-match-11-11",
-        "supplier:CJdropshipping"
+        "supplier:AliExpress"
       ],
       "collections": [
         "new-arrivals",
         "best-sellers",
         "christmas"
       ],
-      "description": "A festive shatterproof ornament set you can bring out each holiday season. A festive piece you can bring out each holiday season. Reuse it each year; store it flat or in a box after the holidays. Works with a range of trees, tables, and mantel setups. A simple decoration that reads clearly from across the room. What's included: A set (confirm exact contents and pack size before listing). About 11.8 \u00d7 7.1 \u00d7 3.1 in; ships at about 1.1 lb (500 g). Ships from China in about 5\u201311 days. Shipping is added at checkout.",
+      "description": "Hang a decorated 12-inch Christmas wreath on a door, window, or cabinet for a simple holiday touch. A festive piece you can bring out each holiday season. Reuse it each year; store it flat or in a box after the holidays. Works with a range of trees, tables, and mantel setups. A simple decoration that reads clearly from across the room. What's included: One artificial pine wreath in the 30 cm / about 12-inch size, as shown in the photos. Ships at about 14.1 oz (400 g). Ships free to the United States. Typical delivery is about 7\u201315 days.",
       "images": [
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shatterproof-ornament-set-1.jpg?v=1794437859",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shatterproof-ornament-set-2.jpg?v=1794437859",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shatterproof-ornament-set-3.jpg?v=1794437859",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shatterproof-ornament-set-4.jpg?v=1794437859",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shatterproof-ornament-set-5.jpg?v=1794437859",
-        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/shatterproof-ornament-set-6.jpg?v=1794437859"
+        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/Sda05b4a16822478d86f1edea8b36377fy.webp?v=1794445178"
+      ]
+    },
+    {
+      "title": "Christmas Santa Doormat",
+      "handle": "christmas-santa-doormat",
+      "url": "https://shop.yourpracticalsolutions.com/products/christmas-santa-doormat",
+      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/Sb7e93f9c92ca46bf999d57234406c1cft.webp?v=1794445178",
+      "image_alt": "Christmas Santa Doormat",
+      "price": "12.99",
+      "price_max": "12.99",
+      "currency": "USD",
+      "product_type": "Christmas",
+      "tags": [
+        "needs-approval",
+        "supplier:AliExpress"
+      ],
+      "collections": [
+        "new-arrivals",
+        "best-sellers",
+        "christmas"
+      ],
+      "description": "Welcome guests with this festive Christmas Santa doormat at the entryway. A simple holiday decoration for a front door or mudroom. Non-slip style mat for seasonal use indoors or in a covered entry. A festive piece you can bring out each holiday season. Easy to place, use, and put away after the holidays. What's included: One Christmas doormat, as shown in the photos. Ships at about 1.1 lb (500 g). Ships free to the United States. Typical delivery is about 7\u201315 days.",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/Sb7e93f9c92ca46bf999d57234406c1cft.webp?v=1794445178"
+      ]
+    },
+    {
+      "title": "Silicone Drink Coaster Set (6-Pack)",
+      "handle": "silicone-drink-coaster-set-6-pack",
+      "url": "https://shop.yourpracticalsolutions.com/products/silicone-drink-coaster-set-6-pack",
+      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S4219d603507e4f359ed665d9073e090fx.webp?v=1794445179",
+      "image_alt": "Silicone Drink Coaster Set (6-Pack)",
+      "price": "10.49",
+      "price_max": "10.49",
+      "currency": "USD",
+      "product_type": "Living Room",
+      "tags": [
+        "needs-approval",
+        "supplier:AliExpress"
+      ],
+      "collections": [
+        "new-arrivals",
+        "best-sellers",
+        "living-room"
+      ],
+      "description": "Protect tables from rings and slips with this 6-pack of 10 cm silicone drink coasters. Fits a typical living room without a bulky footprint. Easy to wipe clean after use. A practical piece for daily living, not just display. Soft, non-slip silicone for cups and glasses. What's included: Six 10 cm silicone coasters, as shown in the photos. Ships at about 7.1 oz (200 g). Ships free to the United States. Typical delivery is about 7\u201315 days.",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S4219d603507e4f359ed665d9073e090fx.webp?v=1794445179"
+      ]
+    },
+    {
+      "title": "Gold Hoop Earrings Set (6 Pairs)",
+      "handle": "gold-hoop-earrings-set-6-pairs",
+      "url": "https://shop.yourpracticalsolutions.com/products/gold-hoop-earrings-set-6-pairs",
+      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/Sc2bf54babf824d759c6c311492d30e47c.webp?v=1794445189",
+      "image_alt": "Gold Hoop Earrings Set (6 Pairs)",
+      "price": "6.99",
+      "price_max": "6.99",
+      "currency": "USD",
+      "product_type": "Women's Clothing",
+      "tags": [
+        "needs-approval",
+        "supplier:AliExpress"
+      ],
+      "collections": [
+        "new-arrivals",
+        "best-sellers",
+        "womens-clothing"
+      ],
+      "description": "A six-pair set of classic round gold and silver hoop earrings for everyday wear. Lightweight and easy to pack for travel or a bag. A simple set you can mix and match with casual outfits. Easy to put on and take off. A hoop set for everyday outfits. What's included: Six pairs of hoop earrings, as shown in the photos. Ships at about 1.4 oz (40 g). Ships free to the United States. Typical delivery is about 7\u201315 days.",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/Sc2bf54babf824d759c6c311492d30e47c.webp?v=1794445189"
+      ]
+    },
+    {
+      "title": "Adhesive Toilet Paper Holder",
+      "handle": "adhesive-toilet-paper-holder",
+      "url": "https://shop.yourpracticalsolutions.com/products/adhesive-toilet-paper-holder",
+      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S9b819af048094e6aaff633e1ec117a189.webp?v=1794445189",
+      "image_alt": "Adhesive Toilet Paper Holder",
+      "price": "4.79",
+      "price_max": "4.79",
+      "currency": "USD",
+      "product_type": "Bathroom",
+      "tags": [
+        "needs-approval",
+        "supplier:AliExpress"
+      ],
+      "collections": [
+        "new-arrivals",
+        "best-sellers",
+        "bathroom"
+      ],
+      "description": "A no-drill adhesive toilet paper holder for the bathroom wall. Built for a damp bathroom and daily routines. Mounts without drilling, using an adhesive pad. A compact piece that does not take over the wall. Easy to wipe clean. What's included: One wall-mount toilet paper holder, as shown in the photos. Ships at about 7.1 oz (200 g). Ships free to the United States. Typical delivery is about 7\u201315 days.",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S9b819af048094e6aaff633e1ec117a189.webp?v=1794445189"
+      ]
+    },
+    {
+      "title": "Spiral Hair Ties (10-Pack)",
+      "handle": "spiral-hair-ties-10-pack",
+      "url": "https://shop.yourpracticalsolutions.com/products/spiral-hair-ties-10-pack",
+      "image": "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S36c9b8bc7bd344078d326a90745db0256.webp?v=1794445191",
+      "image_alt": "Spiral Hair Ties (10-Pack)",
+      "price": "6.99",
+      "price_max": "6.99",
+      "currency": "USD",
+      "product_type": "Women's Clothing",
+      "tags": [
+        "needs-approval",
+        "supplier:AliExpress"
+      ],
+      "collections": [
+        "new-arrivals",
+        "best-sellers",
+        "womens-clothing"
+      ],
+      "description": "A 10-pack of no-crease spiral coil hair ties for everyday ponytails. Lightweight and easy to pack for travel or a bag. The coil design helps reduce ponytail dents and snags. A simple 10-count set so you have a spare on hand. Easy to rinse off after a workout or swim. What's included: Ten spiral hair ties, as shown in the photos. Ships at about 1.4 oz (40 g). Ships free to the United States. Typical delivery is about 7\u201315 days.",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0767/8669/6281/files/S36c9b8bc7bd344078d326a90745db0256.webp?v=1794445191"
       ]
     }
   ],
@@ -10980,19 +10814,19 @@
     {
       "handle": "home-decor",
       "title": "Home & Decor",
-      "count": 23,
+      "count": 24,
       "url": "https://shop.yourpracticalsolutions.com/collections/home-decor"
     },
     {
       "handle": "new-arrivals",
       "title": "New Arrivals",
-      "count": 372,
+      "count": 378,
       "url": "https://shop.yourpracticalsolutions.com/collections/new-arrivals"
     },
     {
       "handle": "best-sellers",
       "title": "Best Sellers",
-      "count": 372,
+      "count": 378,
       "url": "https://shop.yourpracticalsolutions.com/collections/best-sellers"
     },
     {
@@ -11004,7 +10838,7 @@
     {
       "handle": "living-room",
       "title": "Living Room",
-      "count": 26,
+      "count": 27,
       "url": "https://shop.yourpracticalsolutions.com/collections/living-room"
     },
     {
@@ -11022,7 +10856,7 @@
     {
       "handle": "womens-clothing",
       "title": "Women's Clothing",
-      "count": 27,
+      "count": 29,
       "url": "https://shop.yourpracticalsolutions.com/collections/womens-clothing"
     },
     {
@@ -11034,7 +10868,7 @@
     {
       "handle": "bathroom",
       "title": "Bathroom",
-      "count": 23,
+      "count": 24,
       "url": "https://shop.yourpracticalsolutions.com/collections/bathroom"
     },
     {
@@ -11052,7 +10886,7 @@
     {
       "handle": "christmas",
       "title": "Christmas",
-      "count": 25,
+      "count": 27,
       "url": "https://shop.yourpracticalsolutions.com/collections/christmas"
     },
     {
