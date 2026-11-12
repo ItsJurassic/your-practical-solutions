@@ -1,79 +1,208 @@
-// Desktop-only interactive floor plan controller. Loaded on demand by site.js.
-import { initHouse } from "./house-plan.js?v=13";
-import { productCard, emptyState } from "./site.js?v=14";
+// Interactive floor-plan controller. Loaded on demand by site.js (desktop only).
+// Product lists are NOT hardcoded: each hotspot is mapped to category handles in
+// data/navigator.json, and the current ACTIVE catalog (products.json / loadCatalog)
+// is matched at runtime. data/navigator-index.json is the baked companion built
+// whenever the catalog rebuilds, and is used to know which handles are ACTIVE.
+import { initHouse } from "./house-plan.js?v=16";
+import { productCard, emptyState, categoryHandlesFor } from "./site.js?v=20";
+import { loadCategoryData, isCategoryVisible, findCategory, chicagoMonthDay } from "./categories.js?v=2";
 
-// Each spot lists the exact products it shows (site handles from data/coming-soon.json; published
-// Shopify products keep the same site handle). Future products can also opt in with a Shopify tag
-// "spot:<id>" (e.g. spot:kitchen). No broad collection matching, so a spot never shows unrelated items.
-const P = {
-  cleaner: "interior-windshield-cleaner", pickup: "led-magnetic-pickup-tool", snowBrush: "extendable-snow-brush-ice-scraper",
-  snowCover: "windshield-snow-cover", lickMat: "silicone-lick-mat", basin: "collapsible-camping-basin",
-  rugGrip: "rug-corner-grippers", workLight: "magnetic-cob-work-light", faucet: "outdoor-faucet-covers-2-pack",
-};
-export const HOTSPOT_META = {
-  bed: { label: "Bed", products: [], blurb: "Bedding, frames, and bedroom comfort." },
-  wardrobe: { label: "Wardrobe", products: [], blurb: "Closet storage and organizers." },
-  "dresser-his": { label: "His dresser", products: [], blurb: "Men's clothing and dresser essentials." },
-  "dresser-hers": { label: "Her dresser", products: [], blurb: "Women's clothing and dresser essentials." },
-  nightstand: { label: "Bedside table", products: [], blurb: "Bedside storage and lamps." },
-  sofa: { label: "Living room sofa", products: [P.rugGrip], blurb: "Living-room comfort." },
-  rug: { label: "Living room rug", products: [P.rugGrip], blurb: "Keep area rugs flat and in place." },
-  curtains: { label: "Curtains & windows", products: [], blurb: "Window treatments." },
-  media: { label: "Media console", products: [], blurb: "Speakers, chargers, and media accessories." },
-  "kitchen-sink": { label: "Kitchen sink", products: [P.basin], blurb: "Dish washing." },
-  kitchen: { label: "Kitchen", products: [P.basin, P.lickMat], blurb: "Housewares and pet feeding." },
-  "garage-storage": { label: "Garage storage", products: [P.snowBrush, P.cleaner, P.workLight, P.pickup], blurb: "Car-care and winter gear for the garage." },
-  "garage-workstation": { label: "Garage workstation", products: [P.pickup, P.workLight], blurb: "Tools and garage work gear." },
-  yard: { label: "Yard & outdoor faucets", products: [P.faucet], blurb: "Outdoor upkeep and winter faucet protection." },
-  garden: { label: "Garden bed & spigot", products: [P.faucet], blurb: "Garden, hose, and spigot care." },
-  car: { label: "Car", products: [P.snowCover, P.snowBrush, P.cleaner], blurb: "Winter car care: snow, ice, and clear glass." },
-  rv: { label: "RV", products: [P.basin, P.workLight, P.cleaner], blurb: "RV living and travel gear.", zoom: "rv" },
-  "rv-bed": { label: "RV bed", products: [], blurb: "RV bedding and sleep comfort." },
-  "rv-bathroom": { label: "RV bathroom", products: [], blurb: "Compact bathroom and shower care." },
-  "rv-dinette": { label: "RV dinette", products: [], blurb: "Dinette comfort and compact living." },
-  "rv-kitchen": { label: "RV kitchenette", products: [P.basin], blurb: "Compact kitchen and dish-washing gear." },
-  "rv-storage": { label: "RV storage", products: [P.basin, P.workLight], blurb: "Space-saving storage for the road." },
-  "rv-cab": { label: "RV cabin", products: [P.cleaner, P.snowCover], blurb: "Driving comfort and clear windshields." },
-};
+const BASE = window.__ASSET_BASE__ || window.__SITE_BASE__ || "./";
 
-function matchProducts(products, meta, id) {
-  if (!meta || !products?.length) return [];
-  const want = meta.products || [];
-  const spotTag = id ? `spot:${id}` : null;
-  const picked = products.filter((p) => want.includes(p.site_handle || p.handle)
-    || (spotTag && (p.tags || []).some((t) => String(t).toLowerCase() === spotTag)));
-  return picked.sort((a, b) => {
-    const ia = want.indexOf(a.site_handle || a.handle), ib = want.indexOf(b.site_handle || b.handle);
-    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+async function fetchJson(url) {
+  try {
+    const res = await fetch(url, { cache: "no-cache" });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function loadNavigator() {
+  const [map, index] = await Promise.all([
+    fetchJson(`${BASE}data/navigator.json`),
+    fetchJson(`${BASE}data/navigator-index.json`),
+  ]);
+  return { map, index };
+}
+
+function activeHandleSet(index) {
+  const set = new Set();
+  for (const h of index?.all_active_handles || []) set.add(h);
+  for (const hs of index?.hotspots || []) {
+    for (const p of hs.products || []) if (p.handle) set.add(p.handle);
+  }
+  return set;
+}
+
+function isActiveProduct(p, activeHandles) {
+  const status = String(p.shopify_status || p.status || "").toUpperCase();
+  if (status === "DRAFT" || status === "ARCHIVED") return false;
+  const handle = p.handle || "";
+  const site = p.site_handle || "";
+  const shopify = p.shopify_handle || "";
+  if (activeHandles.size) {
+    return activeHandles.has(handle) || activeHandles.has(site) || activeHandles.has(shopify);
+  }
+  // Fallback when the index has not loaded: hide ranked Top 10 coming-soon drafts.
+  if (p.rank != null && p.coming_soon && !p.live) return false;
+  return true;
+}
+
+function visibleHotspotCategories(hotspot, catData, monthDay) {
+  const cats = [...(hotspot.categories || [])];
+  for (const handle of hotspot.seasonal_categories || []) {
+    const cat = findCategory(catData, handle);
+    // A missing category entry is treated as visible so a stale map cannot drop coverage.
+    const visible = cat ? isCategoryVisible(cat, monthDay) : true;
+    if (visible && !cats.includes(handle)) cats.push(handle);
+  }
+  return cats;
+}
+
+function primaryGroup(p, allowed) {
+  const handles = categoryHandlesFor(p);
+  // Prefer the product's own type when it is one of the room's categories.
+  const type = (p.product_type || p.productType || "").trim();
+  const typeHandle = ({
+    "Pet Supplies": "pet-supplies", Kitchen: "kitchen", "Women's Clothing": "womens-clothing",
+    Christmas: "christmas", "Living Room": "living-room", "Men's Clothing": "mens-clothing",
+    "Storage & Organization": "storage-organization", "Tech Accessories": "tech-accessories",
+    Bathroom: "bathroom", "Outdoor & Camping": "outdoor-camping", "Car & RV": "car-rv",
+    "Winter Essentials": "winter-essentials", Gardening: "gardening", "Home Decor": "home-decor",
+    "Garage & Tools": "garage-tools",
+  })[type];
+  if (typeHandle && allowed.includes(typeHandle)) return typeHandle;
+  return allowed.find((h) => handles.includes(h)) || allowed[0] || "";
+}
+
+export function matchProducts(products, hotspot, catData, monthDay, activeHandles) {
+  if (!hotspot || !products?.length) return [];
+  const allowed = visibleHotspotCategories(hotspot, catData, monthDay);
+  const spotTag = hotspot.id ? `spot:${hotspot.id}` : null;
+  const picked = products.filter((p) => {
+    if (!isActiveProduct(p, activeHandles)) return false;
+    const handles = categoryHandlesFor(p);
+    if (allowed.some((h) => handles.includes(h))) return true;
+    if (spotTag && (p.tags || []).some((t) => String(t).toLowerCase() === spotTag)) return true;
+    return false;
   });
+  return picked.sort((a, b) => {
+    const ga = allowed.indexOf(primaryGroup(a, allowed));
+    const gb = allowed.indexOf(primaryGroup(b, allowed));
+    const ia = ga < 0 ? 99 : ga, ib = gb < 0 ? 99 : gb;
+    if (ia !== ib) return ia - ib;
+    return String(a.title || "").localeCompare(String(b.title || ""));
+  });
+}
+
+function categoryName(catData, handle) {
+  const c = findCategory(catData, handle);
+  return (c && (c.name || c.title)) || handle;
+}
+
+function renderSheet(items, hotspot, catData, monthDay) {
+  const allowed = visibleHotspotCategories(hotspot, catData, monthDay);
+  if (!items.length) {
+    if (hotspot.seasonal_only) {
+      const seasonal = (hotspot.seasonal_categories || [])
+        .map((h) => findCategory(catData, h))
+        .filter(Boolean);
+      const labels = seasonal.map((c) => {
+        const win = c.show_window?.label || "";
+        return win ? `${c.name} (${win})` : c.name;
+      }).join(", ");
+      return emptyState(
+        "Back in season",
+        labels
+          ? `${hotspot.label} is shown during ${labels}. Browse the rest of the shop in the meantime.`
+          : `This spot is seasonal. Browse the rest of the shop in the meantime.`,
+      );
+    }
+    return emptyState(
+      `More coming soon`,
+      `We're still picking the right products for the ${String(hotspot.label || "this spot").toLowerCase()}. Browse the full store for everything available now.`,
+    );
+  }
+  const groups = new Map();
+  for (const p of items) {
+    const g = primaryGroup(p, allowed) || "other";
+    if (!groups.has(g)) groups.set(g, []);
+    groups.get(g).push(p);
+  }
+  const links = allowed.map((h) => {
+    const n = (groups.get(h) || []).length;
+    const name = categoryName(catData, h);
+    return `<a class="spot-shop" href="shop.html?c=${encodeURIComponent(h)}">Shop ${name}${n ? ` (${n})` : ""} →</a>`;
+  }).join("");
+  const count = `<p class="spot-count">${items.length} product${items.length === 1 ? "" : "s"} for this spot</p>`;
+  const body = [...groups.entries()].map(([handle, list]) => {
+    const name = categoryName(catData, handle);
+    const head = groups.size > 1
+      ? `<div class="spot-group-head"><h4>${name}</h4><a href="shop.html?c=${encodeURIComponent(handle)}">See all in ${name} →</a></div>`
+      : "";
+    return `<section class="spot-group">${head}${list.map(productCard).join("")}</section>`;
+  }).join("");
+  return `${count}<div class="spot-links">${links}</div>${body}`;
+}
+
+function coverageSnapshot(products, map, catData, monthDay, activeHandles) {
+  const active = (products || []).filter((p) => isActiveProduct(p, activeHandles));
+  const byHotspot = {};
+  const covered = new Set();
+  for (const hs of map?.hotspots || []) {
+    const items = matchProducts(active, hs, catData, monthDay, activeHandles);
+    byHotspot[hs.id] = { count: items.length, handles: items.map((p) => p.handle || p.site_handle) };
+    items.forEach((p) => covered.add(p.handle || p.site_handle));
+  }
+  const uncovered = active.map((p) => p.handle || p.site_handle).filter((h) => !covered.has(h));
+  return {
+    ready: true,
+    activeCount: active.length,
+    uncovered,
+    byHotspot,
+  };
 }
 
 export async function startHouse(catalog) {
   const $ = (id) => document.getElementById(id);
   const sheet = $("product-sheet"), hoverLabel = $("hover-label"), stage = $("house-stage");
   const backHouse = $("back-house"), resetBtn = $("peek-house"), hint = $("view-hint"), status = $("scene-status");
-  const openSheet = (meta, id) => {
-    const items = matchProducts(catalog.products, meta, id);
-    $("sheet-title").textContent = meta.label;
+  const [nav, catData] = await Promise.all([loadNavigator(), loadCategoryData(BASE)]);
+  const map = nav.map || { hotspots: [] };
+  const byId = Object.fromEntries((map.hotspots || []).map((h) => [h.id, h]));
+  const activeHandles = activeHandleSet(nav.index);
+  const monthDay = chicagoMonthDay();
+  window.__NAVIGATOR__ = coverageSnapshot(catalog.products, map, catData, monthDay, activeHandles);
+
+  const openSheet = (hotspot, id) => {
+    const meta = (hotspot && (hotspot.categories || hotspot.seasonal_categories))
+      ? hotspot
+      : (byId[id] || { id, label: (hotspot && hotspot.label) || id, categories: [], seasonal_categories: [] });
+    const items = matchProducts(catalog.products, meta, catData, monthDay, activeHandles);
+    $("sheet-title").textContent = meta.label || id;
     $("sheet-blurb").textContent = meta.blurb || "";
-    $("sheet-body").innerHTML = items.length ? items.map(productCard).join("")
-      : emptyState(`More coming soon`, `We're still picking the right products for the ${String(meta.label || "this spot").toLowerCase()}. Browse the full store for everything available now.`);
+    $("sheet-body").innerHTML = renderSheet(items, meta, catData, monthDay);
     sheet.classList.add("open");
   };
-  window.__openSpot = (id) => openSheet(HOTSPOT_META[id] || { label: id }, id);
+  window.__openSpot = (id) => openSheet(byId[id] || { label: id, id }, id);
   $("close-sheet").onclick = () => sheet.classList.remove("open");
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") sheet.classList.remove("open"); });
   try {
     const api = await initHouse(stage, {
       onHover(hs) {
         if (!hs) { hoverLabel.style.display = "none"; return; }
-        hoverLabel.textContent = hs.label || hs.id;
+        const meta = byId[hs.id];
+        const n = window.__NAVIGATOR__?.byHotspot?.[hs.id]?.count;
+        const label = (meta && meta.label) || hs.label || hs.id;
+        hoverLabel.textContent = (n != null && n > 0) ? `${label} · ${n} product${n === 1 ? "" : "s"}` : label;
         hoverLabel.style.display = "block";
       },
-      onSelect(hs) { if (hs) openSheet(HOTSPOT_META[hs.id] || hs, hs.id); },
+      onSelect(hs) { if (hs) openSheet(byId[hs.id] || hs, hs.id); },
       onView(next) {
         backHouse.hidden = next !== "rv";
-        hint.textContent = next === "rv" ? "Inside the RV" : "Live floor plan — click anything";
+        hint.textContent = next === "rv" ? "Inside the RV" : "Live floor plan — click any room or piece of furniture";
       },
       onReady() {
         status?.remove();

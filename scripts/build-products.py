@@ -14,7 +14,7 @@ The snapshot (data/shopify-snapshot.json) is the raw response of:
 Run:  python3 scripts/build-products.py
 No Storefront token is needed at runtime: the site only reads products.json.
 """
-import json, datetime, pathlib
+import json, datetime, pathlib, subprocess, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SHOP_LINK_BASE = "https://shop.yourpracticalsolutions.com"  # Shopify primary domain
@@ -85,3 +85,7 @@ out = {
 }
 (ROOT / "products.json").write_text(json.dumps(out, indent=2) + "\n")
 print(f"products.json: {len(products)} products, {len(collections)} collections")
+
+# Keep the house navigator in sync with this catalog (category map, not a product list).
+subprocess.check_call([sys.executable, str(ROOT / "scripts" / "build-navigator.py")])
+

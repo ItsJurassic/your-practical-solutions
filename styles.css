@@ -663,3 +663,15 @@ a.product-soon .soon-btn { pointer-events: none; }
   .pdp-related .section-head .btn { display: none; }
   a.product-soon .cta { display: none; }
 }
+
+/* House-navigator product sheet: category groups and shop links */
+.sheet-body .spot-count { margin: 0 0 4px; font-size: .88rem; color: var(--muted, #5c6560); }
+.sheet-body .spot-links { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.sheet-body .spot-shop,
+.sheet-body .spot-group-head a { font-size: .82rem; font-weight: 650; color: var(--brand, #1f4a3d); text-decoration: none; }
+.sheet-body .spot-shop:hover,
+.sheet-body .spot-group-head a:hover { text-decoration: underline; }
+.sheet-body .spot-group { display: grid; gap: 16px; align-content: start; }
+.sheet-body .spot-group + .spot-group { margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--line, #e6e8e3); }
+.sheet-body .spot-group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.sheet-body .spot-group-head h4 { margin: 0; font-family: var(--display, inherit); font-size: 1.02rem; font-weight: 650; }

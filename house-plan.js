@@ -227,6 +227,22 @@ function rvInterior() {
   return { svg: s, box: { x: -40, y: -40, w: W + 80, h: H + 80 } };
 }
 
+
+function petBed(x, y) {
+  return `<g>${r(x, y, 108, 76, 'rx="32" fill="#c4a37a" stroke="#8a6a44" stroke-width="2"')}${r(x + 12, y + 14, 84, 48, 'rx="24" fill="#ead9b8"')}${c(x + 126, y + 38, 16, 'fill="#f4f0eb" stroke="#8a7a62" stroke-width="2"')}${c(x + 126, y + 38, 10, 'fill="#d6b25e"')}${c(x + 158, y + 42, 13, 'fill="#f4f0eb" stroke="#8a7a62" stroke-width="2"')}${c(x + 158, y + 42, 8, 'fill="#7a9bb8"')}</g>`;
+}
+function wreath(x, y) {
+  const berries = [0, 45, 90, 135, 180, 225, 270, 315].map((a) => {
+    const px = x + Math.cos(a * Math.PI / 180) * 22, py = y + Math.sin(a * Math.PI / 180) * 22;
+    return c(px, py, 4.5, 'fill="#2d6a3e"') + c(px + 3, py - 2, 2.4, 'fill="#b91c1c"');
+  }).join("");
+  return `<g class="seasonal-christmas">${c(x, y, 26, 'fill="none" stroke="#1e4d2b" stroke-width="14"')}${c(x, y, 26, 'fill="none" stroke="#3f8a50" stroke-width="8"')}${berries}${c(x, y - 28, 6, 'fill="#c0392b"')}${c(x - 8, y - 24, 5, 'fill="#e74c3c"')}${c(x + 8, y - 24, 5, 'fill="#e74c3c"')}</g>`;
+}
+function xmasTree(x, y) {
+  const tri = (tx, ty, w, h, fill) => `<polygon points="${tx},${ty} ${tx - w},${ty + h} ${tx + w},${ty + h}" fill="${fill}" stroke="#1e4d2b" stroke-width="1.5"/>`;
+  return `<g>${r(x - 8, y + 118, 16, 22, 'fill="#6b4423"')}${tri(x, y + 58, 52, 64, "#1f6b3a")}${tri(x, y + 28, 40, 52, "#2d8a4a")}${tri(x, y + 4, 28, 42, "#3fa15c")}${c(x, y, 8, 'fill="#f4d35e" stroke="#d4a017" stroke-width="1.5"')}${r(x - 36, y + 132, 22, 16, 'rx="2" fill="#b91c1c"')}${r(x + 10, y + 134, 18, 14, 'rx="2" fill="#1d4ed8"')}</g>`;
+}
+
 // ---- plan --------------------------------------------------------------
 const H = { x0: 0, y0: 0, x1: 1400, y1: 1300 }; // house
 const G = { x0: 1400, y0: 300, x1: 2060, y1: 1300 }; // garage
@@ -284,22 +300,16 @@ function buildPlan() {
   furn += hs("dresser-his", "His dresser", dresser(500, 230, 120, 52, "url(#g-walnut)", "#d8c3a0") + `<text x="526" y="296" class="tag" text-anchor="middle" transform="rotate(90 526 290)">HIS</text>`);
   furn += hs("dresser-hers", "Her dresser", dresser(500, 368, 120, 52, "url(#g-whiteoak)", "#8a7356") + `<text x="526" y="434" class="tag" text-anchor="middle" transform="rotate(90 526 428)">HERS</text>`);
   furn += plant(40, 40, 22);
-  // ---- bath
-  furn += tub(684, 8);
-  furn += toilet(568, 150);
-  furn += vanity(800, 120, 120, 54);
-  furn += r(700, 210, 80, 50, 'rx="4" fill="#d9cfc0" opacity=".9"');
+  // ---- bath (whole room is a hotspot so every bathroom product is reachable)
+  furn += hs("bathroom", "Bathroom", `<g>${r(560, 0, 300, 300, 'fill="rgba(0,0,0,0)"')}${tub(684, 8)}${toilet(568, 150)}${vanity(800, 120, 120, 54)}${r(700, 210, 80, 50, 'rx="4" fill="#d9cfc0" opacity=".9"')}</g>`);
   // ---- laundry
-  furn += washer(792, 318, "WASH") + washer(792, 386, "DRY");
-  furn += r(568, 450, 120, 62, 'fill="url(#g-stone)" stroke="#a9a196"');
+  furn += hs("laundry", "Laundry", `<g>${r(560, 300, 300, 220, 'fill="rgba(0,0,0,0)"')}${washer(792, 318, "WASH")}${washer(792, 386, "DRY")}${r(568, 450, 120, 62, 'fill="url(#g-stone)" stroke="#a9a196"')}</g>`);
   // ---- kitchen
   furn += hs("kitchen", "Kitchen", `<g>${counterRun(956, 6, 438, 64)}${counterRun(1330, 70, 64, 230)}${fridge(864, 6)}${stove(1394, 196, 90)}${island(1010, 230, 230, 100)}${stool(1060, 360)}${stool(1125, 360)}${stool(1190, 360)}</g>`);
   furn += hs("kitchen-sink", "Kitchen sink", sinkDbl(1085, 10));
   // ---- dining
-  furn += rug(1010, 700, 330, 250, "#b9a27e");
-  furn += chair(1095, 742, 0) + chair(1175, 742, 0) + chair(1255, 742, 0) + chair(1095, 908, 180) + chair(1175, 908, 180) + chair(1255, 908, 180) + chair(1040, 825, -90) + chair(1310, 825, 90);
-  furn += diningTable(1065, 778, 220, 94);
-  furn += r(1340, 1000, 52, 180, 'rx="3" fill="url(#g-walnut)"') + plant(1365, 1240, 24);
+  furn += hs("dining", "Dining room", `<g>${rug(1010, 700, 330, 250, "#b9a27e")}${chair(1095, 742, 0)}${chair(1175, 742, 0)}${chair(1255, 742, 0)}${chair(1095, 908, 180)}${chair(1175, 908, 180)}${chair(1255, 908, 180)}${chair(1040, 825, -90)}${chair(1310, 825, 90)}${diningTable(1065, 778, 220, 94)}${r(1340, 1000, 52, 180, 'rx="3" fill="url(#g-walnut)"')}</g>`);
+  furn += plant(1365, 1240, 24);
   // ---- living
   furn += hs("rug", "Living room rug", rug(80, 640, 420, 330));
   furn += hs("media", "Media console", tvConsole(110, 528, 300));
@@ -309,8 +319,12 @@ function buildPlan() {
   furn += r(520, 840, 46, 46, 'rx="23" fill="url(#p-kwood)" stroke="#5c4330"');
   furn += plant(40, 1250, 26) + plant(720, 560, 22);
   furn += hs("curtains", "Curtains", r(6, 676, 16, 288, 'fill="#e7dcc6" stroke="#b8a888" stroke-width="2"') + r(160, 1278, 330, 14, 'fill="#e7dcc6" stroke="#b8a888" stroke-width="2"'));
-  // ---- entry
-  furn += r(800, 1210, 120, 70, 'rx="4" fill="#7c6a54" opacity=".9"') + r(930, 1140, 24, 110, 'fill="url(#g-walnut)"');
+  // ---- christmas tree (seasonal; hidden outside Nov 1–Dec 26)
+  furn += `<g class="hs seasonal-christmas" data-id="christmas-tree" data-label="Christmas tree">${xmasTree(630, 600)}</g>`;
+  // ---- pets
+  furn += hs("pets", "Pets", petBed(500, 1120));
+  // ---- entry (wreath is seasonal decoration; the entry stays clickable year-round)
+  furn += hs("entry", "Entry", `<g>${r(770, 1120, 190, 180, 'fill="rgba(0,0,0,0)"')}${r(800, 1210, 120, 70, 'rx="4" fill="#7c6a54" opacity=".9"')}${r(930, 1140, 24, 110, 'fill="url(#g-walnut)"')}${wreath(860, 1170)}</g>`);
 
   // ---- garage
   furn += hs("garage-workstation", "Garage workstation", `<g>${r(1660, 312, 250, 16, 'fill="#d8c09a" stroke="#8a6a44"')}${Array.from({length:24},(_,i)=>c(1668+i*10,320,1.6,'fill="#7a5c3a"')).join("")}${[1700, 1730, 1755, 1785, 1810, 1840, 1870].map((x, i) => r(x, 322, i % 2 ? 6 : 14, i % 2 ? 26 : 18, `rx="2" fill="${["#c0392b", "#555", "#2c6aa0", "#555", "#d4a017", "#555", "#2e7d32"][i]}"`)).join("")}${r(1413, 800, 18, 330, 'fill="#d8c09a" stroke="#8a6a44"')}${[["#c0392b",28,10],["#555",18,6],["#2c6aa0",34,8],["#d4a017",22,12],["#555",30,5],["#2e7d32",26,10],["#c0392b",20,14],["#555",34,6],["#2c6aa0",24,10],["#d4a017",30,6]].map(([col,len,wd],i)=>r(1431, 815+i*31, len, wd, `rx="2" fill="${col}"`)).join("")}${r(1680, 314, 210, 66, 'fill="url(#p-kwood)" stroke="#5c4330" stroke-width="2"')}${r(1700, 330, 40, 24, 'rx="3" fill="#c0392b"')}${r(1820, 330, 50, 20, 'fill="#4b5563"')}${r(1910, 314, 70, 50, 'rx="3" fill="#b91c1c" stroke="#7f1d1d"')}</g>`);
@@ -328,7 +342,7 @@ function buildPlan() {
   furn += hs("rv", "RV — tap to look inside", rvExterior(2130, 860));
 
   // ---- outdoor: patio, yard, garden
-  outdoor += `<g filter="url(#shs)">${c(-230, 830, 70, 'fill="url(#p-kwood)" stroke="#5c4330" stroke-width="2"')}${[0, 90, 180, 270].map((a) => { const x = -230 + Math.cos(a * Math.PI / 180) * 105, y = 830 + Math.sin(a * Math.PI / 180) * 105; return c(x, y, 24, 'fill="#e9e2d4" stroke="#9c8c72"'); }).join("")}${r(-420, 640, 90, 60, 'rx="6" fill="#3a3a3a"')}${c(-375, 670, 20, 'fill="#5a5a5a"')}</g>`;
+  outdoor += hs("patio", "Patio", `<g filter="url(#shs)">${c(-230, 830, 70, 'fill="url(#p-kwood)" stroke="#5c4330" stroke-width="2"')}${[0, 90, 180, 270].map((a) => { const x = -230 + Math.cos(a * Math.PI / 180) * 105, y = 830 + Math.sin(a * Math.PI / 180) * 105; return c(x, y, 24, 'fill="#e9e2d4" stroke="#9c8c72"'); }).join("")}${r(-420, 640, 90, 60, 'rx="6" fill="#3a3a3a"')}${c(-375, 670, 20, 'fill="#5a5a5a"')}</g>`);
   outdoor += hs("yard", "Yard & garden", `<g>${tree(-420, -250, 170)}${tree(300, -330, 140)}${tree(-500, 1600, 150)}${tree(2500, 200, 160)}${shrub(-80, 300, 50)}${shrub(-90, 420, 40)}${shrub(1250, -90, 46)}</g>`);
   let flowers = "";
   for (let i = 0; i < 26; i++) flowers += flower(30 + i * 27, 1352 + (i % 3) * 18, ["#e45b7a", "#f2a65a", "#b06ad9", "#f4d35e"][i % 4]);
@@ -349,6 +363,29 @@ function buildPlan() {
 
   const svg = `<g class="ground">${ground}</g><g class="floors">${floors}</g><g class="outdoor">${outdoor}</g><g class="furn" filter="url(#sh)">${furn}</g><g class="walls" filter="url(#shs)">${wallsSvg}</g><g class="openings">${over}</g><g class="labels">${labels}</g>`;
   return { svg, box: { x: -520, y: -150, w: 3000, h: 2200 } };
+}
+
+
+function chicagoMonthDay(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago", month: "2-digit", day: "2-digit",
+  }).formatToParts(date);
+  const month = parts.find((p) => p.type === "month")?.value;
+  const day = parts.find((p) => p.type === "day")?.value;
+  return `${month}-${day}`;
+}
+function inMonthDayWindow(start, end, wraps, md) {
+  if (wraps || start > end) return md >= start || md <= end;
+  return md >= start && md <= end;
+}
+// Christmas window matches data/categories.json (Nov 1–Dec 26, America/Chicago).
+function applySeasonal(svg) {
+  const md = chicagoMonthDay();
+  const showXmas = inMonthDayWindow("11-01", "12-26", false, md);
+  svg.querySelectorAll(".seasonal-christmas").forEach((el) => {
+    el.style.display = showXmas ? "" : "none";
+    el.setAttribute("pointer-events", showXmas ? "auto" : "none");
+  });
 }
 
 // ---- viewer ------------------------------------------------------------
@@ -375,6 +412,7 @@ export async function initHouse(container, options = {}) {
     const bg = view === "rv" ? r(-2000, -2000, 5000, 5000, 'fill="#e9e1d2"') : "";
     svg.innerHTML = defs() + bg + `<g id="content">${content}</g>` + hl;
     if (view === "house" && planRot) svg.querySelectorAll(".lbl").forEach((g) => g.setAttribute("transform", `rotate(-90 ${g.dataset.x} ${g.dataset.y})`));
+    applySeasonal(svg);
   }
   render();
 

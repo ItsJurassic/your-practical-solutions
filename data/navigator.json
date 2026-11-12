@@ -1,0 +1,271 @@
+{
+  "version": 1,
+  "note": "House-navigator map: each floor-plan hotspot is assigned category handles, not a hardcoded product list. scripts/build-navigator.py resolves the current ACTIVE catalog into data/navigator-index.json whenever the catalog rebuilds. Seasonal categories appear only inside their show_window (America/Chicago), same rules as the shop filters. Merchandising collections (new-arrivals, best-sellers) are ignored as a path because every product is in them.",
+  "timezone": "America/Chicago",
+  "required_categories": [
+    "pet-supplies",
+    "living-room",
+    "kitchen",
+    "mens-clothing",
+    "womens-clothing",
+    "winter-essentials",
+    "car-rv",
+    "garage-tools",
+    "home-decor",
+    "storage-organization",
+    "tech-accessories",
+    "gardening",
+    "bathroom",
+    "outdoor-camping",
+    "christmas",
+    "halloween",
+    "valentines-day",
+    "new-years",
+    "4th-of-july"
+  ],
+  "merchandising_ignored": ["new-arrivals", "best-sellers"],
+  "hotspots": [
+    {
+      "id": "bathroom",
+      "label": "Bathroom",
+      "blurb": "Shower, bath, and bathroom organization.",
+      "categories": ["bathroom"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "laundry",
+      "label": "Laundry",
+      "blurb": "Laundry and closet storage.",
+      "categories": ["storage-organization"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "kitchen",
+      "label": "Kitchen",
+      "blurb": "Everyday kitchen helpers.",
+      "categories": ["kitchen"],
+      "seasonal_categories": ["new-years"],
+      "plan": "house"
+    },
+    {
+      "id": "kitchen-sink",
+      "label": "Kitchen sink",
+      "blurb": "Sink, dishes, and prep.",
+      "categories": ["kitchen"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "dining",
+      "label": "Dining room",
+      "blurb": "Table, serving, and dining decor.",
+      "categories": ["kitchen", "home-decor"],
+      "seasonal_categories": ["christmas", "new-years"],
+      "plan": "house"
+    },
+    {
+      "id": "sofa",
+      "label": "Living room sofa",
+      "blurb": "Living-room comfort and decor.",
+      "categories": ["living-room"],
+      "seasonal_categories": ["valentines-day"],
+      "plan": "house"
+    },
+    {
+      "id": "rug",
+      "label": "Living room rug",
+      "blurb": "Rugs and living-room comforts.",
+      "categories": ["living-room", "home-decor"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "curtains",
+      "label": "Curtains & windows",
+      "blurb": "Window treatments and light.",
+      "categories": ["home-decor", "living-room"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "media",
+      "label": "Media console",
+      "blurb": "Chargers, lights, and media accessories.",
+      "categories": ["tech-accessories", "living-room"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "christmas-tree",
+      "label": "Christmas tree",
+      "blurb": "Christmas decorations and holiday helpers.",
+      "categories": [],
+      "seasonal_categories": ["christmas"],
+      "seasonal_only": true,
+      "plan": "house"
+    },
+    {
+      "id": "pets",
+      "label": "Pets",
+      "blurb": "Beds, bowls, grooming, and pet gear.",
+      "categories": ["pet-supplies"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "entry",
+      "label": "Entry",
+      "blurb": "Doormats, hooks, and a welcome for the season.",
+      "categories": ["home-decor", "storage-organization"],
+      "seasonal_categories": ["christmas", "halloween", "valentines-day"],
+      "plan": "house"
+    },
+    {
+      "id": "bed",
+      "label": "Bed",
+      "blurb": "Blankets, sleep comfort, and bedding.",
+      "categories": ["winter-essentials"],
+      "seasonal_categories": ["valentines-day", "christmas"],
+      "plan": "house"
+    },
+    {
+      "id": "nightstand",
+      "label": "Bedside table",
+      "blurb": "Bedside charging and small accessories.",
+      "categories": ["tech-accessories"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "wardrobe",
+      "label": "Wardrobe",
+      "blurb": "Closet storage and cold-weather layers.",
+      "categories": ["storage-organization", "winter-essentials"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "dresser-his",
+      "label": "His dresser",
+      "blurb": "Men's clothing and accessories.",
+      "categories": ["mens-clothing"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "dresser-hers",
+      "label": "Her dresser",
+      "blurb": "Women's clothing and accessories.",
+      "categories": ["womens-clothing"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "garage-workstation",
+      "label": "Garage workstation",
+      "blurb": "Tools and workbench gear.",
+      "categories": ["garage-tools"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "garage-storage",
+      "label": "Garage storage",
+      "blurb": "Garage organization, tools, and winter gear.",
+      "categories": ["garage-tools", "storage-organization", "winter-essentials"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "car",
+      "label": "Car",
+      "blurb": "Car-care and road-trip essentials.",
+      "categories": ["car-rv", "winter-essentials"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "rv",
+      "label": "RV",
+      "blurb": "RV living and travel gear. Tap to look inside.",
+      "categories": ["car-rv", "outdoor-camping"],
+      "seasonal_categories": [],
+      "plan": "house",
+      "zoom": "rv"
+    },
+    {
+      "id": "rv-bed",
+      "label": "RV bed",
+      "blurb": "Sleep comfort for the road.",
+      "categories": ["winter-essentials"],
+      "seasonal_categories": [],
+      "plan": "rv"
+    },
+    {
+      "id": "rv-bathroom",
+      "label": "RV bathroom",
+      "blurb": "Compact bathroom and shower care.",
+      "categories": ["bathroom"],
+      "seasonal_categories": [],
+      "plan": "rv"
+    },
+    {
+      "id": "rv-dinette",
+      "label": "RV dinette",
+      "blurb": "Compact dining and camp cooking.",
+      "categories": ["kitchen", "outdoor-camping"],
+      "seasonal_categories": [],
+      "plan": "rv"
+    },
+    {
+      "id": "rv-kitchen",
+      "label": "RV kitchenette",
+      "blurb": "Compact kitchen and dish-washing gear.",
+      "categories": ["kitchen", "outdoor-camping"],
+      "seasonal_categories": [],
+      "plan": "rv"
+    },
+    {
+      "id": "rv-storage",
+      "label": "RV storage",
+      "blurb": "Space-saving storage for the road.",
+      "categories": ["storage-organization", "car-rv"],
+      "seasonal_categories": [],
+      "plan": "rv"
+    },
+    {
+      "id": "rv-cab",
+      "label": "RV cabin",
+      "blurb": "Driving comfort and windshield care.",
+      "categories": ["car-rv", "winter-essentials"],
+      "seasonal_categories": [],
+      "plan": "rv"
+    },
+    {
+      "id": "yard",
+      "label": "Yard & garden",
+      "blurb": "Yard, garden, and outdoor time.",
+      "categories": ["gardening", "outdoor-camping"],
+      "seasonal_categories": ["christmas", "4th-of-july"],
+      "plan": "house"
+    },
+    {
+      "id": "garden",
+      "label": "Garden bed",
+      "blurb": "Garden tools, planters, and yard care.",
+      "categories": ["gardening"],
+      "seasonal_categories": [],
+      "plan": "house"
+    },
+    {
+      "id": "patio",
+      "label": "Patio",
+      "blurb": "Patio, camp, and time outside.",
+      "categories": ["outdoor-camping", "gardening"],
+      "seasonal_categories": ["4th-of-july"],
+      "plan": "house"
+    }
+  ]
+}
