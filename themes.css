@@ -75,6 +75,25 @@ html[data-theme="halloween"] .bottom-nav a[aria-current="page"], html[data-theme
 
 html[data-theme]:not([data-theme="default"]) .announce { background: var(--brand); color: #fff; }
 html[data-theme]:not([data-theme="default"]) .announce a { color: #fff; }
+html[data-theme]:not([data-theme="default"]) .ship-notice,
+html[data-theme]:not([data-theme="default"]) .ship-notice-inline {
+  background: var(--soft);
+  color: var(--body);
+  border-color: var(--line);
+}
+html[data-theme]:not([data-theme="default"]) .ship-notice a,
+html[data-theme]:not([data-theme="default"]) .ship-notice-inline a,
+html[data-theme]:not([data-theme="default"]) .pdp-ship-area { color: var(--body); }
+html[data-theme]:not([data-theme="default"]) .ship-notice a,
+html[data-theme]:not([data-theme="default"]) .ship-notice-inline a { color: var(--accent); font-weight: 600; }
+html[data-theme="halloween"] .ship-notice,
+html[data-theme="new-years"] .ship-notice,
+html[data-theme="halloween"] .ship-notice-inline,
+html[data-theme="new-years"] .ship-notice-inline {
+  background: var(--soft);
+  color: var(--body);
+}
+
 html[data-theme]:not([data-theme="default"]) body { background: var(--bg); }
 
 @keyframes theme-twinkle { 0%,100% { opacity: .35; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.1); } }

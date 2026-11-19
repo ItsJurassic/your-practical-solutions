@@ -1,0 +1,835 @@
+{
+  "updated_at": "2026-11-19T12:00:00-06:00",
+  "source": "Shopify Admin GraphQL deliveryProfiles on store xvdkyq-xg, read back after removing California from every West US zone on Nov 19, 2026 (America/Chicago).",
+  "note": "California (US-CA) is excluded from all shipping zones. Keep this file updated when shipping profiles change so scripts/sync-everything.py --check can flag a zone that includes CA. The product snapshot (data/shopify-snapshot.json) does not include delivery profiles.",
+  "profiles": [
+    {
+      "id": "gid://shopify/DeliveryProfile/118855368793",
+      "name": "General profile",
+      "default": true,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118992863321",
+      "name": "Half shipping $0.01\u2013$2.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118992896089",
+      "name": "Half shipping $2.01\u2013$4.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118992928857",
+      "name": "Half shipping $4.01\u2013$6.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118992961625",
+      "name": "Half shipping $6.01\u2013$8.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118992994393",
+      "name": "Half shipping $8.01\u2013$10.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118993027161",
+      "name": "Half shipping $10.01\u2013$12.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118993059929",
+      "name": "Half shipping $14.01\u2013$16.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/DeliveryProfile/118993092697",
+      "name": "Half shipping $12.01\u2013$14.00",
+      "default": false,
+      "zones": [
+        {
+          "name": "Alaska, Hawaii & US territories",
+          "country": "US",
+          "provinces": [
+            "AK",
+            "AS",
+            "FM",
+            "GU",
+            "HI",
+            "MH",
+            "MP",
+            "PW",
+            "PR",
+            "VI",
+            "AA",
+            "AE",
+            "AP"
+          ]
+        },
+        {
+          "name": "Central US",
+          "country": "US",
+          "provinces": [
+            "AL",
+            "AR",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "NE",
+            "ND",
+            "OH",
+            "OK",
+            "SD",
+            "TN",
+            "TX",
+            "WI"
+          ]
+        },
+        {
+          "name": "East US",
+          "country": "US",
+          "provinces": [
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "ME",
+            "MD",
+            "MA",
+            "NH",
+            "NJ",
+            "NY",
+            "NC",
+            "PA",
+            "RI",
+            "SC",
+            "VT",
+            "VA",
+            "DC",
+            "WV"
+          ]
+        },
+        {
+          "name": "West US",
+          "country": "US",
+          "provinces": [
+            "AZ",
+            "CO",
+            "ID",
+            "MT",
+            "NV",
+            "NM",
+            "OR",
+            "UT",
+            "WA",
+            "WY"
+          ]
+        }
+      ]
+    }
+  ]
+}

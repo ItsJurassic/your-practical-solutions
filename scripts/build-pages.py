@@ -83,10 +83,10 @@ for slug, _ in LEGAL:
     body = re.sub(r"<!-- (title|desc): .*? -->\n?", "", src)
     toc = "".join(f'<li><a href="{slug}.html#{i}">{t}</a></li>' for i, t in re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', body))
     others = "".join(f'<a href="{s2}.html">{html.escape(t2)}</a>' for s2, t2 in LEGAL if s2 != slug)
-    lastmod = {"shipping": "2026-11-11", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-11"}[slug]
+    lastmod = {"shipping": "2026-11-19", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-19"}[slug]
     ld = {"@context": "https://schema.org", "@type": "WebPage", "name": html.unescape(title), "url": f"{SITE}/{slug}.html",
           "dateModified": lastmod, "isPartOf": {"@id": f"{SITE}/#website"}, "publisher": {"@id": f"{SITE}/#org"}}
-    lastmod_human = {"shipping": "November 11, 2026", "returns": "November 9, 2026", "privacy": "November 9, 2026", "terms": "November 11, 2026"}[slug]
+    lastmod_human = {"shipping": "November 19, 2026", "returns": "November 9, 2026", "privacy": "November 9, 2026", "terms": "November 19, 2026"}[slug]
     t = apply_shell(legal_t, TITLE=title, DESC=desc, SLUG=f"{slug}.html", TOC=toc, OTHERS=others,
                     BODY=body.strip(), JSONLD_PAGE=json.dumps(ld, indent=2),
                     LASTMOD=lastmod, LASTMOD_HUMAN=lastmod_human)
@@ -395,7 +395,7 @@ for c in cat_entries:
     built_cats.append(c)
 
 today = datetime.date.today().isoformat()
-legal_lastmod = {"shipping": "2026-11-11", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-11"}
+legal_lastmod = {"shipping": "2026-11-19", "returns": "2026-11-09", "privacy": "2026-11-09", "terms": "2026-11-19"}
 legal_urls = "".join(f"  <url><loc>{SITE}/{s}.html</loc><lastmod>{legal_lastmod[s]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>\n" for s, _ in LEGAL)
 product_urls = "".join(
     f"  <url><loc>{SITE}/{product_href(p['handle'])}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>\n"

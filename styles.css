@@ -81,6 +81,14 @@ body.nav-open { overflow: hidden; }
 .announce { background: var(--brand); color: #e8f1ec; font-size: .85rem; text-align: center; padding: 8px 16px; }
 .announce a { color: #fff; font-weight: 600; }
 
+/* California / shipping-area notice */
+.ship-notice { background: var(--brand-50); color: var(--ink); border-bottom: 1px solid var(--line); text-align: center; font-size: .9rem; line-height: 1.45; padding: 10px 16px; }
+.ship-notice .wrap { max-width: 1100px; }
+.ship-notice a { color: var(--brand); font-weight: 600; }
+.ship-notice-inline { background: var(--brand-50); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin: 0 0 16px; color: var(--ink); font-size: .95rem; line-height: 1.45; }
+.pdp-ship-area { margin: -8px 0 16px; font-size: .88rem; color: var(--body); }
+.pdp-section .pdp-ship-area { margin: 0 0 10px; }
+
 /* hero */
 .hero { position: relative; overflow: hidden; background: radial-gradient(1200px 500px at 85% -10%, #f3e3cf 0%, rgba(243,227,207,0) 60%), linear-gradient(180deg, var(--cream), #fff); padding: 72px 0 56px; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
@@ -551,7 +559,7 @@ mark.fill-in { background: #fff3c4; color: #7a5200; padding: 1px 6px; border-rad
   .legal-summary b { font-size: 1.15rem; white-space: nowrap; }
 }
 @media print {
-  .announce, .site-header, .site-footer, .bottom-nav, .legal-toc, .linklike, .skip { display: none !important; }
+  .announce, .ship-notice, .site-header, .site-footer, .bottom-nav, .legal-toc, .linklike, .skip { display: none !important; }
   body { font-size: 11pt; color: #000; padding: 0 !important; }
   .page-hero { background: none; border: 0; padding: 0 0 8pt; }
   .legal-layout { display: block; padding: 0; }

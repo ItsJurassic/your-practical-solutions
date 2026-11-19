@@ -14,6 +14,8 @@ What “everything” means on each change:
 
 Pricing rules that still apply on every add or reprice: the customer pays half of supplier shipping via the band profiles; every item must net a profit; shipping weight must be accurate; the product must be in the correct category collection.
 
+**California is excluded from all shipping zones.** Do not add US-CA (California) to any Shopify delivery profile or zone (General or any half-shipping band). Customers in California must see that shipping is not available for their address. Amazon is not connected yet, so this rule applies to Shopify and the marketing site only until Amazon is connected.
+
 ---
 
 ## One command
@@ -155,6 +157,7 @@ To add a new room, add a hotspot on the plan (`house-plan.js`) **and** a matchin
 - House-plan hotspot IDs vs the navigator map
 - Optional sheet CSVs vs the same snapshot (missing / extra / mismatched price or status)
 - Amazon: placeholder only, reported as skipped
+- Shipping zones: if `data/shipping-profiles.json` exists (or the Shopify snapshot includes `deliveryProfiles`), the check **fails** when any profile or zone includes California (US-CA). The usual product snapshot does **not** include delivery profiles, so if that file is missing the check prints a **manual step** (it does not fail): pull current delivery profiles with the Shopify connector and confirm no zone includes US-CA, then save the pull to `data/shipping-profiles.json` and re-run `--check`.
 
 ---
 
@@ -165,3 +168,4 @@ To add a new room, add a hotspot on the plan (`house-plan.js`) **and** a matchin
 - Do not write margin formula columns I, J, M–U or Settings F7:F10.
 - Do not place orders, including CJ auto-pay exceptions and bulk/MOQ, without the owner’s OK. CJ auto-fulfill orders that are already set to auto-pay are the existing exception.
 - Do not send shoppers to the password-protected Shopify storefront while `data/coming-soon.json` (and `catalog-public.json`) has `live: false`.
+- Do not add California (US-CA) to any Shopify shipping profile or zone.

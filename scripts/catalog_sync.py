@@ -20,6 +20,7 @@ CATEGORIES = ROOT / "data" / "categories.json"
 NAV_MAP = ROOT / "data" / "navigator.json"
 NAV_INDEX = ROOT / "data" / "navigator-index.json"
 CATALOG_PUBLIC = ROOT / "data" / "catalog-public.json"
+SHIPPING_PROFILES = ROOT / "data" / "shipping-profiles.json"
 PRODUCT_PAGES = ROOT / "products"
 
 # Must stay in sync with scripts/build-products.py and site.js TYPE_TO_COLLECTION.
@@ -438,6 +439,159 @@ def sheet_compare(sheet_rows: list[dict], *, handle_key: str, status_key: str | 
     return issues
 
 
+
+def _zone_includes_ca(zone: dict) -> bool:
+    """True if a zone ships to US-CA, including an all-provinces US country."""
+    countries = zone.get("countries") or []
+    # Compact sidecar format: country + provinces at the zone level.
+    if not countries and (zone.get("country") or zone.get("countryCode") or zone.get("provinces")):
+        countries = [{
+            "code": zone.get("country") or zone.get("countryCode") or "US",
+            "provinces": zone.get("provinces") or [],
+            "includeAllProvinces": zone.get("includeAllProvinces", False),
+        }]
+    for country in countries:
+        code = country.get("code") or country.get("countryCode") or ""
+        if isinstance(code, dict):
+            code = code.get("countryCode") or ""
+        if str(code).upper() not in {"US", "USA", "UNITED STATES"}:
+            continue
+        if country.get("includeAllProvinces") or country.get("include_all_provinces"):
+            return True
+        provinces = country.get("provinces") or zone.get("provinces") or []
+        if not provinces:
+            # A US country with no province list is treated as all states.
+            return True
+        for prov in provinces:
+            pc = prov.get("code") if isinstance(prov, dict) else prov
+            if str(pc).upper() == "CA":
+                return True
+    return False
+
+
+def load_shipping_profiles() -> dict | None:
+    """Return shipping-profile data if present in the sidecar or the Shopify snapshot.
+
+    The usual shopify-snapshot.json only stores shop/products/collections, so
+    California-zone checks use data/shipping-profiles.json when that file exists.
+    A snapshot that later includes deliveryProfiles (or shippingProfiles) is also
+    accepted. None means no profile data is available (manual step).
+    """
+    if SHIPPING_PROFILES.exists():
+        try:
+            data = json.loads(SHIPPING_PROFILES.read_text())
+            if data:
+                return data
+        except (OSError, json.JSONDecodeError):
+            return {"_error": f"could not parse {SHIPPING_PROFILES}"}
+    if SNAPSHOT.exists():
+        try:
+            snap = json.loads(SNAPSHOT.read_text())
+        except (OSError, json.JSONDecodeError):
+            snap = None
+        if isinstance(snap, dict):
+            for key in ("deliveryProfiles", "shippingProfiles", "shipping_profiles"):
+                if key in snap:
+                    return snap[key]
+            data = snap.get("data") if isinstance(snap.get("data"), dict) else {}
+            for key in ("deliveryProfiles", "shippingProfiles", "shipping_profiles"):
+                if key in data:
+                    return data[key]
+    return None
+
+
+def iter_shipping_profiles(raw) -> list[dict]:
+    if raw is None:
+        return []
+    if isinstance(raw, dict) and raw.get("_error"):
+        return []
+    if isinstance(raw, dict) and "profiles" in raw:
+        return list(raw.get("profiles") or [])
+    if isinstance(raw, list):
+        return raw
+    if isinstance(raw, dict) and "edges" in raw:
+        return [e.get("node") or e for e in raw.get("edges") or []]
+    if isinstance(raw, dict) and "nodes" in raw:
+        return list(raw.get("nodes") or [])
+    return []
+
+
+def iter_profile_zones(profile: dict) -> list[dict]:
+    zones = profile.get("zones")
+    if zones:
+        return list(zones)
+    out = []
+    for group in profile.get("profileLocationGroups") or profile.get("locationGroups") or []:
+        loc_zones = group.get("locationGroupZones") or group.get("zones") or {}
+        edges = loc_zones.get("edges") if isinstance(loc_zones, dict) else loc_zones
+        if not edges:
+            continue
+        for edge in edges:
+            node = edge.get("node") if isinstance(edge, dict) else edge
+            zone = (node or {}).get("zone") or node or {}
+            out.append(zone)
+    return out
+
+
+def shipping_zones_ca_check(raw=None) -> dict:
+    """Flag any shipping profile or zone that includes US-CA.
+
+    If no profile data is available, this is a documented manual step and is
+    not a consistency failure.
+    """
+    if raw is None:
+        raw = load_shipping_profiles()
+    if isinstance(raw, dict) and raw.get("_error"):
+        return {
+            "available": False,
+            "manual_step": True,
+            "ok": True,
+            "issues": [],
+            "note": raw["_error"] + ". Confirm no Shopify shipping zone includes US-CA (manual step).",
+            "profiles_checked": 0,
+        }
+    if raw is None:
+        return {
+            "available": False,
+            "manual_step": True,
+            "ok": True,
+            "issues": [],
+            "note": (
+                "Shipping profile data is not in the Shopify product snapshot. "
+                "Confirm no zone includes US-CA as a manual step, or save a "
+                "deliveryProfiles pull to data/shipping-profiles.json and re-run --check."
+            ),
+            "profiles_checked": 0,
+        }
+    issues = []
+    profiles = iter_shipping_profiles(raw)
+    for profile in profiles:
+        name = profile.get("name") or profile.get("id") or "unnamed profile"
+        pid = profile.get("id")
+        for zone in iter_profile_zones(profile):
+            if _zone_includes_ca(zone):
+                zname = zone.get("name") or zone.get("id") or "unnamed zone"
+                issues.append({
+                    "kind": "shipping_zone_includes_CA",
+                    "profile": name,
+                    "profile_id": pid,
+                    "zone": zname,
+                    "zone_id": zone.get("id"),
+                })
+    return {
+        "available": True,
+        "manual_step": False,
+        "ok": len(issues) == 0,
+        "issues": issues,
+        "note": (
+            "No shipping profile or zone includes US-CA."
+            if not issues
+            else "One or more shipping zones include California (US-CA)."
+        ),
+        "profiles_checked": len(profiles),
+    }
+
+
 def run_consistency_check(
     *,
     sheet_issues: list[dict] | None = None,
@@ -484,6 +638,8 @@ def run_consistency_check(
         issues.append({"kind": "hotspot_on_plan_but_unmapped", "id": h})
     if sheet_issues:
         issues.extend(sheet_issues)
+    ship = shipping_zones_ca_check()
+    issues.extend(ship["issues"])
 
     report = {
         "ok": len(issues) == 0,
@@ -509,6 +665,7 @@ def run_consistency_check(
             "status": "placeholder",
             "note": "Amazon is not connected yet. When it is, this check will compare Amazon listings to the same Shopify snapshot (handle, price, status, category) and the pipeline will push adds, removals, price changes, and category changes to Amazon.",
         },
+        "shipping_zones": ship,
         "issue_count": len(issues),
         "issues": issues,
     }
@@ -528,6 +685,11 @@ def print_report(report: dict, file=sys.stdout) -> None:
     if nav["offseason_categories"]:
         print(f"  off-season categories (hidden): {', '.join(nav['offseason_categories'])}", file=file)
     print(f"  amazon: {report['amazon']['note']}", file=file)
+    ship = report.get("shipping_zones") or {}
+    if ship.get("available"):
+        print(f"  shipping zones: {ship.get('note')}  (profiles checked: {ship.get('profiles_checked', 0)})", file=file)
+    else:
+        print(f"  shipping zones: MANUAL STEP — {ship.get('note', 'profile data not in snapshot; confirm no zone includes US-CA.')}", file=file)
     if report["issues"]:
         print("  issues:", file=file)
         for iss in report["issues"]:
